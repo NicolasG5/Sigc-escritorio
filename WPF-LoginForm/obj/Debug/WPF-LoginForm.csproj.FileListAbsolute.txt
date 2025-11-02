@@ -1,0 +1,206 @@
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\bin\Debug\WPF-LoginForm.exe.config
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\bin\Debug\WPF-LoginForm.exe
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\bin\Debug\WPF-LoginForm.pdb
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.AssemblyReference.cache
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\MainWindow.g.cs
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\App.g.cs
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\WPF-LoginForm_MarkupCompile.cache
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\WPF-LoginForm_MarkupCompile.lref
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\MainWindow.baml
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\WPF-LoginForm.g.resources
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\WPF_LoginForm.Properties.Resources.resources
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.GenerateResource.cache
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.CoreCompileInputs.cache
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\WPF-LoginForm.exe
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\WPF-LoginForm.pdb
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\View\LoginView.g.cs
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm\WPF-LoginForm\obj\Debug\View\LoginView.baml
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\bin\Debug\WPF-LoginForm.exe.config
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\bin\Debug\WPF-LoginForm.exe
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\bin\Debug\WPF-LoginForm.pdb
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\Views\LoginView.g.cs
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\App.g.cs
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\WPF-LoginForm_MarkupCompile.cache
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\WPF-LoginForm_MarkupCompile.lref
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\Views\LoginView.baml
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\WPF-LoginForm.g.resources
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\WPF_LoginForm.Properties.Resources.resources
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.GenerateResource.cache
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.CoreCompileInputs.cache
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\WPF-LoginForm.exe
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\WPF-LoginForm.pdb
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\Views\MainView.g.cs
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\Views\MainView.baml
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.AssemblyReference.cache
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\CustomControls\BindablePasswordBox.g.cs
+D:\RJ Code Advance\Source Code C#\2022\WPF-LoginForm - MVVM P2\WPF-LoginForm\obj\Debug\CustomControls\BindablePasswordBox.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.AssemblyReference.cache
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\CustomControls\BindablePasswordBox.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\AgregarView.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Clientes.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudCliente.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudClientes.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudEmpleado.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Customer.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView2.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView3.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView4.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView5.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\HomeView.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\LoginView.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\MainView.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\App.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm_MarkupCompile.cache
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm_MarkupCompile.lref
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.exe
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.pdb
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\ButtonStyles.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\DataGridStyles.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\ImageStyles.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\TextBoxSearchStyles.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\Uicolor.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\App.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\CustomControls\BindablePasswordBox.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\AgregarView.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Clientes.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudCliente.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudClientes.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudEmpleado.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Customer.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView2.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView3.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView4.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView5.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\HomeView.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\LoginView.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\WPF-LoginForm.exe.config
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\WPF-LoginForm.exe
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\WPF-LoginForm.pdb
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\EntityFramework.dll
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\FontAwesome.Sharp.dll
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\System.Data.SqlClient.dll
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\System.Drawing.Common.dll
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\EntityFramework.xml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\System.Data.SqlClient.xml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\System.Drawing.Common.xml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\MainView.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.g.resources
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF_LoginForm.Properties.Resources.resources
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.GenerateResource.cache
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.CoreCompileInputs.cache
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.CopyComplete
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudSolicitudServicio.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudSolicitudServicio.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ConsultaSolicitudes.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ConsultaSolicitudes.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView6.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Inspeccion.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView6.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Inspeccion.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ControlSolicitudes.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ControlSolicitudes.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ClienteBanco.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudBanco.g.cs
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ClienteBanco.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudBanco.baml
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\Python.Runtime.dll
+C:\Users\krato\OneDrive\Escritorio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\Python.Runtime.xml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\WPF-LoginForm.exe.config
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\WPF-LoginForm.exe
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\WPF-LoginForm.pdb
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\EntityFramework.dll
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\EntityFramework.SqlServer.dll
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\FontAwesome.Sharp.dll
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\Python.Runtime.dll
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\System.Data.SqlClient.dll
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\System.Drawing.Common.dll
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\EntityFramework.xml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\EntityFramework.SqlServer.xml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\Python.Runtime.xml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\System.Data.SqlClient.xml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\System.Drawing.Common.xml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.AssemblyReference.cache
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\ButtonStyles.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\DataGridStyles.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\ImageStyles.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\TextBoxSearchStyles.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Styles\Uicolor.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\CustomControls\BindablePasswordBox.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\AgregarView.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ConsultaSolicitudes.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ControlSolicitudes.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudEmpleado.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudSolicitudServicio.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Customer.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView2.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView3.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView4.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView5.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\HomeView.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\LoginView.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\MainView.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\App.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm_MarkupCompile.cache
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm_MarkupCompile.lref
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\App.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\CustomControls\BindablePasswordBox.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\AgregarView.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ConsultaSolicitudes.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ControlSolicitudes.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudEmpleado.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrudSolicitudServicio.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Customer.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView2.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView3.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView4.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CustomerView5.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\HomeView.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\LoginView.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\MainView.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.g.resources
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF_LoginForm.Properties.Resources.resources
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.GenerateResource.cache
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.csproj.CoreCompileInputs.cache
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.exe
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.pdb
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-Logi.5D64F34A.Up2Date
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\WPF-LoginForm.exe.config
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ConfirmarSolicitud.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ConfirmarSolicitud.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\DenegarSolicitud.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\DenegarSolicitud.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\atencion.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\atencion.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Cita.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Cita.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\FormularioA.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\FormularioA.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CitaSeg.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CitaSeg.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\FormularioS.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\FormularioS.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Seguimiento.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Seguimiento.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrearCita.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Medicacion.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\MedicacionG.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Reportes.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ReportesG.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Tratamiento.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\TratamientoG.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\CrearCita.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Medicacion.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\MedicacionG.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Reportes.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\ReportesG.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Tratamiento.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\TratamientoG.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Paciente.g.cs
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\obj\Debug\Views\Paciente.baml
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\Newtonsoft.Json.dll
+C:\Duoc material de estudio\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server-main2\WPF-LoginForm\bin\Debug\Newtonsoft.Json.xml

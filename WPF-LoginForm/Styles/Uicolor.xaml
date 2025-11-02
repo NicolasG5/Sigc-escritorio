@@ -1,0 +1,63 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--Background Colors-->
+    <Color x:Key="primaryBackColor1">#F4F6F8</Color>      <!-- Fondo principal: blanco grisáceo, limpio -->
+    <Color x:Key="primaryBackColor2">#E8F6EF</Color>      <!-- Fondo alternativo: verde menta muy suave -->
+    <Color x:Key="secondaryBackColor1">#6EC1E4</Color>    <!-- Azul claro: calma y confianza -->
+    <Color x:Key="secondaryBackColor2">#F8B609</Color>    <!-- Amarillo cálido: energía y optimismo -->
+
+    <!--Window Border Colors-->
+    <Color x:Key="winBorderColor1">#61CE70</Color>        <!-- Verde: bienestar y salud -->
+    <Color x:Key="winBorderColor2">#54595F</Color>        <!-- Gris oscuro: profesionalismo -->
+    <Color x:Key="winBorderColor3">#6EC1E4</Color>        <!-- Azul claro: confianza -->
+    <Color x:Key="winBorderColor4">#F8B609</Color>        <!-- Amarillo cálido: energía -->
+    <Color x:Key="winBorderColor5">#8A8A89</Color>        <!-- Gris medio: neutralidad -->
+
+    <!--Color Palette-->
+    <SolidColorBrush x:Key="color1" Color="#F8B609"/>     <!-- Amarillo principal -->
+    <SolidColorBrush x:Key="color2" Color="#6EC1E4"/>     <!-- Azul claro -->
+    <SolidColorBrush x:Key="color3" Color="#61CE70"/>     <!-- Verde acento -->
+    <SolidColorBrush x:Key="color4" Color="#54595F"/>     <!-- Gris oscuro -->
+    <SolidColorBrush x:Key="color5" Color="#8A8A89"/>     <!-- Gris medio -->
+    <SolidColorBrush x:Key="color6" Color="#7A7A7A"/>     <!-- Gris claro -->
+    <SolidColorBrush x:Key="color7" Color="#E8F6EF"/>     <!-- Verde menta suave -->
+    <SolidColorBrush x:Key="color8" Color="#F4F6F8"/>     <!-- Blanco grisáceo -->
+    <SolidColorBrush x:Key="color9" Color="#43A047"/>     <!-- Verde éxito -->
+    <SolidColorBrush x:Key="color10" Color="#E57373"/>    <!-- Rojo suave (errores) -->
+
+    <!--Font Colors-->
+    <SolidColorBrush x:Key="titleColor1" Color="#54595F"/>    <!-- Gris oscuro para títulos -->
+    <SolidColorBrush x:Key="titleColor2" Color="#6EC1E4"/>    <!-- Azul claro para títulos secundarios -->
+    <SolidColorBrush x:Key="titleColor3" Color="#61CE70"/>    <!-- Verde para énfasis -->
+    <SolidColorBrush x:Key="plainTextColor1" Color="#7A7A7A"/>    <!-- Gris claro para texto normal -->
+    <SolidColorBrush x:Key="plainTextColor2" Color="#8A8A89"/>    <!-- Gris medio para texto secundario -->
+    <SolidColorBrush x:Key="plainTextColor3" Color="#3338A0"/>    <!-- Amarillo para resaltar texto -->
+
+    <!--Panel Colors-->
+    <SolidColorBrush x:Key="panelColor" Color="#E8F6EF"/>       <!-- Verde menta suave para paneles -->
+    <SolidColorBrush x:Key="panelOverColor" Color="#6EC1E4"/>   <!-- Azul claro para hover -->
+    <SolidColorBrush x:Key="panelActiveColor" Color="#61CE70"/> <!-- Verde para panel activo -->
+
+    <!-- Colores sugeridos para psicología -->
+    <Color x:Key="PrimaryColor">#F8B609</Color>
+    <Color x:Key="SecondaryColor">#6EC1E4</Color>
+    <Color x:Key="AccentColor">#61CE70</Color>
+    <Color x:Key="DarkColor">#54595F</Color>
+    <Color x:Key="MediumGray">#8A8A89</Color>
+    <Color x:Key="LightGray">#7A7A7A</Color>
+
+    <!-- Brushes para usar en estilos -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+    <SolidColorBrush x:Key="DarkBrush" Color="{StaticResource DarkColor}" />
+    <SolidColorBrush x:Key="MediumGrayBrush" Color="{StaticResource MediumGray}" />
+    <SolidColorBrush x:Key="LightGrayBrush" Color="{StaticResource LightGray}" />
+
+    <!-- Estado / Header -->
+    <SolidColorBrush x:Key="HeaderBrush" Color="{StaticResource SecondaryColor}"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#43A047"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#E57373"/>
+
+</ResourceDictionary>
