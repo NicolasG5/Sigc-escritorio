@@ -22,6 +22,9 @@ namespace WPF_LoginForm
               {
                   if (loginView.IsVisible == false && loginView.IsLoaded)
                   {
+                      System.Diagnostics.Debug.WriteLine("[App] LoginView hidden, creating MainView");
+                      System.Diagnostics.Debug.WriteLine($"[App] Thread.CurrentPrincipal.Identity.Name: '{System.Threading.Thread.CurrentPrincipal?.Identity?.Name}'");
+                      
                       var mainView = new MainView();
                       mainView.Show();
                       loginView.Close();

@@ -115,6 +115,9 @@ namespace WPF_LoginForm.ViewModels
         {
             userRepository = new UserRepository();
             CurrentUserAccount = new UserAccountModel();
+            
+            System.Diagnostics.Debug.WriteLine($"[MainViewModel Constructor] Initialized");
+            
             //Initialize commands
             ShowHomeViewCommand = new ViewModelCommand(ExecuteShowHomeViewCommand);
 
@@ -138,6 +141,7 @@ namespace WPF_LoginForm.ViewModels
             ShowAgregarViewCommand = new ViewModelCommand(ExecuteShowShowAgregarViewCommandCommand);
 
             LogoutCommand = new ViewModelCommand(ExecuteLogoutCommand);
+
 
 
 
@@ -287,17 +291,50 @@ namespace WPF_LoginForm.ViewModels
         
         private async void LoadCurrentUserData()
         {
-            var user = await userRepository.GetByUsernameAsync(Thread.CurrentPrincipal.Identity.Name);
-            if (user != null)
+            try
             {
-                CurrentUserAccount.Username = user.Username;
-                CurrentUserAccount.DisplayName = $"{user.Name} {user.LastName}";
-                CurrentUserAccount.ProfilePicture = null;
+                var username = Thread.CurrentPrincipal?.Identity?.Name;
+                
+                System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] Username from Principal: '{username}'");
+                
+                if (string.IsNullOrEmpty(username))
+                {
+                    CurrentUserAccount.DisplayName = "Usuario no identificado";
+                    CurrentUserAccount.Username = "";
+                    System.Diagnostics.Debug.WriteLine("[LoadCurrentUserData] Username is null or empty");
+                    OnPropertyChanged(nameof(CurrentUserAccount));
+                    return;
+                }
+
+                System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] Calling GetByUsernameAsync for: {username}");
+                var user = await userRepository.GetByUsernameAsync(username);
+                
+                if (user != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] User found: {user.Name} {user.LastName}");
+                    CurrentUserAccount.Username = user.Username;
+                    CurrentUserAccount.DisplayName = $"{user.Name} {user.LastName}";
+                    CurrentUserAccount.ProfilePicture = null;
+                    
+                    System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] DisplayName set to: {CurrentUserAccount.DisplayName}");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("[LoadCurrentUserData] User not found from API");
+                    CurrentUserAccount.DisplayName = "Usuario no encontrado";
+                    CurrentUserAccount.Username = username;
+                }
+                
+                // Forzar actualización de la UI
+                OnPropertyChanged(nameof(CurrentUserAccount));
             }
-            else
+            catch (Exception ex)
             {
-                CurrentUserAccount.DisplayName = "Invalid user, not logged in";
-                //Hide child views.
+                System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] StackTrace: {ex.StackTrace}");
+                CurrentUserAccount.DisplayName = "Error al cargar usuario";
+                CurrentUserAccount.Username = Thread.CurrentPrincipal?.Identity?.Name ?? "";
+                OnPropertyChanged(nameof(CurrentUserAccount));
             }
         }
 

@@ -303,60 +303,181 @@
                       GridLinesVisibility="Horizontal"
                       HorizontalGridLinesBrush="{StaticResource MediumGrayBrush}" Style="{DynamicResource DataGridStyle}">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Opciones de administrador" 
-                                            Width="245">
+                    <!-- Columna de Acciones -->
+                    <DataGridTemplateColumn Header="Acciones" 
+                                            Width="200">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <DockPanel>
-                                    <!--creacion de botones para crud-->
-                                    <Button Content="Confirmar"
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="✓ Confirmar"
                                             x:Name="BtnConfirmar"
                                             Background="{StaticResource SuccessBrush}"
-                                            Width="80"
+                                            Width="90"
+                                            Height="28"
+                                            Margin="2"
                                             BorderBrush="Transparent"
                                             Foreground="White"
+                                            FontWeight="SemiBold"
                                             Style="{DynamicResource btnBuscarStyle}" 
                                             Click="Confirmar"
-                                            CommandParameter="{Binding Id}"/>
-                                    <Button Content="Denegar"
+                                            CommandParameter="{Binding IdCita}"
+                                            ToolTip="Confirmar esta solicitud"/>
+                                    <Button Content="✗ Denegar"
                                             x:Name="BtnDenegar"
                                             Background="{StaticResource ErrorBrush}"
-                                            Width="80"
+                                            Width="90"
+                                            Height="28"
+                                            Margin="2"
                                             BorderBrush="Transparent"
                                             Foreground="White"
+                                            FontWeight="SemiBold"
                                             Style="{DynamicResource btnBuscarStyle}"
-                                            CommandParameter="{Binding Id}" 
-                                            Click="Denegar"/>
-                                    
-                                    <!--ENDREGION-->
-                                </DockPanel>
+                                            CommandParameter="{Binding IdCita}" 
+                                            Click="Denegar"
+                                            ToolTip="Rechazar esta solicitud"/>
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     
-                    <!--<DataGridTextColumn Header="FechaSolicitud"
+                    <!-- Información del Paciente -->
+                    <DataGridTextColumn Header="Paciente"
+                                        Width="180"
+                                        Binding="{Binding NombrePaciente}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="ToolTip" Value="{Binding RutPaciente}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="RUT"
                                         Width="110"
-                                        Binding="{Binding FechaSolicitud}"/>-->
-                    <!--<DataGridTextColumn Header="Nombre"
+                                        Binding="{Binding RutPaciente}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontFamily" Value="Consolas"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Teléfono"
+                                        Width="110"
+                                        Binding="{Binding TelefonoPaciente}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontFamily" Value="Consolas"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <!-- Información de la Cita -->
+                    <DataGridTextColumn Header="Fecha Cita"
                                         Width="100"
-                                        Binding="{Binding Nombre}"/>-->
-                    <DataGridTextColumn Header="Rut"
+                                        Binding="{Binding FechaCita}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Horario"
                                         Width="130"
-                                        Binding="{Binding Cliente}"/>
-                    <DataGridTextColumn Header="NombrePaciente"
-                                        Width="100"
-                                        Binding="{Binding FechaInicio}"/>
-                    <DataGridTextColumn Header="Descripcion"
-                                        Width="*"
-                                        Binding="{Binding Descripcion}"/>
-                    <DataGridTextColumn Header="Telefono"
-                                        Width="*"
-                                        Binding="{Binding TipoServicio}"/>
-
-                    <DataGridTextColumn Header="Consultar"
-                                        Width="*"
-                                        Binding="{Binding Estado}"/>
-
+                                        Binding="{Binding HorarioCita}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FontFamily" Value="Consolas"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <!-- Información del Psicólogo -->
+                    <DataGridTextColumn Header="Psicólogo"
+                                        Width="150"
+                                        Binding="{Binding NombrePsicologo}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="ToolTip" Value="{Binding TituloPsicologo}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <!-- Información del Servicio -->
+                    <DataGridTextColumn Header="Servicio"
+                                        Width="200"
+                                        Binding="{Binding NombreServicio}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="ToolTip" Value="{Binding ServicioInfo}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Precio"
+                                        Width="80"
+                                        Binding="{Binding PrecioServicio, StringFormat='${0}'}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <!-- Motivo -->
+                    <DataGridTextColumn Header="Motivo Consulta"
+                                        Width="200"
+                                        Binding="{Binding MotivoConsulta}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="Wrap"/>
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                <Setter Property="ToolTip" Value="{Binding MotivoConsulta}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <!-- Código y Estado -->
+                    <DataGridTextColumn Header="Código"
+                                        Width="90"
+                                        Binding="{Binding CodigoConfirmacion}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FontFamily" Value="Consolas"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Estado"
+                                        Width="110"
+                                        Binding="{Binding EstadoDisplay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Fecha Solicitud"
+                                        Width="140"
+                                        Binding="{Binding FechaSolicitud}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="11"/>
+                                <Setter Property="Foreground" Value="{StaticResource MediumGrayBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
 
                 </DataGrid.Columns>
             </DataGrid>

@@ -1,21 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using WPF_LoginForm.Models;
+using WPF_LoginForm.Services;
 
 namespace WPF_LoginForm.Views
 {
@@ -24,248 +14,346 @@ namespace WPF_LoginForm.Views
     /// </summary>
     public partial class CrearCita : Page
     {
+        private readonly CitaApiService _citaService;
+        private readonly ServicioApiService _servicioService;
+        private readonly PsicologoApiService _psicologoService;
+        private readonly PacienteApiService _pacienteService;
+        
+        // Variables para modo confirmación
+        private int? _idCitaConfirmar = null;
+        private CitaModel _citaActual = null;
+        private bool _modoConfirmacion = false;
+
+        /// <summary>
+        /// Constructor por defecto (modo creación de nueva cita)
+        /// </summary>
         public CrearCita()
         {
             InitializeComponent();
-            CargarCB();
-            CargarCB2();
-            CargarCB3();
+            _citaService = new CitaApiService();
+            _servicioService = new ServicioApiService();
+            _psicologoService = new PsicologoApiService();
+            _pacienteService = new PacienteApiService();
+            
+            _modoConfirmacion = false;
+            Titulo.Text = "Crear Nueva Cita";
+            BtnEnviar.Content = "Crear Cita";
+            
+            CargarDatosIniciales();
         }
+
+        /// <summary>
+        /// Constructor con parámetros (modo confirmación de solicitud)
+        /// </summary>
+        public CrearCita(int idCita, CitaModel cita) : this()
+        {
+            _idCitaConfirmar = idCita;
+            _citaActual = cita;
+            _modoConfirmacion = true;
+            
+            Titulo.Text = "Confirmar Solicitud";
+            BtnEnviar.Content = "Confirmar Cita";
+            
+            CargarDatosSolicitud();
+        }
+
+        private async void CargarDatosIniciales()
+        {
+            try
+            {
+                // Cargar pacientes
+                var pacientes = await _pacienteService.GetPacientesActivosAsync();
+                // Nota: tbNombre debería ser un ComboBox para seleccionar pacientes
+                // Por ahora, se puede usar como texto libre
+                
+                // Cargar servicios en cbComuna (temporal, debería ser cbServicio)
+                var servicios = await _servicioService.GetServiciosActivosAsync();
+                cbComuna.ItemsSource = servicios;
+                cbComuna.DisplayMemberPath = "DisplayName";
+                cbComuna.SelectedValuePath = "IdServicio";
+
+                // Cargar psicólogos en cbHora (temporal, debería ser cbPsicologo)
+                var psicologos = await _psicologoService.GetPsicologosActivosAsync();
+                cbHora.ItemsSource = psicologos;
+                cbHora.DisplayMemberPath = "NombreCompleto";
+                cbHora.SelectedValuePath = "IdPsicologo";
+
+                // Inicializar fecha con hoy
+                dpFecha.SelectedDate = DateTime.Today;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar datos: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void CargarDatosSolicitud()
+        {
+            try
+            {
+                if (_citaActual == null) return;
+
+                // Primero cargar los datos de servicios y psicólogos
+                var servicios = await _servicioService.GetServiciosActivosAsync();
+                cbComuna.ItemsSource = servicios;
+                cbComuna.DisplayMemberPath = "DisplayName";
+                cbComuna.SelectedValuePath = "IdServicio";
+
+                var psicologos = await _psicologoService.GetPsicologosActivosAsync();
+                cbHora.ItemsSource = psicologos;
+                cbHora.DisplayMemberPath = "NombreCompleto";
+                cbHora.SelectedValuePath = "IdPsicologo";
+
+                // Cargar información del paciente
+                var paciente = await _pacienteService.GetPacienteByIdAsync(_citaActual.IdPaciente);
+                if (paciente != null)
+                {
+                    tbNombre.Text = paciente.NombreCompleto;
+                    tbNombre.IsReadOnly = true; // Bloquear edición en modo confirmación
+                }
+
+                // Seleccionar psicólogo
+                cbHora.SelectedValue = _citaActual.IdPsicologo;
+
+                // Seleccionar servicio
+                cbComuna.SelectedValue = _citaActual.IdServicio;
+
+                // Mostrar fecha y hora
+                if (DateTime.TryParse(_citaActual.FechaCita, out DateTime fechaCita))
+                {
+                    dpFecha.SelectedDate = fechaCita;
+                }
+
+                // Mostrar motivo de consulta
+                tbNombre_Copiar1.Text = _citaActual.MotivoConsulta;
+
+                // Mostrar observaciones en dirección (temporal)
+                txtDireccion.Text = _citaActual.Observaciones;
+
+                // Mostrar código de confirmación como referencia
+                if (!string.IsNullOrEmpty(_citaActual.CodigoConfirmacion))
+                {
+                    tbNombre_Copiar.Text = $"Código: {_citaActual.CodigoConfirmacion}";
+                    tbNombre_Copiar.IsReadOnly = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar datos de la solicitud: {ex.Message}", 
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void Regresar(object sender, RoutedEventArgs e)
         {
             Content = new ControlSolicitudes();
-
-        }
-        readonly SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["conexionDB2"].ConnectionString);
-        void CargarCB()
-        {
-            con.Open();
-            SqlCommand cmd = new SqlCommand("SELECT tipo_comuna FROM comuna", con);
-            SqlDataReader dr = cmd.ExecuteReader();
-            while (dr.Read())
-            {
-                //cbComuna.Items.Add(dr["tipo_comuna"].ToString());
-            }
-            con.Close();
         }
 
-
-
-        void CargarCB2()
+        private async void Enviar(object sender, RoutedEventArgs e)
         {
-            con.Open();
-            SqlCommand cmd2 = new SqlCommand("SELECT tipo_propiedad FROM propiedad", con);
-            SqlDataReader dr = cmd2.ExecuteReader();
-            while (dr.Read())
+            try
             {
-                //cbPropiedad.Items.Add(dr["tipo_propiedad"].ToString());
-            }
-            con.Close();
-
-        }
-
-        void CargarCB3()
-        {
-            con.Open();
-            SqlCommand cmd3 = new SqlCommand("SELECT tipo_credito FROM hipotecario", con);
-            SqlDataReader dr = cmd3.ExecuteReader();
-            while (dr.Read())
-            {
-                //cbHipotecario.Items.Add(dr["tipo_credito"].ToString());
-            }
-            con.Close();
-        }
-
-        private string HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < hashedBytes.Length; i++)
+                // Si estamos en modo confirmación
+                if (_modoConfirmacion && _idCitaConfirmar.HasValue)
                 {
-                    builder.Append(hashedBytes[i].ToString("x2"));
+                    await ConfirmarSolicitud();
                 }
-                return builder.ToString();
-            }
-        }
-
-        #region CRUD (create, read, update, delete)
-        public int id_cliente;
-        #region Crear
-        private void Crear(object sender, RoutedEventArgs e)
-        {
-            if (tbNombre.Text == "")
-            {
-                MessageBox.Show("Los campos no pueden quedar vacíos");
-            }
-            else
-            {
-                con.Open();
-
-                //string patron = "WPFLoginForm";
-                //using (SqlCommand cmd = new SqlCommand("INSERT INTO cliente (Nombre_c, A_paterno, A_materno, Correo, usuario, contrasenia, comuna, propiedad,hipotecario) VALUES (@Nombre_c, @A_paterno, @A_materno, @Correo, @usuario, (EncryptByPassPhrase('" + patron + "', '" + tbContrasenia.Text + "')), @comuna, @propiedad,@hipotecario); SELECT SCOPE_IDENTITY()", con))
-                //{
-                //    //cmd.Parameters.AddWithValue("@Nombre_c", tbNombre.Text);
-                //    //cmd.Parameters.AddWithValue("@A_paterno", tbA_paterno.Text);
-                //    //cmd.Parameters.AddWithValue("@A_materno", tbA_materno.Text);
-                //    //cmd.Parameters.AddWithValue("@Correo", tbCorreo.Text);
-                //    //cmd.Parameters.AddWithValue("@usuario", tbUsuario.Text);
-
-                //    // Fetch comuna ID
-                //    SqlCommand cmdComuna = new SqlCommand("SELECT id_comuna FROM comuna WHERE tipo_comuna = @tipoComuna", con);
-                //    //cmdComuna.Parameters.AddWithValue("@tipoComuna", cbComuna.Text);
-                //    int comuna = (int)cmdComuna.ExecuteScalar();
-                //    cmd.Parameters.AddWithValue("@comuna", comuna);
-
-                //    // Fetch propiedad ID
-                //    SqlCommand cmdPropiedad = new SqlCommand("SELECT id_propiedad FROM propiedad WHERE tipo_propiedad = @tipoPropiedad", con);
-                //    //cmdPropiedad.Parameters.AddWithValue("@tipoPropiedad", cbPropiedad.Text);
-                //    int propiedad = (int)cmdPropiedad.ExecuteScalar();
-                //    cmd.Parameters.AddWithValue("@propiedad", propiedad);
-
-
-                //    SqlCommand cmdHipotecario = new SqlCommand("SELECT Id FROM hipotecario WHERE tipo_credito = @tipo_credito", con);
-                //    //cmdHipotecario.Parameters.AddWithValue("@tipo_credito", cbHipotecario.Text);
-                //    int hipotecario = (int)cmdHipotecario.ExecuteScalar();
-                //    cmd.Parameters.AddWithValue("@hipotecario", hipotecario);
-
-                //    cmd.ExecuteNonQuery(); // Ejecutar la consulta para insertar los datos
-
-
-                //}
-
-                //con.Close();
-
-                Content = new CustomerView5();
-            }
-        }
-        #endregion
-
-        #region Consultar
-        public void Consultar()
-        {
-            con.Open();
-
-            using (SqlCommand cmd = new SqlCommand("SELECT c.Nombre_c, c.A_paterno, c.A_materno, c.Correo, c.usuario, co.tipo_comuna, p.tipo_propiedad, h.tipo_credito FROM cliente c JOIN comuna co ON c.comuna = co.id_comuna JOIN propiedad p ON c.propiedad = p.id_propiedad JOIN hipotecario h ON c.hipotecario = h.Id WHERE c.id_cliente = @id_cliente", con))
-            {
-                cmd.Parameters.AddWithValue("@id_cliente", id_cliente);
-
-                using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                else
                 {
-                    if (rdr.Read())
-                    {
-                        tbNombre.Text = rdr["Nombre_c"].ToString();
-
-                        //tbUsuario.Text = rdr["usuario"].ToString();
-                        //cbComuna.SelectedItem = rdr["tipo_comuna"].ToString();
-                        //cbPropiedad.SelectedItem = rdr["tipo_propiedad"].ToString();
-                        //cbHipotecario.SelectedItem = rdr["tipo_credito"].ToString();
-
-                        /*tbContrasenia.Clear();*/ // Limpiar el TextBox de la contraseña
-                    }
+                    await CrearNuevaCita();
                 }
             }
-
-            con.Close();
-        }
-        #endregion
-        #region Eliminar
-        private void Eliminar(object sender, RoutedEventArgs e)
-        {
-            con.Open();
-
-            using (SqlCommand cmd = new SqlCommand("EliminarCliente", con))
+            catch (Exception ex)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id_cliente", id_cliente);
-                cmd.ExecuteNonQuery();
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            con.Close();
-
-            Content = new CustomerView5();
         }
-        #endregion
-        #region Actualizar
-        string patron = "WPFLoginForm";
-        private void Actualizar(object sender, RoutedEventArgs e)
-        {
-            if (tbNombre.Text == "")
-            {
-                MessageBox.Show("Los campos no pueden quedar vacíos");
-            }
-            else
-            {
-                con.Open();
 
-                using (SqlCommand cmd = new SqlCommand("UPDATE cliente SET Nombre_c = @Nombre_c, A_paterno = @A_paterno, A_materno = @A_materno, Correo = @Correo, usuario = @usuario, comuna = @comuna, propiedad = @propiedad, hipotecario = @hipotecario WHERE id_cliente = @id_cliente", con))
+        /// <summary>
+        /// Confirma una solicitud de cita pendiente
+        /// </summary>
+        private async Task ConfirmarSolicitud()
+        {
+            try
+            {
+                // Validar campos obligatorios
+                if (!ValidarCampos())
+                    return;
+
+                // Mostrar mensaje de confirmación
+                var resultado = MessageBox.Show(
+                    $"¿Confirmar la siguiente cita?\n\n" +
+                    $"📋 Paciente: {tbNombre.Text}\n" +
+                    $"👨‍⚕️ Psicólogo: {(cbHora.SelectedItem as PsicologoModel)?.NombreCompleto}\n" +
+                    $"📅 Fecha: {dpFecha.SelectedDate?.ToString("dd/MM/yyyy")}\n" +
+                    $"🔧 Servicio: {(cbComuna.SelectedItem as ServicioModel)?.NombreServicio}\n" +
+                    $"💬 Motivo: {tbNombre_Copiar1.Text}\n\n" +
+                    $"Se enviará notificación al paciente y psicólogo,\n" +
+                    $"y se creará el evento en Google Calendar.",
+                    "Confirmar Solicitud",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (resultado == MessageBoxResult.No)
+                    return;
+
+                // Llamar al endpoint de confirmación
+                bool confirmada = await _citaService.ConfirmarCitaAsync(_idCitaConfirmar.Value);
+
+                if (confirmada)
                 {
-                    cmd.Parameters.AddWithValue("@Nombre_c", tbNombre.Text);
-
-                    //cmd.Parameters.AddWithValue("@usuario", tbUsuario.Text);
-
-                    //if (tbContrasenia.Text != "")
-                    //{
-                    //    SqlCommand com = new SqlCommand("Update cliente set contrasenia=(EncryptByPassPhrase('" + patron + "','" + tbContrasenia.Text + "')) where id_Cliente='" + id_cliente + "'", con);
-                    //    com.ExecuteNonQuery();
-                    //}
-
-                    // Fetch comuna ID
-                    SqlCommand cmdComuna = new SqlCommand("SELECT id_comuna FROM comuna WHERE tipo_comuna = @tipoComuna", con);
-                    //cmdComuna.Parameters.AddWithValue("@tipoComuna", cbComuna.Text);
-                    int comuna = (int)cmdComuna.ExecuteScalar();
-                    cmd.Parameters.AddWithValue("@comuna", comuna);
-
-                    // Fetch propiedad ID
-                    SqlCommand cmdPropiedad = new SqlCommand("SELECT id_propiedad FROM propiedad WHERE tipo_propiedad = @tipoPropiedad", con);
-                    //cmdPropiedad.Parameters.AddWithValue("@tipoPropiedad", cbPropiedad.Text);
-                    int propiedad = (int)cmdPropiedad.ExecuteScalar();
-                    cmd.Parameters.AddWithValue("@propiedad", propiedad);
-
-                    // Fetch hipotecario ID
-                    SqlCommand cmdHipotecario = new SqlCommand("SELECT Id FROM hipotecario WHERE tipo_credito = @tipoCredito", con);
-                    //cmdHipotecario.Parameters.AddWithValue("@tipoCredito", cbHipotecario.Text);
-                    int hipotecario = (int)cmdHipotecario.ExecuteScalar();
-                    cmd.Parameters.AddWithValue("@hipotecario", hipotecario);
-
-                    cmd.Parameters.AddWithValue("@id_cliente", id_cliente);
-
-                    cmd.ExecuteNonQuery();
+                    MessageBox.Show(
+                        $"✅ ¡Solicitud confirmada exitosamente!\n\n" +
+                        $"📋 Código: {_citaActual.CodigoConfirmacion}\n" +
+                        $"📅 Fecha: {dpFecha.SelectedDate?.ToString("dd/MM/yyyy")}\n" +
+                        $"🕐 Hora: {_citaActual.HoraInicio}\n\n" +
+                        $"✉️ Se han enviado notificaciones\n" +
+                        $"📆 Evento creado en Google Calendar", 
+                        "Confirmación Exitosa", 
+                        MessageBoxButton.OK, 
+                        MessageBoxImage.Information);
+                    
+                    // Volver a la lista de solicitudes
+                    Content = new ControlSolicitudes();
                 }
-
-                con.Close();
-
-                Content = new CustomerView5();
-            }
-        }
-        #endregion
-        public void Enviar(object sender, RoutedEventArgs e)
-        {
-            con.Open();
-
-            using (SqlCommand cmd = new SqlCommand("SELECT c.Nombre_c, c.A_paterno, c.A_materno, c.Correo, c.usuario, co.tipo_comuna, p.tipo_propiedad, h.tipo_credito FROM cliente c JOIN comuna co ON c.comuna = co.id_comuna JOIN propiedad p ON c.propiedad = p.id_propiedad JOIN hipotecario h ON c.hipotecario = h.Id WHERE c.id_cliente = @id_cliente", con))
-            {
-                cmd.Parameters.AddWithValue("@id_cliente", id_cliente);
-
-                using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                else
                 {
-                    if (rdr.Read())
-                    {
-                        tbNombre.Text = rdr["Nombre_c"].ToString();
-
-                        //tbUsuario.Text = rdr["usuario"].ToString();
-                        //cbComuna.SelectedItem = rdr["tipo_comuna"].ToString();
-                        //cbPropiedad.SelectedItem = rdr["tipo_propiedad"].ToString();
-                        //cbHipotecario.SelectedItem = rdr["tipo_credito"].ToString();
-
-                        /*tbContrasenia.Clear();*/ // Limpiar el TextBox de la contraseña
-                    }
+                    MessageBox.Show(
+                        "❌ No se pudo confirmar la solicitud.\n\n" +
+                        "Posibles causas:\n" +
+                        "• Error de conexión con el servidor\n" +
+                        "• La cita ya fue confirmada\n" +
+                        "• Datos inválidos\n\n" +
+                        "Intente nuevamente.", 
+                        "Error al Confirmar", 
+                        MessageBoxButton.OK, 
+                        MessageBoxImage.Error);
                 }
             }
-
-            con.Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"❌ Error al confirmar solicitud:\n\n" +
+                    $"{ex.Message}\n\n" +
+                    $"Detalles técnicos:\n{ex.InnerException?.Message}", 
+                    "Error Crítico", 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Error);
+            }
         }
-        #endregion
+
+        /// <summary>
+        /// Crea una nueva cita desde cero
+        /// </summary>
+        private async Task CrearNuevaCita()
+        {
+            try
+            {
+                // Validar campos obligatorios
+                if (!ValidarCampos())
+                    return;
+
+                // Obtener servicio seleccionado para calcular duración
+                var servicioSeleccionado = cbComuna.SelectedItem as ServicioModel;
+                var horaInicio = "09:00:00"; // Hora por defecto (puedes implementar un selector)
+                var horaFin = CalcularHoraFin(horaInicio, servicioSeleccionado?.DuracionMinutos ?? 50);
+
+                // Crear objeto de cita
+                var nuevaCita = new CitaModel
+                {
+                    FechaCita = dpFecha.SelectedDate.Value.ToString("yyyy-MM-dd"),
+                    HoraInicio = horaInicio,
+                    HoraFin = horaFin,
+                    MotivoConsulta = tbNombre_Copiar1.Text ?? "Consulta general",
+                    Observaciones = txtDireccion.Text,
+                    IdPaciente = 1, // TODO: Obtener del ComboBox de pacientes cuando lo implementes
+                    IdPsicologo = (int)cbHora.SelectedValue,
+                    IdServicio = (int)cbComuna.SelectedValue,
+                    IdSala = 1, // TODO: Implementar selector de sala
+                    IdEstadoCita = 1, // Estado inicial (pendiente)
+                    RecordatorioEnviado = false
+                };
+
+                // Llamar al servicio para crear la cita
+                var citaCreada = await _citaService.CreateCitaAsync(nuevaCita);
+
+                if (citaCreada != null)
+                {
+                    MessageBox.Show(
+                        $"✅ Cita creada exitosamente\n\n" +
+                        $"📅 Fecha: {nuevaCita.FechaCita}\n" +
+                        $"🕐 Hora: {nuevaCita.HoraInicio}\n" +
+                        $"👨‍⚕️ Psicólogo: {(cbHora.SelectedItem as PsicologoModel)?.NombreCompleto}\n" +
+                        $"🔧 Servicio: {servicioSeleccionado?.NombreServicio}", 
+                        "Éxito", 
+                        MessageBoxButton.OK, 
+                        MessageBoxImage.Information);
+                    
+                    Content = new ControlSolicitudes();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "❌ No se pudo crear la cita.\n" +
+                        "Verifique los datos e intente nuevamente.", 
+                        "Error", 
+                        MessageBoxButton.OK, 
+                        MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al crear la cita: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// Valida que todos los campos obligatorios estén completos
+        /// </summary>
+        private bool ValidarCampos()
+        {
+            if (string.IsNullOrWhiteSpace(tbNombre.Text))
+            {
+                MessageBox.Show("⚠️ El campo Paciente no puede estar vacío", 
+                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (dpFecha.SelectedDate == null)
+            {
+                MessageBox.Show("⚠️ Debe seleccionar una fecha para la cita", 
+                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (cbComuna.SelectedValue == null)
+            {
+                MessageBox.Show("⚠️ Debe seleccionar un servicio", 
+                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (cbHora.SelectedValue == null)
+            {
+                MessageBox.Show("⚠️ Debe seleccionar un psicólogo", 
+                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Calcula la hora de fin basándose en la hora de inicio y la duración en minutos
+        /// </summary>
+        private string CalcularHoraFin(string horaInicio, int duracionMinutos)
+        {
+            if (TimeSpan.TryParse(horaInicio, out TimeSpan inicio))
+            {
+                var fin = inicio.Add(TimeSpan.FromMinutes(duracionMinutos));
+                return fin.ToString(@"hh\:mm\:ss");
+            }
+            return "10:00:00"; // Valor por defecto
+        }
     }
 }
