@@ -1,0 +1,18 @@
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.vspscc
+_ReSharper*/
+*.ncrunch*
+*.ide
+
+# NuGet
+packages/
+*.nupkg
+
+# Visual Studio Code
+.vscode/
