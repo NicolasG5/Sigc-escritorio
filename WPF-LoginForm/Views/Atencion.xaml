@@ -305,59 +305,123 @@
           GridLinesVisibility="Horizontal"
           HorizontalGridLinesBrush="{StaticResource MediumGrayBrush}" Style="{DynamicResource DataGridStyle}">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Opciones de administrador" 
-                                Width="245">
+                    <!-- Columna de Acciones -->
+                    <DataGridTemplateColumn Header="Acciones" 
+                                Width="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <DockPanel>
-                                    <!--creacion de botones para crud-->
-                                    <Button Content="Atender"
-                                x:Name="BtnConsultar"
-                                Background="{StaticResource SuccessBrush}"
-                                Width="80"
-                                BorderBrush="Transparent"
-                                Foreground="White"
-                                Style="{DynamicResource btnBuscarStyle}" 
-                                Click="Consultar"
-                                CommandParameter="{Binding id_cliente}"/>
-                                    <!--ENDREGION-->
-                                </DockPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="✓ Atender"
+                                            x:Name="BtnConsultar"
+                                            Background="{StaticResource SuccessBrush}"
+                                            Width="85"
+                                            Height="28"
+                                            Margin="2"
+                                            BorderBrush="Transparent"
+                                            Foreground="White"
+                                            FontWeight="SemiBold"
+                                            Style="{DynamicResource btnBuscarStyle}" 
+                                            Click="Consultar"
+                                            CommandParameter="{Binding IdCita}"
+                                            ToolTip="Iniciar atención del paciente"/>
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Rut"
-                            Width="40"
-                            Binding="{Binding id_cliente}"/>
+                    
+                    <!-- ID Cita -->
+                    <DataGridTextColumn Header="ID"
+                            Width="50"
+                            Binding="{Binding IdCita}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
 
+                    <!-- RUT Paciente -->
+                    <DataGridTextColumn Header="RUT Paciente"
+                            Width="110"
+                            Binding="{Binding RutPaciente}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontFamily" Value="Consolas"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Nombre del Paciente -->
                     <DataGridTextColumn Header="Nombre del Paciente"
+                            Width="*"
+                            Binding="{Binding NombrePaciente}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <!-- Fecha Cita -->
+                    <DataGridTextColumn Header="Fecha Cita"
                             Width="100"
-                            Binding="{Binding Nombre_c}"/>
+                            Binding="{Binding FechaCita, StringFormat='dd/MM/yyyy'}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <!-- Hora -->
+                    <DataGridTextColumn Header="Hora"
+                            Width="100"
+                            Binding="{Binding HoraCita}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FontFamily" Value="Consolas"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <!-- Motivo -->
                     <DataGridTextColumn Header="Motivo"
-                            Width="100"
-                            Binding="{Binding A_paterno}"/>
-                    <DataGridTextColumn Header="Adiccion"
-                            Width="100"
-                            Binding="{Binding A_materno}"/>
-                    <DataGridTextColumn Header="Riesgos"
                             Width="*"
-                            Binding="{Binding tipo_comuna}"/>
-                    <DataGridTextColumn Header="Precesencia"
-                            Width="*"
-                            Binding="{Binding tipo_propiedad}"/>
-                    <!--<DataGridTextColumn Header="propiedad"
-                            Width="*"
-                            Binding="{Binding tipo_propiedad}"/>-->
-
-
+                            Binding="{Binding MotivoCita}"/>
+                    
+                    <!-- Estado -->
+                    <DataGridTemplateColumn Header="Estado" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="10" 
+                                        Padding="8,4" 
+                                        Background="{StaticResource AccentBrush}"
+                                        HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding EstadoCita}" 
+                                               Foreground="White" 
+                                               FontWeight="Bold" 
+                                               FontSize="11"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <!--EndRegion-->
             <!--Region FrameCliente-->
+            <!-- Moved frame to content area to avoid showing navigation bar over header -->
             <Frame x:Name="FrameAtencion"
-       Grid.Column="0"
-       Grid.Row="0"
-       Grid.RowSpan="8"
-       Grid.ColumnSpan="6" />
+       Grid.Column="1"
+       Grid.Row="3"
+       Grid.RowSpan="4"
+       Grid.ColumnSpan="4" 
+       NavigationUIVisibility="Hidden" 
+       Background="Transparent" 
+       BorderThickness="0"
+       Visibility="Collapsed" />
             <!--Endregion-->
 
         </Grid>

@@ -3,15 +3,13 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:WPF_LoginForm.Views" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+      xmlns:local="clr-namespace:WPF_LoginForm.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="FormularioA"
+      d:DesignHeight="600" d:DesignWidth="800"
+      Title="Formulario de Atención"
       Background="Transparent">
 
     <Page.Resources>
-
-        <!--REGION FocusVisual-->
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -21,8 +19,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--endregion-->
-        <!--REGION BtnStyle-->
+
         <SolidColorBrush x:Key="Button.Static.Background" Color="{StaticResource PrimaryColor}"/>
         <SolidColorBrush x:Key="Button.Static.Border" Color="{StaticResource MediumGray}"/>
         <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource SecondaryColor}"/>
@@ -32,6 +29,7 @@
         <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFE0E0E0"/>
         <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
         <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        
         <Style x:Key="BtnStyle" TargetType="{x:Type Button}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
@@ -49,9 +47,6 @@
                             <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
@@ -70,12 +65,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--ENDREGION-->
-        <!--REGION TEXTBOX-->
 
         <SolidColorBrush x:Key="TextBox.Static.Border" Color="{StaticResource AccentColor}"/>
         <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{StaticResource SecondaryColor}"/>
         <SolidColorBrush x:Key="TextBox.Focus.Border" Color="{StaticResource AccentColor}"/>
+        
         <Style x:Key="TextBox" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
@@ -91,7 +85,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Border CornerRadius="10" x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="false">
@@ -107,22 +101,12 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
-                        <Condition Property="IsSelectionActive" Value="false"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                </MultiTrigger>
-            </Style.Triggers>
         </Style>
-        <!--ENDREGION-->
-
     </Page.Resources>
+
     <Border CornerRadius="10"
-         BorderThickness="1"
-         Background="{StaticResource panelColor}">
+            BorderThickness="1"
+            Background="{StaticResource panelColor}">
         <Border.BorderBrush>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="{StaticResource winBorderColor4}" Offset="0"/>
@@ -130,218 +114,196 @@
                 <GradientStop Color="{StaticResource winBorderColor4}" Offset="1"/>
             </LinearGradientBrush>
         </Border.BorderBrush>
-        <Grid Margin="0,0,-1,0">
-            <!--REGION COLS & ROWS-->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="80*"/>
-                <ColumnDefinition Width="119*"/>
-                <ColumnDefinition Width="101.004"/>
-                <ColumnDefinition Width="99"/>
-                <ColumnDefinition Width="80*"/>
-                <ColumnDefinition Width="20"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="10*"/>
-                <RowDefinition Height="23"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="7.629"/>
-                <RowDefinition Height="32*"/>
-                <RowDefinition Height="4.789"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="20"/>
-            </Grid.RowDefinitions>
-            <!--ENDREGION-->
-            <!--REGION TITULO-->
-            <TextBlock x:Name="Titulo"
-                   Text="Atencion"
-                   Grid.Column="2"
-                   Grid.Row="1"
-                   FontSize="30"
-                   VerticalAlignment="Top"
-                   HorizontalAlignment="Center" 
-                   Foreground="{StaticResource titleColor1}" Height="40" Width="118"/>
-            <!--ENDREGION-->
-            <!--REGION BOTONES-->
-            <!--REGION REGRESAR-->
-            <Button x:Name="BtnRegresar"
-                Content="Regresar"
-                Grid.Column="1"
-                Grid.Row="1"
-                Cursor="Hand"
-                Background="{StaticResource SecondaryBrush}"
-                Style="{DynamicResource BtnStyle}"
-                Click="Regresar" Margin="10,5,50,15"/>
-            <!--ENDREGION-->
-            <!--REGION CREAR-->
-            <Button x:Name="BtnCrear"
-                Content="Crear"
-                Grid.Row="19"
-                Grid.Column="5"
-                Cursor="Hand"
-                Background="{StaticResource PrimaryBrush}"
-                Style="{DynamicResource BtnStyle}"
-                Visibility="Hidden"
-                Click="Crear" Margin="30,8,30,0" Grid.RowSpan="2"/>
-            <!--ENDREGION-->
-            <!--REGION ELIMINAR-->
-            <Button x:Name="BtnEliminar"
-                Content="Eliminar"
-                Grid.Row="19"
-                Grid.Column="5"
-                Cursor="Hand"
-                Background="{StaticResource ErrorBrush}"
-                Style="{DynamicResource BtnStyle}"
-                Visibility="Hidden"
-                Click="Eliminar" Margin="30,8,30,0" Grid.RowSpan="2"/>
-            <!--ENDREGION-->
-            <!--REGION MODIFICAR-->
-            <Button x:Name="BtnActualizar"
-                Content="Actualizar"
-                Grid.Row="19"
-                Grid.Column="5"
-                Cursor="Hand"
-                Background="{StaticResource PrimaryBrush}"
-                Style="{DynamicResource BtnStyle}"
-                Visibility="Hidden"
-                Click="Actualizar" Margin="30,8,30,0" Grid.RowSpan="2"/>
-            <!--ENDREGION-->
-            <!--ENDREGION-->
-            <!--REGION CONTENIDO-->
-            <TextBlock Grid.Row="2"
-                   Grid.Column="1"
-                   Text="Nombre Completo:"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Foreground="{StaticResource titleColor1}" Margin="6,2,0,0" Height="16" Width="102"/>
-            <TextBox Grid.Row="1"
-                 Grid.Column="1"
-                 x:Name="tbNombre" Style="{DynamicResource TextBox}"
-                 HorizontalContentAlignment="Center" Margin="139,42,53,1" Grid.ColumnSpan="3" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="3">
-                <TextBox.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="-0.133"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </TextBox.RenderTransform>
-            </TextBox>
-            <TextBox Grid.Row="1"
-                 Grid.Column="4"
-                 x:Name="tbA_paterno"
-                 Style="{DynamicResource TextBox}"
-                 HorizontalContentAlignment="Center" Margin="0,47,11,2" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
-            <TextBlock Grid.Row="2"
-                   Grid.Column="3"
-                   Text="Rut:"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Foreground="{StaticResource titleColor1}" Margin="61,0,0,0" Height="16" Width="20"/>
-            <TextBox Grid.Row="4"
-                 Grid.Column="1"
-                 x:Name="tbA_materno"
-                 Style="{DynamicResource TextBox}"
-                 HorizontalContentAlignment="Center" Margin="138,3,51,28" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
-            <TextBlock Grid.Row="4"
-                   Grid.Column="1"
-                   Text="Fecha de Nacimiento:"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Foreground="{StaticResource titleColor1}" Margin="3,0,0,0" Height="16" Width="114"/>
-            <TextBox Grid.Row="6"
-                 Grid.Column="1"
-                 x:Name="tbFecha"
-                 Style="{DynamicResource TextBox}"
-                 HorizontalContentAlignment="Center" Margin="138,7,51,5" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
-            <TextBlock Grid.Row="6"
-                   Grid.Column="1"
-                   Text="Antecedentes:"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Foreground="{StaticResource titleColor1}" Margin="3,5,0,0" Height="16" Width="75"/>
-            <TextBlock Grid.Row="10"
-            Text="Descripcion paciente:"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Height="16" Width="132" Grid.Column="1" Margin="2,2,0,0"/>
-            <TextBox Grid.Row="9"
-            Grid.Column="1"
-            x:Name="tbFecha_Copiar1"
-            Style="{DynamicResource TextBox}"
-            HorizontalContentAlignment="Center" Margin="138,4,0,0" Grid.RowSpan="7" HorizontalAlignment="Left" Width="311" Grid.ColumnSpan="3" Height="113" VerticalAlignment="Top"/>
-            <TextBlock Grid.Row="16"
-            Text="Tratamiento:"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Height="16" Width="137" Margin="0,5,0,0" Grid.Column="1" Grid.RowSpan="3"/>
-            <TextBox Grid.Row="19"
-            Grid.Column="1"
-            x:Name="tbFecha_Copiar4"
-            Style="{DynamicResource TextBox}"
-            HorizontalContentAlignment="Center" Margin="89,8,100,10" Grid.RowSpan="4" Grid.ColumnSpan="3"/>
-            <TextBlock Grid.Row="19"
-            Text="Conclusion:"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Margin="3,4,0,0" Grid.Column="1" Height="16" Width="61" Grid.RowSpan="2"/>
-            <TextBox Grid.Row="15"
-                Grid.Column="1"
-                x:Name="tbFecha_Copiar"
-                Style="{DynamicResource TextBox}"
-                HorizontalContentAlignment="Center" Margin="90,32,99,1" Grid.RowSpan="4" Grid.ColumnSpan="3"/>
-            <TextBlock Grid.Row="16"
-                Text="Medicacion:"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Height="16" Width="137" Margin="13,5,0,0" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="3"/>
-            <TextBox Grid.Row="15"
-                Grid.Column="3"
-                x:Name="tbFecha_Copiar5"
-                Style="{DynamicResource TextBox}"
-                HorizontalContentAlignment="Center" Margin="91,29,10,18" Grid.RowSpan="6" Grid.ColumnSpan="4"/>
-            <!--ENDREGION-->
-            <!--REGION ENVIAR-->
-            <Button x:Name="btnEnviar"
-        Content="Guardar"
-        Grid.Row="20"
-        Grid.Column="5"
-        Width="100"
-        Cursor="Hand"
-        Background="{StaticResource PrimaryBrush}"
-        Style="{DynamicResource BtnStyle}"
-        Click="Guardar" Margin="30,19,30,9" Grid.RowSpan="3"/>
-            <TextBox Grid.Row="4"
-                Grid.Column="4"
-                x:Name="tbA_paterno_Copiar"
-                Style="{DynamicResource TextBox}"
-                HorizontalContentAlignment="Center" Margin="0,21,7,10" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
-            <TextBlock Grid.Row="3"
-                Grid.Column="3"
-                Text="Requiere derivacion?: "
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Foreground="{StaticResource titleColor1}" Margin="61,7,0,0" Height="16" Width="119" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
-            <!--ENDREGION-->
 
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
 
+                <!-- Título y Botón Regresar -->
+                <Grid Grid.Row="0">
+                    <Button x:Name="BtnRegresar"
+                            Content="← Regresar"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Width="120"
+                            Height="35"
+                            Cursor="Hand"
+                            Background="{StaticResource SecondaryBrush}"
+                            Style="{DynamicResource BtnStyle}"
+                            Click="Regresar"/>
 
-        </Grid>
+                    <TextBlock Text="Formulario de Atención"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Foreground="{StaticResource titleColor1}"/>
+                </Grid>
 
+                <!-- Tipo de Tratamiento -->
+                <StackPanel Grid.Row="1" Margin="0,10">
+                    <TextBlock Text="Tipo de Tratamiento *"
+                               Foreground="{StaticResource titleColor1}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtTipoTratamiento"
+                             Style="{DynamicResource TextBox}"
+                             Height="35"
+                             VerticalContentAlignment="Center"
+                             Padding="10,0"
+                             FontSize="14"
+                             ToolTip="Ej: Psicológico, Terapia Cognitiva, Terapia Conductual, etc."/>
+                </StackPanel>
+
+                <!-- Descripción -->
+                <StackPanel Grid.Row="2" Margin="0,10">
+                    <TextBlock Text="Descripción del Tratamiento *"
+                               Foreground="{StaticResource titleColor1}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtDescripcion"
+                             Style="{DynamicResource TextBox}"
+                             Height="100"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"
+                             Padding="10"
+                             FontSize="14"
+                             ToolTip="Descripción detallada del tratamiento y observaciones iniciales"/>
+                </StackPanel>
+
+                <!-- Objetivos -->
+                <StackPanel Grid.Row="3" Margin="0,10">
+                    <TextBlock Text="Objetivos del Tratamiento *"
+                               Foreground="{StaticResource titleColor1}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtObjetivos"
+                             Style="{DynamicResource TextBox}"
+                             Height="100"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"
+                             Padding="10"
+                             FontSize="14"
+                             ToolTip="Objetivos terapéuticos a alcanzar durante el tratamiento"/>
+                </StackPanel>
+
+                <!-- Fechas -->
+                <Grid Grid.Row="4" Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Fecha Inicio -->
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Fecha de Inicio *"
+                                   Foreground="{StaticResource titleColor1}"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,5"/>
+                        <DatePicker x:Name="dpFechaInicio"
+                                    Height="35"
+                                    FontSize="14"/>
+                    </StackPanel>
+
+                    <!-- Fecha Fin Estimada -->
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Fecha Fin Estimada *"
+                                   Foreground="{StaticResource titleColor1}"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,5"/>
+                        <DatePicker x:Name="dpFechaFinEstimada"
+                                    Height="35"
+                                    FontSize="14"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Estado -->
+                <StackPanel Grid.Row="5" Margin="0,10">
+                    <TextBlock Text="Estado del Tratamiento"
+                               Foreground="{StaticResource titleColor1}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,5"/>
+                    <ComboBox x:Name="cboEstado"
+                              Height="35"
+                              FontSize="14"
+                              SelectedIndex="0">
+                        <ComboBoxItem Content="Activo" Tag="activo"/>
+                        <ComboBoxItem Content="En Pausa" Tag="en_pausa"/>
+                        <ComboBoxItem Content="Completado" Tag="completado"/>
+                        <ComboBoxItem Content="Cancelado" Tag="cancelado"/>
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- Nota Informativa -->
+                <Border Grid.Row="6" 
+                        Background="{StaticResource SecondaryBrush}"
+                        CornerRadius="10"
+                        Padding="15"
+                        Margin="0,20,0,0">
+                    <StackPanel>
+                        <TextBlock Text="ℹ Información Importante"
+                                   Foreground="White"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,10"/>
+                        <TextBlock Text="• Este formulario registra la observación inicial del tratamiento."
+                                   Foreground="White"
+                                   FontSize="12"
+                                   Margin="0,2"/>
+                        <TextBlock Text="• Al guardar, el estado de la cita cambiará a 'Completada'."
+                                   Foreground="White"
+                                   FontSize="12"
+                                   Margin="0,2"/>
+                        <TextBlock Text="• Los campos marcados con * son obligatorios."
+                                   Foreground="White"
+                                   FontSize="12"
+                                   Margin="0,2"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Botones -->
+                <StackPanel Grid.Row="7"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <Button x:Name="BtnCancelar"
+                            Content="Cancelar"
+                            Width="120"
+                            Height="40"
+                            Margin="0,0,15,0"
+                            Cursor="Hand"
+                            Background="{StaticResource ErrorBrush}"
+                            Style="{DynamicResource BtnStyle}"
+                            Click="Regresar"/>
+
+                    <Button x:Name="BtnGuardar"
+                            Content="✓ Guardar Atención"
+                            Width="180"
+                            Height="40"
+                            Cursor="Hand"
+                            Background="{StaticResource SuccessBrush}"
+                            Style="{DynamicResource BtnStyle}"
+                            Click="Guardar"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Border>
 </Page>

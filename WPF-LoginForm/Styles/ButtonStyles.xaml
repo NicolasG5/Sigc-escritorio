@@ -216,7 +216,7 @@
 
     <!--#region Delete Button-->
     <SolidColorBrush x:Key="deletelight" Color="#EF9A9A"/>
-    <SolidColorBrush x:Key="deletedark" Color="{StaticResource ErrorBrush}"/>
+    <SolidColorBrush x:Key="deletedark" Color="#E53935"/>
 
     <Style x:Key="ButtonDeleteDGStyle" TargetType="{x:Type Button}">
         <Setter Property="Height" Value="25"/>

@@ -29,8 +29,17 @@ namespace WPF_LoginForm.Models
         [JsonProperty("id_paciente")]
         public int IdPaciente { get; set; }
 
-        [JsonProperty("id_psicologo")]
-        public int IdPsicologo { get; set; }
+        // ? CORRECCIÓN: La API devuelve "id_empleado" no "id_psicologo"
+        [JsonProperty("id_empleado")]
+        public int IdEmpleado { get; set; }
+        
+        // Alias para compatibilidad con código existente que usa IdPsicologo
+        [JsonIgnore]
+        public int IdPsicologo
+        {
+            get { return IdEmpleado; }
+            set { IdEmpleado = value; }
+        }
 
         [JsonProperty("id_servicio")]
         public int IdServicio { get; set; }

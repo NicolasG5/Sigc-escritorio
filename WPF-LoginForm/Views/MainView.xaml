@@ -67,7 +67,10 @@
             <viewModels:ReportesG/>
         </DataTemplate>
 
-
+        <!-- NUEVO: DataTemplate para Gestion de Usuarios -->
+        <DataTemplate DataType="{x:Type viewModel:GestionUsurarios}">
+            <viewModels:GestionUsurarios/>
+        </DataTemplate>
 
         <DataTemplate DataType="{x:Type viewModel:ControlSolicitudes}">
             <viewModels:ControlSolicitudes/>
@@ -287,6 +290,17 @@
                         </StackPanel>
                     </RadioButton>
 
+                    <!-- NUEVO: Boton para Gestion de Usuarios -->
+                    <RadioButton Style="{StaticResource menuButton}"
+                                 Tag="{StaticResource color3}"
+                                 Command="{Binding ShowGestionUsuariosCommand}">
+
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="Users" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Gestion de Usuarios" Style="{StaticResource menuButtonText}"/>
+                        </StackPanel>
+                    </RadioButton>
+
                     <!--<RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color2}"
                                  Command="{Binding ShowAgregarViewCommand}">
@@ -296,10 +310,6 @@
                             <TextBlock Text="Revision clientes" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>-->
-
-
-
-
 
 
                 </StackPanel>

@@ -58,22 +58,57 @@ namespace WPF_LoginForm.Repositories
         }
         public async Task<UserModel> GetByUsernameAsync(string username)
         {
-            // Obtener el token desde el almacén global (ajusta si usas otro método)
-            var token = ApiTokenStore.Instance.Token;
-            if (string.IsNullOrEmpty(token))
-                return null;
-
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/users/me");
-            request.Headers.Add("accept", "application/json");
-            request.Headers.Add("Authorization", $"Bearer {token}");
-
-            var response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var json = await response.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<UserModel>(json);
-                return user;
+                System.Diagnostics.Debug.WriteLine($"[GetByUsernameAsync] Called with username: {username}");
+                
+                // Obtener el token desde el almacén global (ajusta si usas otro método)
+                var token = ApiTokenStore.Instance.Token;
+                
+                System.Diagnostics.Debug.WriteLine($"[GetByUsernameAsync] Token: {(string.IsNullOrEmpty(token) ? "NULL/EMPTY" : token.Substring(0, 20) + "...")}");
+                
+                if (string.IsNullOrEmpty(token))
+                {
+                    System.Diagnostics.Debug.WriteLine("[GetByUsernameAsync] Token is null or empty, returning null");
+                    return null;
+                }
+
+                var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/users/me");
+                request.Headers.Add("accept", "application/json");
+                request.Headers.Add("Authorization", $"Bearer {token}");
+
+                System.Diagnostics.Debug.WriteLine($"[GetByUsernameAsync] Sending request to: {_httpClient.BaseAddress}/api/v1/users/me");
+                
+                var response = await _httpClient.SendAsync(request);
+                
+                System.Diagnostics.Debug.WriteLine($"[GetByUsernameAsync] Response status: {response.StatusCode}");
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine($"[GetByUsernameAsync] Response JSON: {json}");
+                    
+                    var user = JsonConvert.DeserializeObject<UserModel>(json);
+                    
+                    if (user != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[GetByUsernameAsync] User deserialized: {user.Name} {user.LastName} (Username: {user.Username})");
+                    }
+                    
+                    return user;
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine($"[GetByUsernameAsync] Error response: {errorContent}");
+                }
             }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[GetByUsernameAsync] Exception: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[GetByUsernameAsync] StackTrace: {ex.StackTrace}");
+            }
+            
             return null;
         }
         // Método para obtener todos los usuarios usando el token

@@ -82,17 +82,45 @@ namespace WPF_LoginForm.Views
                 tbObservaciones.Text = _citaActual.Observaciones ?? "Sin observaciones";
 
                 // --- INFORMACIÓN DEL PSICÓLOGO ---
-                var psicologo = await _psicologoService.GetPsicologoByIdAsync(_citaActual.IdPsicologo);
-                if (psicologo != null)
+                System.Diagnostics.Debug.WriteLine($"[ConfirmarSolicitud] Cargando psicólogo ID: {_citaActual.IdPsicologo}");
+                
+                if (_citaActual.IdPsicologo > 0)
                 {
-                    tbNombrePsicologo.Text = psicologo.NombreCompleto ?? "N/A";
-                    tbTituloPsicologo.Text = psicologo.TituloProfesional ?? "N/A";
-                    tbEmailPsicologo.Text = psicologo.EmailPersonal ?? "N/A";
-                    tbTelefonoPsicologo.Text = psicologo.Telefono ?? "N/A";
+                    try
+                    {
+                        var psicologo = await _psicologoService.GetPsicologoByIdAsync(_citaActual.IdPsicologo);
+                        
+                        if (psicologo != null)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[ConfirmarSolicitud] ✅ Psicólogo cargado: {psicologo.NombreCompleto}");
+                            tbNombrePsicologo.Text = psicologo.NombreCompleto ?? "N/A";
+                            tbTituloPsicologo.Text = psicologo.TituloProfesional ?? "N/A";
+                            tbEmailPsicologo.Text = psicologo.EmailPersonal ?? "N/A";
+                            tbTelefonoPsicologo.Text = psicologo.Telefono ?? "N/A";
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[ConfirmarSolicitud] ⚠️ Psicólogo NULL para ID: {_citaActual.IdPsicologo}");
+                            System.Diagnostics.Debug.WriteLine($"[ConfirmarSolicitud]    GET /api/v1/empleados/{_citaActual.IdPsicologo} devolvió NULL");
+                            tbNombrePsicologo.Text = "⚠️ Psicólogo no encontrado en el sistema";
+                            tbTituloPsicologo.Text = "N/A";
+                            tbEmailPsicologo.Text = "N/A";
+                            tbTelefonoPsicologo.Text = "N/A";
+                        }
+                    }
+                    catch (Exception exPsi)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[ConfirmarSolicitud] ❌ ERROR al cargar psicólogo: {exPsi.Message}");
+                        tbNombrePsicologo.Text = $"❌ Error al cargar ({exPsi.Message})";
+                        tbTituloPsicologo.Text = "N/A";
+                        tbEmailPsicologo.Text = "N/A";
+                        tbTelefonoPsicologo.Text = "N/A";
+                    }
                 }
                 else
                 {
-                    tbNombrePsicologo.Text = "Psicólogo no encontrado";
+                    System.Diagnostics.Debug.WriteLine($"[ConfirmarSolicitud] ⚠️ IdPsicologo es 0 - No hay psicólogo asignado");
+                    tbNombrePsicologo.Text = "⚠️ Sin psicólogo asignado";
                     tbTituloPsicologo.Text = "N/A";
                     tbEmailPsicologo.Text = "N/A";
                     tbTelefonoPsicologo.Text = "N/A";

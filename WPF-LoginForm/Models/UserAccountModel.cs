@@ -1,24 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WPF_LoginForm.Models
 {
-   public class UserAccountModel
+   public class UserAccountModel : INotifyPropertyChanged
     {
-        public string Username { get; set; }
-        public string DisplayName { get; set; }
-        public byte[] ProfilePicture { get; set; }
-        public string Password { get; set; } // Added Password property
-        public bool Estado { get; set; } // Added Estado property
+        private string _username;
+        private string _displayName;
+        private byte[] _profilePicture;
+        private string _password;
+        private bool _estado;
 
-        // Added Autenticar method
+        public string Username 
+        { 
+            get => _username; 
+            set 
+            { 
+                _username = value; 
+                OnPropertyChanged(nameof(Username)); 
+            } 
+        }
+
+        public string DisplayName 
+        { 
+            get => _displayName; 
+            set 
+            { 
+                _displayName = value; 
+                OnPropertyChanged(nameof(DisplayName)); 
+            } 
+        }
+
+        public byte[] ProfilePicture 
+        { 
+            get => _profilePicture; 
+            set 
+            { 
+                _profilePicture = value; 
+                OnPropertyChanged(nameof(ProfilePicture)); 
+            } 
+        }
+
+        public string Password 
+        { 
+            get => _password; 
+            set 
+            { 
+                _password = value; 
+                OnPropertyChanged(nameof(Password)); 
+            } 
+        }
+
+        public bool Estado 
+        { 
+            get => _estado; 
+            set 
+            { 
+                _estado = value; 
+                OnPropertyChanged(nameof(Estado)); 
+            } 
+        }
+
         public bool Autenticar(string password)
         {
-            // Here you would add your own logic to check if the password is correct
             return this.Password == password;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

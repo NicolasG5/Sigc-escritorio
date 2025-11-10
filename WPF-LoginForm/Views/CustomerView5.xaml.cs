@@ -1,111 +1,219 @@
-ï»¿using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using WPF_LoginForm.Models;
+using WPF_LoginForm.Services;
 
 namespace WPF_LoginForm.Views
 {
-    /// <summary>
-    /// LÃ³gica de interacciÃ³n para CustomerView5.xaml
-    /// </summary>
     public partial class CustomerView5 : UserControl
     {
+        private readonly PacienteApiService _pacienteService;
+        private List<PacienteModel> _todosPacientes;
+
         public CustomerView5()
         {
             InitializeComponent();
+            _pacienteService = new PacienteApiService();
             CargarDatos();
         }
 
-        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["conexionDB2"].ConnectionString);
-        void CargarDatos()
+        private async void CargarDatos()
         {
-            con.Open();
-            SqlCommand cmd = new SqlCommand("SELECT c.id_cliente, c.Nombre_c, c.A_paterno, c.A_materno, co.tipo_comuna, p.tipo_propiedad, h.tipo_credito FROM cliente c INNER JOIN comuna co ON c.comuna = co.id_comuna INNER JOIN propiedad p ON c.propiedad = p.id_propiedad INNER JOIN hipotecario h ON c.hipotecario = h.Id ORDER BY c.id_cliente ASC", con);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-
-            GridDatos.ItemsSource = dt.DefaultView;
-            con.Close();
-
-
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== CARGANDO PACIENTES ===");
+                
+                var pacientes = await _pacienteService.GetAllPacientesAsync();
+                _todosPacientes = pacientes?.ToList() ?? new List<PacienteModel>();
+                
+                System.Diagnostics.Debug.WriteLine($"Pacientes cargados: {_todosPacientes.Count}");
+                
+                GridDatos.ItemsSource = _todosPacientes;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al cargar pacientes: {ex.Message}");
+                MessageBox.Show($"Error al cargar pacientes:\n\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-        #region buscar
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Obtener el texto actual del TextBox
-            string texto = Buscar.Text;
+            try
+            {
+                if (_todosPacientes == null || !_todosPacientes.Any())
+                    return;
 
-            // Obtener el DataTable actual del DataGrid
-            DataTable dt = ((DataView)GridDatos.ItemsSource).Table;
+                string busqueda = Buscar.Text?.ToLower() ?? "";
 
-            // Aplicar el filtro en el DataView asociado al DataTable
-            dt.DefaultView.RowFilter = $"Nombre_c LIKE '%{texto}%' OR A_paterno LIKE '%{texto}%' OR A_materno LIKE '%{texto}%'";
+                if (string.IsNullOrWhiteSpace(busqueda))
+                {
+                    GridDatos.ItemsSource = _todosPacientes;
+                    return;
+                }
+
+                var filtrados = _todosPacientes.Where(p =>
+                    (p.Rut?.ToLower().Contains(busqueda) ?? false) ||
+                    (p.NombreCompleto?.ToLower().Contains(busqueda) ?? false) ||
+                    (p.Email?.ToLower().Contains(busqueda) ?? false) ||
+                    (p.Telefono?.ToLower().Contains(busqueda) ?? false)
+                ).ToList();
+
+                GridDatos.ItemsSource = filtrados;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en búsqueda: {ex.Message}");
+            }
         }
-        #endregion
+
         private void Agregar(object sender, RoutedEventArgs e)
         {
-            Paciente ventana = new Paciente();
-            FrameCustomerView5.Content = ventana;
-            //ventana.BtnCrear.Visibility = Visibility.Visible;
+            System.Diagnostics.Debug.WriteLine(">>> Abriendo formulario CREAR paciente");
+            
+            // Crear formulario en modo crear
+            var formulario = new Paciente();
+            
+            // Suscribirse al evento para cerrar y recargar
+            formulario.PacienteGuardado += (s, args) =>
+            {
+                System.Diagnostics.Debug.WriteLine("? Evento PacienteGuardado recibido - cerrando formulario");
+                FrameCustomerView5.Content = null;
+                CargarDatos();
+            };
+            
+            // Mostrar formulario en el Frame
+            FrameCustomerView5.Content = formulario;
         }
 
         private void Consultar(object sender, RoutedEventArgs e)
         {
-            int id = (int)((Button)sender).CommandParameter;
-            Paciente ventana = new Paciente();
-            //ventana.id_cliente = id;
-            ventana.Consultar();
-            FrameCustomerView5.Content = ventana;
-            ventana.Titulo.Text = "Consultar Cliente";
-            ventana.tbNombre.IsEnabled = false;
-            //ventana.tbA_paterno.IsEnabled = false;
-            //ventana.tbA_materno.IsEnabled = false;
-            //ventana.tbCorreo.IsEnabled = false;
-            //ventana.cbComuna.IsEnabled = false;
-            //ventana.cbPropiedad.IsEnabled = false;
-            //ventana.cbHipotecario.IsEnabled = false;
+            var button = sender as Button;
+            if (button?.CommandParameter == null) return;
 
+            int idPaciente = (int)button.CommandParameter;
+            var paciente = _todosPacientes.FirstOrDefault(p => p.IdPaciente == idPaciente);
 
+            if (paciente == null)
+            {
+                MessageBox.Show("Paciente no encontrado", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
+            System.Diagnostics.Debug.WriteLine($">>> Abriendo formulario EDITAR (consulta) paciente: {paciente.NombreCompleto}");
+            
+            // Crear formulario en modo editar (consulta es como editar pero sin guardar)
+            var formulario = new Paciente(paciente);
+            
+            // Suscribirse al evento para cerrar
+            formulario.PacienteGuardado += (s, args) =>
+            {
+                System.Diagnostics.Debug.WriteLine("? Cerrando consulta de paciente");
+                FrameCustomerView5.Content = null;
+            };
+            
+            // Mostrar formulario en el Frame
+            FrameCustomerView5.Content = formulario;
         }
 
         private void Actualizar(object sender, RoutedEventArgs e)
         {
-            int id = (int)((Button)sender).CommandParameter;
-            Paciente ventana = new Paciente();
-            //ventana.id_cliente = id;
-            ventana.Consultar();
-            FrameCustomerView5.Content = ventana;
-            ventana.Titulo.Text = "Actualizar Cliente";
-            ventana.tbNombre.IsEnabled = true;
-            //ventana.tbA_paterno.IsEnabled = true;
-            //ventana.tbA_materno.IsEnabled = true;
-            //ventana.tbCorreo.IsEnabled = true;
-            //ventana.cbComuna.IsEnabled = true;
-            //ventana.cbPropiedad.IsEnabled = true;
-            //ventana.cbHipotecario.IsEnabled = true;
-            //ventana.BtnActualizar.Visibility = Visibility.Visible;
+            var button = sender as Button;
+            if (button?.CommandParameter == null) return;
+
+            int idPaciente = (int)button.CommandParameter;
+            var paciente = _todosPacientes.FirstOrDefault(p => p.IdPaciente == idPaciente);
+
+            if (paciente == null)
+            {
+                MessageBox.Show("Paciente no encontrado", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine($">>> Abriendo formulario EDITAR paciente: {paciente.NombreCompleto}");
+            
+            // Crear formulario en modo editar
+            var formulario = new Paciente(paciente);
+            
+            // Suscribirse al evento para cerrar y recargar
+            formulario.PacienteGuardado += (s, args) =>
+            {
+                System.Diagnostics.Debug.WriteLine("? Evento PacienteGuardado recibido - cerrando formulario y recargando");
+                FrameCustomerView5.Content = null;
+                CargarDatos();
+            };
+            
+            // Mostrar formulario en el Frame
+            FrameCustomerView5.Content = formulario;
         }
 
-        private void Eliminar(object sender, RoutedEventArgs e)
+        private async void Eliminar(object sender, RoutedEventArgs e)
         {
-            int id = (int)((Button)sender).CommandParameter;
-            Paciente ventana = new Paciente();
-            //ventana.id_cliente = id;
-            ventana.Consultar();
-            FrameCustomerView5.Content = ventana;
-            //ventana.Titulo.Text = "Eliminar Cliente";
-            //ventana.tbNombre.IsEnabled = false;
-            //ventana.tbA_paterno.IsEnabled = false;
-            //ventana.tbA_materno.IsEnabled = false;
-            //ventana.tbCorreo.IsEnabled = false;
-            ////ventana.cbComuna.IsEnabled = false;
-            ////ventana.cbPropiedad.IsEnabled = false;
-            //ventana.cbHipotecario.IsEnabled = false;
-            //ventana.BtnEliminar.Visibility = Visibility.Visible;
-        }
+            var button = sender as Button;
+            if (button?.CommandParameter == null) return;
 
+            int idPaciente = (int)button.CommandParameter;
+            var paciente = _todosPacientes.FirstOrDefault(p => p.IdPaciente == idPaciente);
+
+            if (paciente == null)
+            {
+                MessageBox.Show("Paciente no encontrado", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var resultado = MessageBox.Show(
+                $"¿Está seguro de eliminar al paciente?\n\n" +
+                $"{paciente.NombreCompleto}\n" +
+                $"RUT: {paciente.Rut}\n\n" +
+                $"Esta acción no se puede deshacer.",
+                "Confirmar Eliminación",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (resultado == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    System.Diagnostics.Debug.WriteLine($"Eliminando paciente ID: {idPaciente}");
+                    
+                    bool eliminado = await _pacienteService.DeletePacienteAsync(idPaciente);
+
+                    if (eliminado)
+                    {
+                        MessageBox.Show(
+                            $"Paciente eliminado exitosamente\n\n{paciente.NombreCompleto}",
+                            "Éxito",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+
+                        // Recargar lista de pacientes
+                        CargarDatos();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo eliminar el paciente.\n\nIntente nuevamente.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Error al eliminar paciente:\n\n{ex.Message}",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            }
+        }
     }
 }

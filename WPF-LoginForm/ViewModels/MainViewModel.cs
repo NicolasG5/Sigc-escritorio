@@ -96,6 +96,7 @@ namespace WPF_LoginForm.ViewModels
         public ICommand ShowMedicacionCommand { get; }
         public ICommand ShowReportesCommand { get; }
         public ICommand ShowControlSolicitudesCommand { get; }
+        public ICommand ShowGestionUsuariosCommand { get; } // NUEVO COMANDO
 
 
         public ICommand ShowAgregarViewCommand { get; }
@@ -133,6 +134,7 @@ namespace WPF_LoginForm.ViewModels
             ShowTratamientoCommand = new ViewModelCommand(ExecuteShowTratamientoCommand);
             ShowMedicacionCommand = new ViewModelCommand(ExecuteShowMedicacionCommand);
             ShowReportesCommand = new ViewModelCommand(ExecuteShowReportesCommand);
+            ShowGestionUsuariosCommand = new ViewModelCommand(ExecuteShowGestionUsuariosCommand); // NUEVO
 
 
             ShowCustomerView4Command = new ViewModelCommand(ExecuteShowCustomerView4Command);
@@ -142,7 +144,7 @@ namespace WPF_LoginForm.ViewModels
 
             LogoutCommand = new ViewModelCommand(ExecuteLogoutCommand);
 
-
+        
 
 
 
@@ -156,6 +158,14 @@ namespace WPF_LoginForm.ViewModels
             CurrentChildView = new ReportesG();
             Caption = "Seguimiento";
             Icon = IconChar.Hammer;
+        }
+
+        // NUEVO: Metodo para mostrar Gestion de Usuarios
+        private void ExecuteShowGestionUsuariosCommand(object obj)
+        {
+            CurrentChildView = new ViewModels.GestionUsurarios();
+            Caption = "Gestion de Usuarios";
+            Icon = IconChar.Users;
         }
 
         private void ExecuteShowMedicacionCommand(object obj)

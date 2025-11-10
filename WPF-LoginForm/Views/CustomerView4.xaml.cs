@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using WPF_LoginForm.Models;
+using WPF_LoginForm.Services;
 
 namespace WPF_LoginForm.Views
 {
@@ -23,108 +14,287 @@ namespace WPF_LoginForm.Views
     /// </summary>
     public partial class CustomerView4 : UserControl
     {
+        private readonly PsicologoApiService _empleadoService;
+        private List<PsicologoModel> _todosEmpleados;
+
         public CustomerView4()
         {
             InitializeComponent();
+            _empleadoService = new PsicologoApiService();
             CargarDatos();
         }
-        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["conexionDB2"].ConnectionString);
-        void CargarDatos()
+
+        private async void CargarDatos()
         {
-            con.Open();
-            SqlCommand cmd = new SqlCommand("Select Id,Run, Nombre, A_paterno,A_materno, tipo_comuna from Empleados inner join comuna on Empleados.comuna=comuna.id_comuna order by Id ASC", con);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-
-            GridDatos.ItemsSource = dt.DefaultView;
-            con.Close();
-
-
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== CARGANDO EMPLEADOS ===");
+                
+                var empleados = await _empleadoService.GetAllPsicologosAsync();
+                _todosEmpleados = empleados?.ToList() ?? new List<PsicologoModel>();
+                
+                System.Diagnostics.Debug.WriteLine($"Empleados cargados: {_todosEmpleados.Count}");
+                
+                GridDatos.ItemsSource = _todosEmpleados;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al cargar empleados: {ex.Message}");
+                MessageBox.Show($"Error al cargar empleados:\n\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-        #region buscar
+
+        /// <summary>
+        /// Método público para recargar datos desde CrudEmpleado
+        /// </summary>
+        public void CargarDatosPublic()
+        {
+            CargarDatos();
+        }
+
+        #region Buscar
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Obtener el texto actual del TextBox
-            string texto = Buscar.Text;
+            try
+            {
+                if (_todosEmpleados == null || !_todosEmpleados.Any())
+                    return;
 
-            // Obtener el DataTable actual del DataGrid
-            DataTable dt = ((DataView)GridDatos.ItemsSource).Table;
+                string busqueda = Buscar.Text?.ToLower() ?? "";
 
-            // Aplicar el filtro en el DataView asociado al DataTable
-            dt.DefaultView.RowFilter = $"Nombre LIKE '%{texto}%' OR A_paterno LIKE '%{texto}%' OR A_materno LIKE '%{texto}%'";
+                if (string.IsNullOrWhiteSpace(busqueda))
+                {
+                    GridDatos.ItemsSource = _todosEmpleados;
+                    return;
+                }
+
+                var filtrados = _todosEmpleados.Where(emp =>
+                    (emp.Rut?.ToLower().Contains(busqueda) ?? false) ||
+                    (emp.Nombres?.ToLower().Contains(busqueda) ?? false) ||
+                    (emp.ApellidoPaterno?.ToLower().Contains(busqueda) ?? false) ||
+                    (emp.ApellidoMaterno?.ToLower().Contains(busqueda) ?? false) ||
+                    (emp.NombreCompleto?.ToLower().Contains(busqueda) ?? false) ||
+                    (emp.EmailPersonal?.ToLower().Contains(busqueda) ?? false) ||
+                    (emp.Telefono?.ToLower().Contains(busqueda) ?? false)
+                ).ToList();
+
+                GridDatos.ItemsSource = filtrados;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en búsqueda: {ex.Message}");
+            }
         }
         #endregion
+
         private void Agregar(object sender, RoutedEventArgs e)
         {
-            CrudEmpleado ventana = new CrudEmpleado();
-            FrameCustomerView4.Content = ventana;
-            ventana.BtnCrear.Visibility = Visibility.Visible;
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("✅ Navegando a formulario de creación de empleado");
+                
+                // Navegar al formulario de creación usando el Frame
+                var crudEmpleado = new CrudEmpleado(); // Constructor sin parámetros = modo creación
+                
+                // Suscribirse al evento EmpleadoGuardado para cerrar el formulario
+                crudEmpleado.EmpleadoGuardado += (s, args) =>
+                {
+                    System.Diagnostics.Debug.WriteLine("✅ Evento EmpleadoGuardado recibido - cerrando Frame");
+                    FrameCustomerView4.Content = null;
+                    CargarDatos(); // Recargar datos
+                };
+                
+                FrameCustomerView4.Content = crudEmpleado;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ Error al navegar a creación: {ex.Message}");
+                MessageBox.Show($"Error al abrir formulario:\n\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Consultar(object sender, RoutedEventArgs e)
         {
-            int id = (int)((Button)sender).CommandParameter;
-            CrudEmpleado ventana = new CrudEmpleado();
-            ventana.Id = id;
-            ventana.Consultar();
-            FrameCustomerView4.Content = ventana;
-            ventana.Titulo.Text = "Consultar Empleado";
-            ventana.tbRun.IsEnabled = false;
-            ventana.tbNombre.IsEnabled = false;
-            ventana.tbA_paterno.IsEnabled = false;
-            ventana.tbA_materno.IsEnabled = false;
+            var button = sender as Button;
+            if (button?.CommandParameter == null) return;
 
-            ventana.tbFecha.IsEnabled = false;
+            int idEmpleado = (int)button.CommandParameter;
+            var empleado = _todosEmpleados.FirstOrDefault(emp => emp.IdEmpleado == idEmpleado);
 
-            //ventana.cbComuna.IsEnabled = false;
+            if (empleado == null)
+            {
+                MessageBox.Show("Empleado no encontrado", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"✅ Navegando a consulta de empleado: {empleado.NombreCompleto}");
+                
+                // Navegar al formulario de consulta usando el Frame
+                var crudEmpleado = new CrudEmpleado(empleado, soloConsulta: true);
+                
+                // Suscribirse al evento EmpleadoGuardado para cerrar el formulario
+                crudEmpleado.EmpleadoGuardado += (s, args) =>
+                {
+                    System.Diagnostics.Debug.WriteLine("✅ Evento EmpleadoGuardado recibido - cerrando Frame");
+                    FrameCustomerView4.Content = null;
+                };
+                
+                FrameCustomerView4.Content = crudEmpleado;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ Error al navegar a consulta: {ex.Message}");
+                MessageBox.Show($"Error al abrir formulario:\n\n{ex.Message}\n\nMostrando datos en ventana emergente.",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MostrarDatosEmpleado(empleado);
+            }
+        }
 
+        // Método auxiliar para mostrar datos en MessageBox (fallback)
+        private void MostrarDatosEmpleado(PsicologoModel empleado)
+        {
+            string mensaje = $"INFORMACION DEL EMPLEADO\n" +
+                           $"{'=',50}\n\n" +
+                           $"DATOS PERSONALES\n" +
+                           $"{'-',50}\n" +
+                           $"ID: {empleado.IdEmpleado}\n" +
+                           $"RUT: {empleado.Rut}\n" +
+                           $"Nombre: {empleado.NombreCompleto}\n" +
+                           $"Fecha Nacimiento: {empleado.FechaNacimiento}\n\n" +
+                           $"CONTACTO\n" +
+                           $"{'-',50}\n" +
+                           $"Email: {empleado.EmailPersonal}\n" +
+                           $"Telefono: {empleado.Telefono}\n" +
+                           $"Direccion: {empleado.Direccion}\n\n" +
+                           $"INFORMACION PROFESIONAL\n" +
+                           $"{'-',50}\n" +
+                           $"Titulo: {empleado.TituloProfesional}\n" +
+                           $"Universidad: {empleado.Universidad}\n" +
+                           $"Registro: {empleado.RegistroProfesional}\n" +
+                           $"Experiencia: {empleado.AniosExperiencia} anos\n" +
+                           $"Rol: {empleado.RolEmpleado}\n" +
+                           $"Estado: {empleado.Estado}\n" +
+                           $"Fecha Registro: {empleado.FechaRegistro:dd/MM/yyyy}";
 
+            MessageBox.Show(mensaje, $"Consulta Empleado: {empleado.Nombres}",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        // Método helper para buscar Frame en el árbol visual
+        private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            if (parent == null) return null;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T typedChild)
+                    return typedChild;
+
+                var childOfChild = FindVisualChild<T>(child);
+                if (childOfChild != null)
+                    return childOfChild;
+            }
+            return null;
         }
 
         private void Actualizar(object sender, RoutedEventArgs e)
         {
-            int id = (int)((Button)sender).CommandParameter;
-            CrudEmpleado ventana = new CrudEmpleado();
-            ventana.Id = id;
-            ventana.Consultar();
-            FrameCustomerView4.Content = ventana;
-            ventana.Titulo.Text = "Actualizar Empleado";
-            ventana.tbRun.IsEnabled = true;
-            ventana.tbNombre.IsEnabled = true;
-            ventana.tbA_paterno.IsEnabled = true;
-            ventana.tbA_materno.IsEnabled = true;
+            var button = sender as Button;
+            if (button?.CommandParameter == null) return;
 
+            int idEmpleado = (int)button.CommandParameter;
+            var empleado = _todosEmpleados.FirstOrDefault(emp => emp.IdEmpleado == idEmpleado);
 
-            ventana.tbFecha.IsEnabled = true;
+            if (empleado == null)
+            {
+                MessageBox.Show("Empleado no encontrado", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            //ventana.cbComuna.IsEnabled = true;
-
-
-
-            ventana.BtnActualizar.Visibility = Visibility.Visible;
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"✅ Navegando a edición de empleado: {empleado.NombreCompleto}");
+                
+                // Navegar al formulario de edición usando el Frame
+                var crudEmpleado = new CrudEmpleado(empleado, soloConsulta: false);
+                
+                // Suscribirse al evento EmpleadoGuardado para cerrar el formulario y recargar
+                crudEmpleado.EmpleadoGuardado += (s, args) =>
+                {
+                    System.Diagnostics.Debug.WriteLine("✅ Evento EmpleadoGuardado recibido - cerrando Frame");
+                    FrameCustomerView4.Content = null;
+                    CargarDatos(); // Recargar datos
+                };
+                
+                FrameCustomerView4.Content = crudEmpleado;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ Error al navegar a edición: {ex.Message}");
+                MessageBox.Show($"Error al abrir formulario:\n\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        private void Eliminar(object sender, RoutedEventArgs e)
+        private async void Eliminar(object sender, RoutedEventArgs e)
         {
-            int id = (int)((Button)sender).CommandParameter;
-            CrudEmpleado ventana = new CrudEmpleado();
-            ventana.Id = id;
-            ventana.Consultar();
-            FrameCustomerView4.Content = ventana;
-            ventana.Titulo.Text = "Eliminar Empleado";
-            ventana.tbRun.IsEnabled = false;
-            ventana.tbNombre.IsEnabled = false;
-            ventana.tbA_paterno.IsEnabled = false;
-            ventana.tbA_materno.IsEnabled = false;
+            var button = sender as Button;
+            if (button?.CommandParameter == null) return;
 
-            ventana.tbFecha.IsEnabled = false;
+            int idEmpleado = (int)button.CommandParameter;
+            var empleado = _todosEmpleados.FirstOrDefault(emp => emp.IdEmpleado == idEmpleado);
 
-            //ventana.cbComuna.IsEnabled = false;
+            if (empleado == null)
+            {
+                MessageBox.Show("Empleado no encontrado", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
+            // Confirmación de eliminación
+            var resultado = MessageBox.Show(
+                $"Esta seguro de eliminar al empleado?\n\n" +
+                $"Nombre: {empleado.NombreCompleto}\n" +
+                $"RUT: {empleado.Rut}\n" +
+                $"Rol: {empleado.RolEmpleado}\n\n" +
+                $"Esta accion NO se puede deshacer.",
+                "Confirmar Eliminacion",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
 
-            ventana.BtnEliminar.Visibility = Visibility.Visible;
+            if (resultado == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    bool eliminado = await _empleadoService.DeleteEmpleadoAsync(idEmpleado);
+                    
+                    if (eliminado)
+                    {
+                        MessageBox.Show($"Empleado '{empleado.NombreCompleto}' eliminado exitosamente.",
+                            "Exito", MessageBoxButton.OK, MessageBoxImage.Information);
+                        
+                        // Recargar lista
+                        CargarDatos();
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo eliminar el empleado.\nVerifique que no tenga citas o atenciones asociadas.",
+                            "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al eliminar empleado:\n\n{ex.Message}",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

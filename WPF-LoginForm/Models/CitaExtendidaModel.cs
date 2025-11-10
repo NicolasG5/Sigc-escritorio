@@ -1,60 +1,99 @@
-using Newtonsoft.Json;
 using System;
 
 namespace WPF_LoginForm.Models
 {
     /// <summary>
-    /// Modelo extendido de cita con información completa para mostrar en DataGrid
-    /// Incluye datos de Paciente, Psicólogo y Servicio expandidos
+    /// Modelo extendido de Cita que incluye información del paciente, psicólogo y servicio
+    /// USADO EN: ControlSolicitudes.xaml (para solicitudes pendientes)
     /// </summary>
     public class CitaExtendidaModel
     {
-        // Datos de la Cita
+        // Datos básicos de la cita
         public int IdCita { get; set; }
+        public int IdPaciente { get; set; }
+        public int IdPsicologo { get; set; }
+        public int IdServicio { get; set; }
+        
+        // Información de fecha y hora
         public string FechaCita { get; set; }
         public string HoraInicio { get; set; }
         public string HoraFin { get; set; }
+        public string HorarioCita => $"{HoraInicio} - {HoraFin}";
+        
+        // Información de la cita
         public string MotivoConsulta { get; set; }
-        public string CodigoConfirmacion { get; set; }
+        public string Observaciones { get; set; }
         public DateTime FechaCreacion { get; set; }
         public string Estado { get; set; }
+        public string CodigoConfirmacion { get; set; }
 
-        // Datos del Paciente (expandidos)
-        public int IdPaciente { get; set; }
-        public string RutPaciente { get; set; }
+        // Información del paciente
         public string NombrePaciente { get; set; }
-        public string TelefonoPaciente { get; set; }
+        public string RutPaciente { get; set; }
         public string EmailPaciente { get; set; }
+        public string TelefonoPaciente { get; set; }
 
-        // Datos del Psicólogo (expandidos)
-        public int IdPsicologo { get; set; }
+        // Información del psicólogo
         public string NombrePsicologo { get; set; }
         public string TituloPsicologo { get; set; }
 
-        // Datos del Servicio (expandidos)
-        public int IdServicio { get; set; }
+        // Información del servicio
         public string NombreServicio { get; set; }
         public string PrecioServicio { get; set; }
         public int DuracionServicio { get; set; }
-
-        // Propiedades calculadas para mostrar en DataGrid
-        public string FechaSolicitud => FechaCreacion.ToString("dd/MM/yyyy HH:mm");
-        public string HorarioCita => $"{HoraInicio} - {HoraFin}";
-        public string PacienteInfo => $"{NombrePaciente} ({RutPaciente})";
-        public string PsicologoInfo => $"{NombrePsicologo} - {TituloPsicologo}";
-        public string ServicioInfo => $"{NombreServicio} - ${PrecioServicio}";
+        
+        // ? PROPIEDADES CALCULADAS PARA XAML (Compatible con C# 7.3)
+        
+        /// <summary>
+        /// Información completa del servicio para tooltip
+        /// </summary>
+        public string ServicioInfo
+        {
+            get
+            {
+                return $"{NombreServicio}\n" +
+                       $"Precio: ${PrecioServicio}\n" +
+                       $"Duración: {DuracionServicio} minutos";
+            }
+        }
+        
+        /// <summary>
+        /// Estado formateado para display
+        /// </summary>
         public string EstadoDisplay
         {
             get
             {
-                switch (Estado?.ToLower())
+                if (Estado == null) return "Desconocido";
+                
+                switch (Estado)
                 {
-                    case "pendiente": return "? Pendiente";
-                    case "confirmada": return "? Confirmada";
-                    case "cancelada": return "? Cancelada";
-                    case "completada": return "?? Completada";
-                    default: return Estado;
+                    case "Pendiente":
+                        return "? Pendiente";
+                    case "Confirmada":
+                        return "? Confirmada";
+                    case "En Curso":
+                        return "?? En Curso";
+                    case "Completada":
+                        return "?? Completada";
+                    case "Cancelada":
+                        return "? Cancelada";
+                    case "No Asistió":
+                        return "?? No Asistió";
+                    default:
+                        return Estado;
                 }
+            }
+        }
+        
+        /// <summary>
+        /// Fecha de solicitud formateada
+        /// </summary>
+        public string FechaSolicitud
+        {
+            get
+            {
+                return FechaCreacion.ToString("dd/MM/yyyy HH:mm");
             }
         }
     }

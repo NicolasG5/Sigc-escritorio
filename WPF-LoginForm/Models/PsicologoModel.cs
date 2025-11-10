@@ -5,8 +5,17 @@ namespace WPF_LoginForm.Models
 {
     public class PsicologoModel
     {
-        [JsonProperty("id_psicologo")]
-        public int IdPsicologo { get; set; }
+        // ? CORRECCIÓN: La API devuelve "id_empleado" no "id_psicologo"
+        [JsonProperty("id_empleado")]
+        public int IdEmpleado { get; set; }
+        
+        // Alias para compatibilidad con código existente
+        [JsonIgnore]
+        public int IdPsicologo 
+        { 
+            get => IdEmpleado; 
+            set => IdEmpleado = value; 
+        }
 
         [JsonProperty("rut")]
         public string Rut { get; set; }
@@ -47,6 +56,10 @@ namespace WPF_LoginForm.Models
         [JsonProperty("foto_perfil")]
         public string FotoPerfil { get; set; }
 
+        // ? ACTUALIZACIÓN: La API ahora devuelve "id_rol" en lugar de "rol_empleado"
+        [JsonProperty("id_rol")]
+        public int IdRol { get; set; }
+
         [JsonProperty("estado")]
         public string Estado { get; set; }
 
@@ -55,6 +68,22 @@ namespace WPF_LoginForm.Models
 
         [JsonProperty("fecha_registro")]
         public DateTime? FechaRegistro { get; set; }
+
+        // Propiedad calculada para obtener el nombre del rol
+        [JsonIgnore]
+        public string RolEmpleado
+        {
+            get
+            {
+                switch (IdRol)
+                {
+                    case 1: return "psicologo";
+                    case 2: return "administrativo";
+                    case 3: return "recepcionista";
+                    default: return "desconocido";
+                }
+            }
+        }
 
         // Propiedad calculada para mostrar en UI
         public string NombreCompleto => $"{Nombres} {ApellidoPaterno} {ApellidoMaterno}";

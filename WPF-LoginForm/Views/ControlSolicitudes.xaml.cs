@@ -75,53 +75,132 @@ namespace WPF_LoginForm.Views
         {
             try
             {
-                // Cargar datos del paciente
-                var paciente = await _pacienteService.GetPacienteByIdAsync(cita.IdPaciente);
+                System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] Iniciando carga para cita ID: {cita.IdCita}");
+                System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] IdPaciente: {cita.IdPaciente}, IdPsicologo: {cita.IdPsicologo}, IdServicio: {cita.IdServicio}");
                 
-                // Cargar datos del psicólogo
-                var psicologo = await _psicologoService.GetPsicologoByIdAsync(cita.IdPsicologo);
+                // Cargar datos del paciente
+                System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] Cargando paciente ID: {cita.IdPaciente}");
+                var paciente = await _pacienteService.GetPacienteByIdAsync(cita.IdPaciente);
+                System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] Paciente cargado: {paciente?.NombreCompleto ?? "NULL"}");
+                
+                // Cargar datos del psicólogo (OPCIONAL para solicitudes pendientes)
+                System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] Verificando psicólogo ID: {cita.IdPsicologo}");
+                
+                PsicologoModel psicologo = null;
+                string nombrePsicologo = "Sin asignar";
+                string tituloPsicologo = "Pendiente de asignación";
+                
+                if (cita.IdPsicologo > 0)
+                {
+                    try
+                    {
+                        psicologo = await _psicologoService.GetPsicologoByIdAsync(cita.IdPsicologo);
+                        
+                        if (psicologo != null)
+                        {
+                            nombrePsicologo = psicologo.NombreCompleto;
+                            tituloPsicologo = psicologo.TituloProfesional ?? "N/A";
+                            System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] ✅ Psicólogo: {nombrePsicologo}");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] ⚠️ Psicólogo NULL para ID: {cita.IdPsicologo}");
+                            nombrePsicologo = $"⚠️ Error (ID: {cita.IdPsicologo} no encontrado)";
+                        }
+                    }
+                    catch (Exception exPsi)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] ❌ Error al cargar psicólogo: {exPsi.Message}");
+                        nombrePsicologo = "Error al cargar";
+                    }
+                }
+                else
+                {
+                    // NORMAL: Las solicitudes pendientes no tienen psicólogo asignado todavía
+                    System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] ℹ️ Solicitud pendiente sin psicólogo asignado (normal)");
+                }
                 
                 // Cargar datos del servicio
+                System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] Cargando servicio ID: {cita.IdServicio}");
                 var servicio = await _servicioService.GetServicioByIdAsync(cita.IdServicio);
+                System.Diagnostics.Debug.WriteLine($"[CargarDatosCompletosCita] Servicio cargado: {servicio?.NombreServicio ?? "NULL"}");
+                
+                if (servicio == null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"⚠️ [CargarDatosCompletosCita] ADVERTENCIA: Servicio es NULL para IdServicio={cita.IdServicio}");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"✅ [CargarDatosCompletosCita] Servicio OK: {servicio.NombreServicio}, Precio: {servicio.Precio}, Duracion: {servicio.DuracionMinutos}");
+                }
 
                 // Determinar el estado basado en id_estado_cita
                 string estadoTexto = DeterminarEstado(cita.IdEstadoCita);
 
-                return new CitaExtendidaModel
+                var citaExtendida = new CitaExtendidaModel
                 {
-                    // Datos de la cita
+                    // Datos de la cita (con valores por defecto seguros)
                     IdCita = cita.IdCita,
-                    FechaCita = cita.FechaCita,
-                    HoraInicio = cita.HoraInicio,
-                    HoraFin = cita.HoraFin,
-                    MotivoConsulta = cita.MotivoConsulta,
-                    CodigoConfirmacion = cita.CodigoConfirmacion,
+                    FechaCita = cita.FechaCita ?? "",
+                    HoraInicio = cita.HoraInicio ?? "",
+                    HoraFin = cita.HoraFin ?? "",
+                    MotivoConsulta = cita.MotivoConsulta ?? "Sin motivo especificado",
+                    CodigoConfirmacion = cita.CodigoConfirmacion ?? "",
                     FechaCreacion = cita.FechaCreacion,
-                    Estado = estadoTexto,
+                    Estado = estadoTexto ?? "Desconocido",
                     
-                    // Datos del paciente
+                    // Datos del paciente (con valores por defecto)
                     IdPaciente = cita.IdPaciente,
                     RutPaciente = paciente?.Rut ?? "N/A",
                     NombrePaciente = paciente?.NombreCompleto ?? "Desconocido",
                     TelefonoPaciente = paciente?.Telefono ?? "N/A",
                     EmailPaciente = paciente?.Email ?? "N/A",
                     
-                    // Datos del psicólogo
+                    // Datos del psicólogo (puede ser "Sin asignar" para solicitudes pendientes)
                     IdPsicologo = cita.IdPsicologo,
-                    NombrePsicologo = psicologo?.NombreCompleto ?? "Sin asignar",
-                    TituloPsicologo = psicologo?.TituloProfesional ?? "N/A",
+                    NombrePsicologo = nombrePsicologo,
+                    TituloPsicologo = tituloPsicologo,
                     
-                    // Datos del servicio
+                    // Datos del servicio (con valores por defecto)
                     IdServicio = cita.IdServicio,
                     NombreServicio = servicio?.NombreServicio ?? "Sin servicio",
                     PrecioServicio = servicio?.Precio ?? "0",
                     DuracionServicio = servicio?.DuracionMinutos ?? 0
                 };
+                
+                System.Diagnostics.Debug.WriteLine($"✅ [CargarDatosCompletosCita] CitaExtendida creada - Servicio: {citaExtendida.NombreServicio}");
+                
+                return citaExtendida;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error al cargar datos completos de cita {cita.IdCita}: {ex.Message}");
-                return null;
+                System.Diagnostics.Debug.WriteLine($"❌ [CargarDatosCompletosCita] Error al cargar datos completos de cita {cita.IdCita}: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"❌ [CargarDatosCompletosCita] StackTrace: {ex.StackTrace}");
+                
+                // ✅ CORRECCIÓN: En caso de error, devolver objeto con valores por defecto en lugar de null
+                return new CitaExtendidaModel
+                {
+                    IdCita = cita.IdCita,
+                    FechaCita = cita.FechaCita ?? "",
+                    HoraInicio = cita.HoraInicio ?? "",
+                    HoraFin = cita.HoraFin ?? "",
+                    MotivoConsulta = cita.MotivoConsulta ?? "Error al cargar datos",
+                    CodigoConfirmacion = cita.CodigoConfirmacion ?? "",
+                    FechaCreacion = cita.FechaCreacion,
+                    Estado = "Error",
+                    IdPaciente = cita.IdPaciente,
+                    RutPaciente = "Error",
+                    NombrePaciente = "Error al cargar",
+                    TelefonoPaciente = "N/A",
+                    EmailPaciente = "N/A",
+                    IdPsicologo = cita.IdPsicologo,
+                    NombrePsicologo = "Error al cargar",
+                    TituloPsicologo = "N/A",
+                    IdServicio = cita.IdServicio,
+                    NombreServicio = "Error al cargar",
+                    PrecioServicio = "0",
+                    DuracionServicio = 0
+                };
             }
         }
 
@@ -159,14 +238,15 @@ namespace WPF_LoginForm.Views
                 }
                 else
                 {
-                    // Filtrar por múltiples criterios
+                    // ✅ CORRECCIÓN: Filtrar con manejo seguro de valores nulos
                     var citasFiltradas = _citasCompletas.Where(c =>
-                        c.NombrePaciente.ToLower().Contains(textoBusqueda) ||
-                        c.RutPaciente.ToLower().Contains(textoBusqueda) ||
-                        c.NombrePsicologo.ToLower().Contains(textoBusqueda) ||
-                        c.NombreServicio.ToLower().Contains(textoBusqueda) ||
-                        c.CodigoConfirmacion.ToLower().Contains(textoBusqueda) ||
-                        c.MotivoConsulta.ToLower().Contains(textoBusqueda)
+                        (!string.IsNullOrEmpty(c.NombrePaciente) && c.NombrePaciente.ToLower().Contains(textoBusqueda)) ||
+                        (!string.IsNullOrEmpty(c.RutPaciente) && c.RutPaciente.ToLower().Contains(textoBusqueda)) ||
+                        (!string.IsNullOrEmpty(c.NombrePsicologo) && c.NombrePsicologo.ToLower().Contains(textoBusqueda)) ||
+                        (!string.IsNullOrEmpty(c.NombreServicio) && c.NombreServicio.ToLower().Contains(textoBusqueda)) ||
+                        (!string.IsNullOrEmpty(c.CodigoConfirmacion) && c.CodigoConfirmacion.ToLower().Contains(textoBusqueda)) ||
+                        (!string.IsNullOrEmpty(c.MotivoConsulta) && c.MotivoConsulta.ToLower().Contains(textoBusqueda)) ||
+                        (!string.IsNullOrEmpty(c.Estado) && c.Estado.ToLower().Contains(textoBusqueda))
                     ).ToList();
 
                     GridDatos.ItemsSource = citasFiltradas;
@@ -175,6 +255,8 @@ namespace WPF_LoginForm.Views
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error en búsqueda: {ex.Message}");
+                // En caso de error, mostrar todas las citas
+                GridDatos.ItemsSource = _citasCompletas;
             }
         }
 
@@ -185,7 +267,7 @@ namespace WPF_LoginForm.Views
             FrameControlSolicitudes.Content = ventana;
         }
 
-        // Evento para botón Confirmar (Abrir ventana CrearCita para confirmar)
+        // Evento para botón Confirmar (Abrir ventana ConfirmarSolicitud para confirmar)
         private async void Confirmar(object sender, RoutedEventArgs e)
         {
             try
@@ -217,6 +299,7 @@ namespace WPF_LoginForm.Views
                         HoraInicio = citaExtendidaLocal.HoraInicio,
                         HoraFin = citaExtendidaLocal.HoraFin,
                         MotivoConsulta = citaExtendidaLocal.MotivoConsulta,
+                        Observaciones = "",
                         CodigoConfirmacion = citaExtendidaLocal.CodigoConfirmacion,
                         FechaCreacion = citaExtendidaLocal.FechaCreacion,
                         IdPaciente = citaExtendidaLocal.IdPaciente,
@@ -227,8 +310,8 @@ namespace WPF_LoginForm.Views
                         RecordatorioEnviado = false
                     };
                     
-                    // Navegar a CrearCita con los datos ya cargados
-                    CrearCita ventana = new CrearCita(idCita, citaModel);
+                    // ✅ CORRECCIÓN: Navegar a ConfirmarSolicitud en lugar de CrearCita
+                    ConfirmarSolicitud ventana = new ConfirmarSolicitud(idCita, citaModel);
                     FrameControlSolicitudes.Content = ventana;
                     return;
                 }
@@ -253,8 +336,8 @@ namespace WPF_LoginForm.Views
                 
                 System.Diagnostics.Debug.WriteLine($"Cita cargada desde API: {cita.CodigoConfirmacion}");
                 
-                // Navegar a CrearCita pasando el ID de la cita a confirmar
-                CrearCita ventana2 = new CrearCita(idCita, cita);
+                // ✅ CORRECCIÓN: Navegar a ConfirmarSolicitud pasando el ID de la cita a confirmar
+                ConfirmarSolicitud ventana2 = new ConfirmarSolicitud(idCita, cita);
                 FrameControlSolicitudes.Content = ventana2;
             }
             catch (InvalidCastException ex)

@@ -3,6 +3,9 @@ using System;
 
 namespace WPF_LoginForm.Models
 {
+    /// <summary>
+    /// Modelo completo de Paciente para GET (incluye todos los campos)
+    /// </summary>
     public class PacienteModel
     {
         [JsonProperty("id_paciente")]
@@ -54,14 +57,21 @@ namespace WPF_LoginForm.Models
         public int? IdPrevision { get; set; }
 
         [JsonProperty("fecha_registro")]
-        public DateTime? FechaRegistro { get; set; }
+        public string FechaRegistro { get; set; }
 
-        [JsonProperty("fecha_consentimiento")]
-        public DateTime? FechaConsentimiento { get; set; }
-
-        // Propiedades calculadas para mostrar en UI
+        // Propiedad calculada para mostrar nombre completo
         public string NombreCompleto => $"{Nombres} {ApellidoPaterno} {ApellidoMaterno}";
-        
-        public string DisplayName => $"{NombreCompleto} - {Rut}";
+    }
+
+    /// <summary>
+    /// Respuesta de la API para lista de pacientes
+    /// </summary>
+    public class PacientesResponse
+    {
+        [JsonProperty("data")]
+        public PacienteModel[] Data { get; set; }
+
+        [JsonProperty("count")]
+        public int Count { get; set; }
     }
 }

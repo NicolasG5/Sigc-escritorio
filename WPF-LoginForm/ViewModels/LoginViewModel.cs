@@ -81,24 +81,38 @@ namespace WPF_LoginForm.ViewModels
             try
             {
                 var plainPassword = new System.Net.NetworkCredential(string.Empty, Password).Password;
+                System.Diagnostics.Debug.WriteLine($"[ExecuteLoginCommand] Attempting login for: {Email}");
+
                 var loginResponse = await userRepository.AuthenticateUserAsync(Email, plainPassword);
+
                 if (loginResponse != null && loginResponse.Success && !string.IsNullOrEmpty(loginResponse.Token))
                 {
+                    System.Diagnostics.Debug.WriteLine($"[ExecuteLoginCommand] Login successful. Token: {loginResponse.Token?.Substring(0, 20)}...");
+                    System.Diagnostics.Debug.WriteLine($"[ExecuteLoginCommand] Username from response: {loginResponse.Username}");
+
                     Thread.CurrentPrincipal = new System.Security.Principal.GenericPrincipal(
                         new System.Security.Principal.GenericIdentity(loginResponse.Username), null);
+
+                    System.Diagnostics.Debug.WriteLine($"[ExecuteLoginCommand] Thread.CurrentPrincipal.Identity.Name: {Thread.CurrentPrincipal.Identity.Name}");
+
                     ApiTokenStore.Instance.Token = loginResponse.Token;
+
                     // Obtener usuarios tras login exitoso
                     var usuarios = await userRepository.GetAllAsync();
                     Usuarios.Clear();
                     foreach (var usuario in usuarios)
                         Usuarios.Add(usuario);
+
+                    System.Diagnostics.Debug.WriteLine($"[ExecuteLoginCommand] Setting IsViewVisible to false");
                     IsViewVisible = false;
                     return;
                 }
                 ErrorMessage = loginResponse?.ErrorMessage ?? "Email o contraseña incorrectos, o usuario inactivo.";
+                System.Diagnostics.Debug.WriteLine($"[ExecuteLoginCommand] Login failed: {ErrorMessage}");
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[ExecuteLoginCommand] Exception: {ex.Message}");
                 ErrorMessage = $"Error de conexión: {ex.Message}";
             }
         }
