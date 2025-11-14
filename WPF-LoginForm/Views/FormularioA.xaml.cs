@@ -75,7 +75,6 @@ namespace WPF_LoginForm.Views
 
             if (resultado == MessageBoxResult.Yes)
             {
-                // Usar la nueva función que navega sin pedir confirmación
                 VolverAAtencion();
             }
         }
@@ -244,8 +243,8 @@ namespace WPF_LoginForm.Views
                 System.Diagnostics.Debug.WriteLine($"  TipoTratamiento: {txtTipoTratamiento.Text.Trim()}");
                 System.Diagnostics.Debug.WriteLine($"  Descripcion: {txtDescripcion.Text.Trim().Substring(0, Math.Min(50, txtDescripcion.Text.Trim().Length))}...");
                 System.Diagnostics.Debug.WriteLine($"  Objetivos: {txtObjetivos.Text.Trim().Substring(0, Math.Min(50, txtObjetivos.Text.Trim().Length))}...");
-                System.Diagnostics.Debug.WriteLine($"  IdPaciente: {crearTratamientoRequest.IdPaciente}");
-                System.Diagnostics.Debug.WriteLine($"  IdPsicologo: {_cita.IdPsicologo}");
+                System.Diagnostics.Debug.WriteLine($"  IdPaciente: {_cita.IdPaciente}");
+                System.Diagnostics.Debug.WriteLine($"  IdEmpleado (Psicologo): {_cita.IdPsicologo}");
                 System.Diagnostics.Debug.WriteLine($"  IdCita: {_idCita}");
                 System.Diagnostics.Debug.WriteLine($"  FechaInicio: {dpFechaInicio.SelectedDate.Value:yyyy-MM-dd}");
                 System.Diagnostics.Debug.WriteLine($"  FechaFinEstimada: {dpFechaFinEstimada.SelectedDate.Value:yyyy-MM-dd}");
@@ -262,6 +261,7 @@ namespace WPF_LoginForm.Views
                 System.Diagnostics.Debug.WriteLine($"  FechaInicio: {crearTratamientoRequest.FechaInicio}");
                 System.Diagnostics.Debug.WriteLine($"  FechaFinEstimada: {crearTratamientoRequest.FechaFinEstimada}");
                 System.Diagnostics.Debug.WriteLine($"  Estado: {crearTratamientoRequest.Estado}");
+                System.Diagnostics.Debug.WriteLine($"Creando tratamiento con observación inicial...");
                 
                 // 1. Crear tratamiento con observación inicial
                 var tratamientoResponse = await _tratamientoService.CrearTratamientoConObservacionAsync(crearTratamientoRequest);
@@ -325,62 +325,11 @@ namespace WPF_LoginForm.Views
                     MessageBoxImage.Information);
                 
                 // 3. Notificar que se guardó y volver a Atencion
-                System.Diagnostics.Debug.WriteLine($">>> NAVEGANDO DE VUELTA A ATENCION.XAML");
+                System.Diagnostics.Debug.WriteLine(">>> GUARDADO EXITOSO - VOLVIENDO A ATENCION");
                 AtencionGuardada?.Invoke(this, EventArgs.Empty);
-                
-                // ✅ SOLUCIÓN: Usar NavigationService en lugar de buscar Frame manualmente
-                if (this.NavigationService != null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"✅ NavigationService encontrado, navegando...");
-                    
-                    // Crear nueva instancia de Atencion
-                    var atencionView = new Atencion();
-                    
-                    // Navegar usando NavigationService
-                    this.NavigationService.Navigate(atencionView);
-                    
-                    // Limpiar historial de navegación para evitar "Atrás"
-                    if (this.NavigationService.CanGoBack)
-                    {
-                        this.NavigationService.RemoveBackEntry();
-                    }
-                    
-                    System.Diagnostics.Debug.WriteLine($"✅ NAVEGACIÓN COMPLETADA - Ahora en Atencion.xaml");
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"⚠️ NavigationService no disponible, intentando método alternativo...");
-                    
-                    // Método alternativo: Buscar Frame padre
-                    var atencionView = new Atencion();
-                    var parent = this.Parent;
-                    
-                    System.Diagnostics.Debug.WriteLine($"Buscando Frame padre... Parent inicial: {parent?.GetType().Name}");
-                    
-                    while (parent != null && !(parent is Frame))
-                    {
-                        parent = System.Windows.Media.VisualTreeHelper.GetParent(parent);
-                        System.Diagnostics.Debug.WriteLine($"  → Subiendo a: {parent?.GetType().Name}");
-                    }
-                    
-                    if (parent is Frame frame)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"✅ Frame encontrado, cambiando Content...");
-                        frame.Content = atencionView;
-                        System.Diagnostics.Debug.WriteLine($"✅ NAVEGACIÓN COMPLETADA - Ahora en Atencion.xaml");
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine($"❌ ERROR: No se encontró Frame ni NavigationService");
-                        MessageBox.Show(
-                            "⚠️ ADVERTENCIA\n\n" +
-                            "La atención se guardó correctamente pero no se pudo regresar automáticamente.\n\n" +
-                            "Por favor, regrese manualmente al módulo de Atención.",
-                            "Navegación",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Warning);
-                    }
-                }
+
+                // Intentar limpiar el Frame padre (mismo comportamiento que ControlSolicitudes/ConfirmarSolicitud flow)
+                VolverAAtencion();
             }
             catch (Exception ex)
             {
@@ -397,27 +346,12 @@ namespace WPF_LoginForm.Views
             }
         }
 
-        /// <summary>
-        /// Navega de vuelta al módulo Atencion sin pedir confirmación.
-        /// Busca el Frame padre y asigna una nueva instancia de Atencion.
-        /// </summary>
+        // VolverAAtencion: busca Frame padre y limpia su Content, ocultando si existe
         private void VolverAAtencion()
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine(">>> VolverAAtencion() - intentando navegar a Atencion");
-
-                // Primero intentar usar NavigationService si está disponible
-                if (this.NavigationService != null)
-                {
-                    System.Diagnostics.Debug.WriteLine("NavigationService disponible, navegando a Atencion");
-                    this.NavigationService.Navigate(new Atencion());
-                    if (this.NavigationService.CanGoBack)
-                        this.NavigationService.RemoveBackEntry();
-                    return;
-                }
-
-                // Si no hay NavigationService, buscar el Frame padre y cambiar su Content
+                System.Diagnostics.Debug.WriteLine(">>> VolverAAtencion() - buscando Frame padre...");
                 var parent = this.Parent;
                 while (parent != null && !(parent is Frame))
                 {
@@ -426,12 +360,23 @@ namespace WPF_LoginForm.Views
 
                 if (parent is Frame frame)
                 {
-                    System.Diagnostics.Debug.WriteLine("Frame padre encontrado, navegando a Atencion");
-                    frame.Content = new Atencion();
+                    System.Diagnostics.Debug.WriteLine(">>> Frame padre encontrado - limpiando Content y ocultando Frame si aplica");
+                    frame.Content = null;
+
+                    // Si el Frame está dentro de la vista Atencion y tiene nombre FrameAtencion, intentar ocultarlo
+                    try
+                    {
+                        var possibleAtencion = System.Windows.Media.VisualTreeHelper.GetParent(frame);
+                        // No reliable cast here; Atencion already maneja ocultar su Frame vía evento AtencionGuardada
+                    }
+                    catch { }
+
                     return;
                 }
 
-                System.Diagnostics.Debug.WriteLine("No se encontró NavigationService ni Frame padre para navegar a Atencion");
+                // Fallback: reemplazar Content por nueva instancia (menos preferible)
+                System.Diagnostics.Debug.WriteLine(">>> No se encontró Frame padre, usando fallback Content = new Atencion()");
+                Content = new Atencion();
             }
             catch (Exception ex)
             {

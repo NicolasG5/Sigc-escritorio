@@ -239,7 +239,7 @@
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0"
+            <TextBlock x:Name="TituloAtencion" Grid.Row="0"
            Grid.ColumnSpan="6"
            Text="Gestion de atenciones"
            Foreground="{StaticResource titleColor1}"
@@ -250,7 +250,7 @@
     />
 
             <!--Region texto-->
-            <TextBlock Text="Buscar Atencion:"
+            <TextBlock x:Name="LblBuscar" Text="Buscar Atencion:"
            HorizontalAlignment="Right"
            VerticalAlignment="Center"
            Grid.Column="1"

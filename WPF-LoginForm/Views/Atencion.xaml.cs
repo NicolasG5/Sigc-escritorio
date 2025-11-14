@@ -23,6 +23,39 @@ namespace WPF_LoginForm.Views
             _citaService = new CitaApiService();
             _pacienteService = new PacienteApiService();
             CargarCitasPacientePresente();
+
+            // Suscribirse a cambios de contenido del Frame para ocultar/mostrar elementos
+            FrameAtencion.ContentRendered += FrameAtencion_ContentRendered;
+        }
+
+        private void FrameAtencion_ContentRendered(object sender, EventArgs e)
+        {
+            try
+            {
+                var tituloAtencion = (TextBlock)FindName("TituloAtencion");
+                var lblBuscar = (TextBlock)FindName("LblBuscar");
+                var buscar = (TextBox)FindName("Buscar");
+                var btnCrearCliente = (Button)FindName("BtnCrearCliente");
+
+                if (FrameAtencion.Content != null)
+                {
+                    if (tituloAtencion != null) tituloAtencion.Visibility = Visibility.Collapsed;
+                    if (lblBuscar != null) lblBuscar.Visibility = Visibility.Collapsed;
+                    if (buscar != null) buscar.Visibility = Visibility.Collapsed;
+                    if (btnCrearCliente != null) btnCrearCliente.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    if (tituloAtencion != null) tituloAtencion.Visibility = Visibility.Visible;
+                    if (lblBuscar != null) lblBuscar.Visibility = Visibility.Visible;
+                    if (buscar != null) buscar.Visibility = Visibility.Visible;
+                    if (btnCrearCliente != null) btnCrearCliente.Visibility = Visibility.Visible;
+                }
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error en FrameAtencion_ContentRendered: " + ex.Message);
+            }
         }
         
         private async void CargarCitasPacientePresente()
