@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WPF_LoginForm.Services;
 
 namespace WPF_LoginForm.Views
 {
@@ -9,16 +11,35 @@ namespace WPF_LoginForm.Views
     /// </summary>
     public partial class Tratamiento : Page
     {
-        // TODO: Inyectar servicios de API
-        
+        private readonly TratamientoApiService _apiService = new TratamientoApiService();
+
         public Tratamiento()
         {
             InitializeComponent();
-            // TODO: Migrar a API
         }
-        
-        // TODO: Migrar a API REST - Se eliminó conexión SQL directa
-        
+
+        public async Task CargarTratamiento(int idTratamiento)
+        {
+            var tratamiento = await _apiService.GetTratamientoByIdAsync(idTratamiento);
+            if (tratamiento == null)
+            {
+                MessageBox.Show($"No se encontró el tratamiento con ID {idTratamiento}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            tbTipoTratamiento.Text = tratamiento.TipoTratamiento;
+            tbDescripcion.Text = tratamiento.Descripcion;
+            tbObjetivos.Text = tratamiento.Objetivos;
+            tbFechaInicio.Text = tratamiento.FechaInicio;
+            tbFechaFinEstimada.Text = tratamiento.FechaFinEstimada;
+            tbFechaFinReal.Text = tratamiento.FechaFinReal;
+            tbEstado.Text = tratamiento.Estado;
+            tbIdTratamiento.Text = tratamiento.IdTratamiento.ToString();
+            tbIdPaciente.Text = tratamiento.IdPaciente.ToString();
+            tbIdEmpleado.Text = tratamiento.IdEmpleado.ToString();
+            tbIdCita.Text = tratamiento.IdCita.ToString();
+            tbFechaRegistro.Text = tratamiento.FechaRegistro;
+        }
+
         private void Crear(object sender, RoutedEventArgs e)
         {
             // TODO: Implementar con API
@@ -26,16 +47,14 @@ namespace WPF_LoginForm.Views
 
         private void Regresar(object sender, RoutedEventArgs e)
         {
-            Content = new Atencion();
+            Content = new TratamientoG();
         }
-        
-        #region buscar
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // TODO: Implementar búsqueda con API
         }
-        #endregion
-        
+
         private void Agregar(object sender, RoutedEventArgs e)
         {
             ConfirmarSolicitud ventana = new ConfirmarSolicitud();

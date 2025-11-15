@@ -8,11 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Tratamiento"
       Background="{StaticResource panelColor}">
-
     <Page.Resources>
-
-
-
         <!--REGION FocusVisual-->
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -420,150 +416,61 @@
                 <RowDefinition Height="0"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="10*"/>
-                <RowDefinition Height="23"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="7.629"/>
-                <RowDefinition Height="32*"/>
-                <RowDefinition Height="4.789"/>
-                <RowDefinition Height="8*"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <!--ENDREGION-->
-            <!--REGION TITULO-->
-            <TextBlock x:Name="Titulo"
-           Text="Tratamiento"
-           Grid.Column="2"
-           Grid.Row="1"
-           FontSize="30"
-           VerticalAlignment="Top"
-           HorizontalAlignment="Center" 
-           Foreground="{StaticResource titleColor1}" Height="40" Width="185"/>
-            <!--ENDREGION-->
-            <!--REGION BOTONES-->
-            <!--REGION REGRESAR-->
-            <Button x:Name="BtnRegresar"
-        Content="Regresar"
-        Grid.Column="1"
-        Grid.Row="1"
-        Cursor="Hand"
-        Background="{StaticResource PrimaryBrush}"
-        Style="{DynamicResource BtnStyle}"
-        Click="Regresar" Margin="10,5,50,15"/>
-            <!--ENDREGION-->
-            <!--REGION CREAR-->
-            <Button x:Name="BtnCrear"
-        Content="Crear"
-        Grid.Row="19"
-        Grid.Column="5"
-        Cursor="Hand"
-        Background="{StaticResource PrimaryBrush}"
-        Style="{DynamicResource BtnStyle}"
-        Visibility="Hidden"
-        Click="Crear" Margin="30,8,30,0" Grid.RowSpan="2"/>
-            <!--ENDREGION-->
-            <!--REGION ELIMINAR-->
-            <Button x:Name="BtnEliminar"
-        Content="Eliminar"
-        Grid.Row="19"
-        Grid.Column="5"
-        Cursor="Hand"
-        Background="{StaticResource ErrorBrush}"
-        Style="{DynamicResource BtnStyle}"
-        Visibility="Hidden"
-        Click="Eliminar" Margin="30,8,30,0" Grid.RowSpan="2"/>
-            <!--ENDREGION-->
-            <!--REGION MODIFICAR-->
-            <Button x:Name="BtnActualizar"
-        Content="Actualizar"
-        Grid.Row="19"
-        Grid.Column="5"
-        Cursor="Hand"
-        Background="{StaticResource PrimaryBrush}"
-        Style="{DynamicResource BtnStyle}"
-        Visibility="Hidden"
-        Click="Actualizar" Margin="30,8,30,0" Grid.RowSpan="2"/>
-            <!--ENDREGION-->
-            <!--ENDREGION-->
-            <!--REGION CONTENIDO-->
-            <TextBlock Grid.Row="2"
-           Grid.Column="1"
-           Text="Nombre Paciente:"
-           HorizontalAlignment="Left"
-           VerticalAlignment="Top"
-           Foreground="{StaticResource titleColor1}" Margin="6,2,0,0" Height="16" Width="102"/>
-            <TextBox Grid.Row="1"
-         Grid.Column="1"
-         x:Name="tbNombre" Style="{DynamicResource TextBox}"
-         HorizontalContentAlignment="Center" Margin="139,42,53,1" Grid.ColumnSpan="3" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="3">
-                <TextBox.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="-0.133"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </TextBox.RenderTransform>
-            </TextBox>
-
-            <TextBlock Grid.Row="10"
-    Text="Descripcion tratamiento :"
-    HorizontalAlignment="Left"
-    VerticalAlignment="Top"
-    Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Height="16" Width="132" Grid.Column="1" Margin="2,2,0,0"/>
-            <TextBox Grid.Row="8"
-    Grid.Column="1"
-    x:Name="tbFecha_Copiar1"
-    Style="{DynamicResource TextBox}"
-    HorizontalContentAlignment="Center" Margin="138,15,0,0" Grid.RowSpan="8" HorizontalAlignment="Left" Width="311" Grid.ColumnSpan="3" Height="144" VerticalAlignment="Top"/>
-            <TextBlock Grid.Row="6"
-    Text="Tratamiento:"
-    HorizontalAlignment="Left"
-    VerticalAlignment="Top"
-    Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Height="16" Width="137" Margin="6,0,0,0" Grid.Column="1"/>
-            <TextBox Grid.Row="17"
-    Grid.Column="1"
-    x:Name="tbFecha_Copiar4"
-    Style="{DynamicResource TextBox}"
-    HorizontalContentAlignment="Center" Margin="138,4,51,24" Grid.RowSpan="4" Grid.ColumnSpan="3"/>
-            <TextBlock Grid.Row="18"
-    Text="Conclusion:"
-    HorizontalAlignment="Left"
-    VerticalAlignment="Top"
-    Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Margin="6,2,0,0" Grid.Column="1" Height="16" Width="61"/>
-            <TextBox Grid.Row="4"
-        Grid.Column="1"
-        x:Name="tbFecha_Copiar"
-        Style="{DynamicResource TextBox}"
-        HorizontalContentAlignment="Center" Margin="138,16,51,10" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
-            <!--ENDREGION-->
-            <!--REGION ENVIAR-->
-            <Button x:Name="btnEnviar"
-Content="Guardar"
-Grid.Row="20"
-Grid.Column="5"
-Width="100"
-Cursor="Hand"
-Background="{StaticResource AccentBrush}"
-Style="{DynamicResource BtnStyle}"
-Click="Guardar" Margin="30,19,30,9" Grid.RowSpan="3"/>
-            <!--ENDREGION-->
-
-
-
+            <!-- Título -->
+            <TextBlock x:Name="Titulo" Text="Tratamiento" Grid.Column="2" Grid.Row="1" FontSize="30" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="{StaticResource titleColor1}" Height="40" Width="185"/>
+            <!-- Botón Regresar -->
+            <Button x:Name="BtnRegresar" Content="Regresar" Grid.Column="1" Grid.Row="1" Cursor="Hand" Background="{StaticResource PrimaryBrush}" Style="{DynamicResource BtnStyle}" Click="Regresar" Margin="10,5,50,15"/>
+            <!-- Campos del tratamiento -->
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Tipo de Tratamiento:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="2" Grid.Column="2" x:Name="tbTipoTratamiento" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="Descripción:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="3" Grid.Column="2" x:Name="tbDescripcion" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Objetivos:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="4" Grid.Column="2" x:Name="tbObjetivos" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="Fecha Inicio:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="5" Grid.Column="2" x:Name="tbFechaInicio" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Fecha Fin Estimada:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="6" Grid.Column="2" x:Name="tbFechaFinEstimada" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="Fecha Fin Real:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="7" Grid.Column="2" x:Name="tbFechaFinReal" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Estado:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="8" Grid.Column="2" x:Name="tbEstado" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="ID Tratamiento:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="9" Grid.Column="2" x:Name="tbIdTratamiento" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="10" Grid.Column="1" Text="ID Paciente:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="10" Grid.Column="2" x:Name="tbIdPaciente" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="11" Grid.Column="1" Text="ID Empleado:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="11" Grid.Column="2" x:Name="tbIdEmpleado" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="12" Grid.Column="1" Text="ID Cita:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="12" Grid.Column="2" x:Name="tbIdCita" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <TextBlock Grid.Row="13" Grid.Column="1" Text="Fecha Registro:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource titleColor1}" Margin="6,2,0,0"/>
+            <TextBox Grid.Row="13" Grid.Column="2" x:Name="tbFechaRegistro" Style="{DynamicResource TextBox}" HorizontalContentAlignment="Left" Margin="5"/>
+            <!-- Botones CRUD -->
+            <Button x:Name="BtnCrear" Content="Crear" Grid.Row="19" Grid.Column="5" Cursor="Hand" Background="{StaticResource PrimaryBrush}" Style="{DynamicResource BtnStyle}" Visibility="Hidden" Click="Crear" Margin="30,8,30,0" Grid.RowSpan="2"/>
+            <Button x:Name="BtnEliminar" Content="Eliminar" Grid.Row="19" Grid.Column="5" Cursor="Hand" Background="{StaticResource ErrorBrush}" Style="{DynamicResource BtnStyle}" Visibility="Hidden" Click="Eliminar" Margin="30,8,30,0" Grid.RowSpan="2"/>
+            <Button x:Name="BtnActualizar" Content="Actualizar" Grid.Row="19" Grid.Column="5" Cursor="Hand" Background="{StaticResource PrimaryBrush}" Style="{DynamicResource BtnStyle}" Visibility="Hidden" Click="Actualizar" Margin="30,8,30,0" Grid.RowSpan="2"/>
+            <Button x:Name="btnEnviar" Content="Guardar" Grid.Row="20" Grid.Column="5" Width="100" Cursor="Hand" Background="{StaticResource AccentBrush}" Style="{DynamicResource BtnStyle}" Click="Guardar" Margin="30,19,30,9" Grid.RowSpan="3"/>
         </Grid>
-
     </Border>
 </Page>

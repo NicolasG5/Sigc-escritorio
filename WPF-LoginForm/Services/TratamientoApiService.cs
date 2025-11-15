@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,6 +74,98 @@ namespace WPF_LoginForm.Services
                 System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Obtiene un tratamiento por ID
+        /// GET /api/v1/tratamientos/{id}
+        /// </summary>
+        public async Task<TratamientoResponse> GetTratamientoByIdAsync(int idTratamiento)
+        {
+            try
+            {
+                var token = ApiTokenStore.Instance.Token;
+                if (string.IsNullOrEmpty(token))
+                {
+                    System.Diagnostics.Debug.WriteLine("[TratamientoApiService] Token no disponible");
+                    return null;
+                }
+
+                var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/tratamientos/{idTratamiento}");
+                httpRequest.Headers.Add("accept", "application/json");
+                httpRequest.Headers.Add("Authorization", $"Bearer {token}");
+
+                var response = await _httpClient.SendAsync(httpRequest);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                System.Diagnostics.Debug.WriteLine($"[TratamientoApiService] GET /api/v1/tratamientos/{idTratamiento} Status: {response.StatusCode}");
+                System.Diagnostics.Debug.WriteLine($"[TratamientoApiService] Body: {responseContent}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var tratamiento = JsonConvert.DeserializeObject<TratamientoResponse>(responseContent);
+                    return tratamiento;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error al obtener tratamiento: {response.StatusCode} - {responseContent}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception en GetTratamientoByIdAsync: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los tratamientos
+        /// GET /api/v1/tratamientos
+        /// </summary>
+        public async Task<List<TratamientoResponse>> GetAllTratamientosAsync()
+        {
+            try
+            {
+                var token = ApiTokenStore.Instance.Token;
+                if (string.IsNullOrEmpty(token))
+                {
+                    System.Diagnostics.Debug.WriteLine("[TratamientoApiService] Token no disponible");
+                    return null;
+                }
+
+                var httpRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/tratamientos");
+                httpRequest.Headers.Add("accept", "application/json");
+                httpRequest.Headers.Add("Authorization", $"Bearer {token}");
+
+                var response = await _httpClient.SendAsync(httpRequest);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                System.Diagnostics.Debug.WriteLine($"[TratamientoApiService] GET /api/v1/tratamientos Status: {response.StatusCode}");
+                System.Diagnostics.Debug.WriteLine($"[TratamientoApiService] Body: {responseContent}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var listResponse = JsonConvert.DeserializeObject<TratamientosListResponse>(responseContent);
+                    return listResponse?.Data ?? new List<TratamientoResponse>();
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error al obtener tratamientos: {response.StatusCode} - {responseContent}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception en GetAllTratamientosAsync: {ex.Message}");
+                return null;
+            }
+        }
+    
+        public class TratamientosListResponse
+        {
+            [JsonProperty("data")]
+            public List<TratamientoResponse> Data { get; set; }
         }
     }
 
