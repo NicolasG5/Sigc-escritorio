@@ -85,5 +85,56 @@ namespace WPF_LoginForm.Views
                 FrameTratamientoG.Content = ventana;
             }
         }
+
+        private async void Atender(object sender, RoutedEventArgs e)
+        {
+            if (((Button)sender).CommandParameter is int idTratamiento)
+            {
+                // Obtener el tratamiento y el paciente
+                var tratamiento = await _apiService.GetTratamientoByIdAsync(idTratamiento);
+                if (tratamiento == null)
+                {
+                    MessageBox.Show("No se pudo obtener el tratamiento.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                var paciente = await _pacienteService.GetPacienteByIdAsync(tratamiento.IdPaciente);
+                if (paciente == null)
+                {
+                    MessageBox.Show("No se pudo obtener el paciente.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                // Crear y mostrar el formulario de seguimiento
+                var formularioS = new WPF_LoginForm.Views.FormularioS(tratamiento, paciente);
+                FrameTratamientoG.Content = formularioS;
+            }
+        }
+
+        private async void ConsultarSeguimiento(object sender, RoutedEventArgs e)
+        {
+            if (((Button)sender).CommandParameter is int idTratamiento)
+            {
+                var seguimientoService = new WPF_LoginForm.Services.SeguimientoApiService();
+                var seguimiento = await seguimientoService.GetSeguimientoByIdAsync(idTratamiento);
+                if (seguimiento == null)
+                {
+                    MessageBox.Show("No se encontró seguimiento para este tratamiento.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                // Buscar el nombre real del paciente
+                var pacienteService = new WPF_LoginForm.Services.PacienteApiService();
+                var paciente = await pacienteService.GetPacienteByIdAsync(seguimiento.id_paciente);
+                string nombrePaciente = paciente?.NombreCompleto ?? "";
+                // Mostrar los datos en FormularioS
+                var formularioS = new WPF_LoginForm.Views.FormularioS(null, paciente);
+                formularioS.tbNombre.Text = nombrePaciente;
+                formularioS.tbFecha.Text = seguimiento.fecha_seguimiento;
+                formularioS.tbFecha_Copiar1.Text = seguimiento.estado_animo;
+                formularioS.tbFecha_Copiar.Text = seguimiento.adherencia_tratamiento;
+                formularioS.tbFecha_Copiar4.Text = seguimiento.observaciones;
+                formularioS.tbFecha_Copiar5.Text = seguimiento.proxima_evaluacion;
+                // Puedes mapear más campos según tu UI
+                FrameTratamientoG.Content = formularioS;
+            }
+        }
     }
 }

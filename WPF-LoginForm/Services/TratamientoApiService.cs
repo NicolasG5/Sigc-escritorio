@@ -167,6 +167,12 @@ namespace WPF_LoginForm.Services
             [JsonProperty("data")]
             public List<TratamientoResponse> Data { get; set; }
         }
+
+        public async Task<TratamientoResponse> GetTratamientoByPacienteIdAsync(int idPaciente)
+        {
+            var tratamientos = await GetAllTratamientosAsync();
+            return tratamientos?.Find(t => t.IdPaciente == idPaciente);
+        }
     }
 
     /// <summary>
@@ -246,5 +252,9 @@ namespace WPF_LoginForm.Services
 
         [JsonProperty("fecha_registro")]
         public string FechaRegistro { get; set; }
+
+        // NUEVO: NombrePaciente para mostrar en la UI
+        [JsonProperty("nombre_paciente")]
+        public string NombrePaciente { get; set; }
     }
 }

@@ -15,6 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPF_LoginForm.Models;
+using WPF_LoginForm.Services;
+using System.Collections.ObjectModel;
 
 namespace WPF_LoginForm.Views
 {
@@ -23,23 +26,41 @@ namespace WPF_LoginForm.Views
     /// </summary>
     public partial class MedicacionG : UserControl
     {
+        private readonly MedicacionApiService _medicacionService = new MedicacionApiService();
+        private readonly PacienteApiService _pacienteService = new PacienteApiService();
+        public ObservableCollection<MedicacionModel> Medicaciones { get; set; } = new ObservableCollection<MedicacionModel>();
+
         public MedicacionG()
         {
             InitializeComponent();
-            CargarDatos();
+            _ = CargarMedicacionesAsync();
         }
-        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["conexionDB2"].ConnectionString);
 
-        void CargarDatos()
+        private async Task CargarMedicacionesAsync()
         {
-            con.Open();
-            SqlCommand cmd = new SqlCommand("SELECT s.Id, s.FechaSolicitud, s.Cliente, s.Descripcion,s.FechaInicio, s.Estado, ts.NombreServicio AS TipoServicio FROM SolicitudServicio s INNER JOIN TipoServicio ts ON s.TipoServicio = ts.id_tipoServicio ORDER BY s.Id ASC", con);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-
-            GridDatos.ItemsSource = dt.DefaultView;
-            con.Close();
+            var lista = await _medicacionService.GetAllMedicacionesAsync();
+            Medicaciones.Clear();
+            if (lista != null)
+            {
+                foreach (var m in lista)
+                {
+                    // Obtener nombre del paciente por id
+                    if (m.IdPaciente > 0)
+                    {
+                        try
+                        {
+                            var paciente = await _pacienteService.GetPacienteByIdAsync(m.IdPaciente);
+                            m.NombrePaciente = paciente?.NombreCompleto ?? "";
+                        }
+                        catch
+                        {
+                            m.NombrePaciente = "";
+                        }
+                    }
+                    Medicaciones.Add(m);
+                }
+            }
+            GridDatos.ItemsSource = Medicaciones;
         }
 
         // Evento para búsqueda en el TextBox
@@ -53,60 +74,18 @@ namespace WPF_LoginForm.Views
         // Evento para botón Agregar
         private void Agregar(object sender, RoutedEventArgs e)
         {
-            Medicacion ventana = new Medicacion();
-            FrameControlSolicitudes.Content = ventana;
-            //ventana.BtnCrear.Visibility = Visibility.Visible;
+            var medicacionView = new Medicacion();
+            FrameControlSolicitudes.Navigate(medicacionView);
         }
 
-        // Evento para botón Denegar
-        private void Denegar(object sender, RoutedEventArgs e)
+        private void Consultar(object sender, RoutedEventArgs e)
         {
-            int id = (int)((Button)sender).CommandParameter;
-            CrudSolicitudServicio ventana = new CrudSolicitudServicio();
-            //ventana.id_solicitud = id;
-            //ventana.Consultar();
-            //FrameControlSolicitudes.Content = ventana;
-            //ventana.Titulo.Text = "Consultar Servicio";
-            //ventana.tbCliente.IsEnabled = false;
-            //ventana.tbDescripcion.IsEnabled = false;
-            //ventana.cbTipoServicio.IsEnabled = false;
-            //ventana.tbFechaSolicitud.IsEnabled = false;
-            //ventana.tbFechaInicio.IsEnabled = false;
-            //ventana.tbEstado.IsEnabled = false;
-            ventana.BtnDenegar.Visibility = Visibility.Visible;
-            con.Open();
-            using (SqlCommand cmd = new SqlCommand("UPDATE SolicitudServicio SET Estado = 'Denegado' WHERE Id = @id", con))
+            if (((Button)sender).CommandParameter is MedicacionModel medicacion)
             {
-                cmd.Parameters.AddWithValue("@id", id);
-                cmd.ExecuteNonQuery();
+                var medicacionView = new Medicacion();
+                medicacionView.CargarDatos(medicacion);
+                FrameControlSolicitudes.Navigate(medicacionView);
             }
-            con.Close();
         }
-
-        // Evento para botón Confirmar
-        private void Confirmar(object sender, RoutedEventArgs e)
-        {
-            int id = (int)((Button)sender).CommandParameter;
-            ConfirmarSolicitud ventana = new ConfirmarSolicitud();
-            //ventana.id_solicitud = id;
-            //ventana.Consultar();
-            FrameControlSolicitudes.Content = ventana;
-            //ventana.Titulo.Text = "Actualizar Servicio";
-            //ventana.tbCliente.IsEnabled = false;
-            //ventana.tbDescripcion.IsEnabled = false;
-            //ventana.cbTipoServicio.IsEnabled = false;
-            //ventana.cbEquipo.IsEnabled = false;
-            //ventana.tbFechaInicio.IsEnabled = false;
-            //ventana.BtnEnviar.Visibility = Visibility.Visible;
-            //con.Open();
-            //using (SqlCommand cmd = new SqlCommand("UPDATE SolicitudServicio SET Estado = 'Confirmado' WHERE Id = @id", con))
-            //{
-            //    cmd.Parameters.AddWithValue("@id", id);
-            //    cmd.ExecuteNonQuery();
-            //}
-            //con.Close();
-        }
-
-
     }
 }

@@ -308,68 +308,73 @@
                   GridLinesVisibility="Horizontal"
                   HorizontalGridLinesBrush="{StaticResource MediumGrayBrush}" Style="{DynamicResource DataGridStyle}">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Opciones de administrador" 
-                                        Width="245">
+                    <DataGridTemplateColumn Header="Opciones de administrador" Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <DockPanel>
-                                    <!--creacion de botones para crud-->
-                                    <Button Content="Confirmar"
-                                        x:Name="BtnConfirmar"
+                                <Button Content="✓ Consultar"
+                                        x:Name="BtnConsultar"
                                         Background="{StaticResource SuccessBrush}"
-                                        Width="80"
+                                        Width="85"
+                                        Height="28"
+                                        Margin="2"
                                         BorderBrush="Transparent"
                                         Foreground="White"
-                                        Style="{DynamicResource btnBuscarStyle}" 
-                                        Click="Confirmar"
-                                        CommandParameter="{Binding Id}"/>
-                                    <Button Content="Denegar"
-                                        x:Name="BtnDenegar"
-                                        Background="{StaticResource ErrorBrush}"
-                                        Width="80"
-                                        BorderBrush="Transparent"
-                                        Foreground="White"
+                                        FontWeight="SemiBold"
                                         Style="{DynamicResource btnBuscarStyle}"
-                                        CommandParameter="{Binding Id}" 
-                                        Click="Denegar"/>
-
-                                    <!--ENDREGION-->
-                                </DockPanel>
+                                        Click="ConsultarSeguimientoGrid_Click"
+                                        CommandParameter="{Binding IdSeguimiento}"
+                                        ToolTip="Consultar seguimiento"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <!--<DataGridTextColumn Header="ID"
-                                    Width="40"
-                                    Binding="{Binding Id}"/>-->
-                    <!--<DataGridTextColumn Header="FechaSolicitud"
-                                    Width="110"
-                                    Binding="{Binding FechaSolicitud}"/>-->
-                    <!--<DataGridTextColumn Header="Nombre"
-                                    Width="100"
-                                    Binding="{Binding Nombre}"/>-->
-                    <DataGridTextColumn Header="NombrePaciente"
-                                    Width="130"
-                                    Binding="{Binding Cliente}"/>
-                    <DataGridTextColumn Header="Fecha"
-                                    Width="100"
-                                    Binding="{Binding FechaInicio}"/>
-                    <DataGridTextColumn Header="Descripcion"
-                                    Width="*"
-                                    Binding="{Binding Descripcion}"/>
-                    
-
-
+                    <DataGridTextColumn Header="ID" Width="60" Binding="{Binding IdSeguimiento}"/>
+                    <DataGridTextColumn Header="NombrePaciente" Width="130" Binding="{Binding NombrePaciente}"/>
+                    <DataGridTextColumn Header="Fecha" Width="100" Binding="{Binding FechaSeguimiento}"/>
+                    <DataGridTextColumn Header="Estado Ánimo" Width="100" Binding="{Binding EstadoAnimo}"/>
+                    <DataGridTextColumn Header="Adherencia" Width="100" Binding="{Binding AdherenciaTratamiento}"/>
+                    <DataGridTextColumn Header="Observaciones" Width="*" Binding="{Binding Observaciones}"/>
+                    <DataGridTextColumn Header="Próxima Evaluación" Width="120" Binding="{Binding ProximaEvaluacion}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <!--EndRegion-->
             <!--Region FrameCliente-->
-            <Frame x:Name="FrameControlSolicitudes"
+            <!-- <Frame x:Name="FrameControlSolicitudes"
                Grid.Column="0"
                Grid.Row="0"
                Grid.RowSpan="8"
-               Grid.ColumnSpan="6" />
+               Grid.ColumnSpan="6" /> -->
             <!--Endregion-->
-
+            <!--Grid para seguimiento datos-->
+            <Grid x:Name="GridSeguimientoDatos" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,10,0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Paciente:" FontWeight="Bold" Foreground="{StaticResource titleColor1}"/>
+                <TextBox x:Name="tbPaciente" Grid.Row="0" Margin="120,0,0,5" Height="28" FontSize="15" IsReadOnly="True"/>
+                <TextBlock Text="Fecha Seguimiento:" Grid.Row="1" FontWeight="Bold" Foreground="{StaticResource titleColor1}"/>
+                <TextBox x:Name="tbFechaSeguimiento" Grid.Row="1" Margin="120,0,0,5" Height="28" FontSize="15" IsReadOnly="True"/>
+                <TextBlock Text="Estado Ánimo:" Grid.Row="2" FontWeight="Bold" Foreground="{StaticResource titleColor1}"/>
+                <TextBox x:Name="tbEstadoAnimo" Grid.Row="2" Margin="120,0,0,5" Height="28" FontSize="15" IsReadOnly="True"/>
+                <TextBlock Text="Adherencia Tratamiento:" Grid.Row="3" FontWeight="Bold" Foreground="{StaticResource titleColor1}"/>
+                <TextBox x:Name="tbAdherencia" Grid.Row="3" Margin="120,0,0,5" Height="28" FontSize="15" IsReadOnly="True"/>
+                <TextBlock Text="Observaciones:" Grid.Row="4" FontWeight="Bold" Foreground="{StaticResource titleColor1}"/>
+                <TextBox x:Name="tbObservaciones" Grid.Row="4" Margin="120,0,0,5" Height="28" FontSize="15" IsReadOnly="True"/>
+                <TextBlock Text="Próxima Evaluación:" Grid.Row="5" FontWeight="Bold" Foreground="{StaticResource titleColor1}"/>
+                <TextBox x:Name="tbProximaEvaluacion" Grid.Row="5" Margin="120,0,0,5" Height="28" FontSize="15" IsReadOnly="True"/>
+            </Grid>
+            <!--Region Frame para mostrar FormularioS como Page, sin barra de navegación-->
+            <Frame x:Name="FrameFormularioS"
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   Grid.RowSpan="8"
+                   Grid.ColumnSpan="6"
+                   NavigationUIVisibility="Hidden" />
+            <!--EndRegion-->
         </Grid>
     </Border>
 </UserControl>

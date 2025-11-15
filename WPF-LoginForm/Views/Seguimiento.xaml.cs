@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPF_LoginForm.Services;
+using System.Collections.ObjectModel;
 
 namespace WPF_LoginForm.Views
 {
@@ -23,11 +25,74 @@ namespace WPF_LoginForm.Views
     /// </summary>
     public partial class Seguimiento : UserControl
     {
+        private readonly SeguimientoApiService _seguimientoService = new SeguimientoApiService();
+        private readonly PacienteApiService _pacienteService = new PacienteApiService();
+
+        public ObservableCollection<SeguimientoGridItem> Seguimientos { get; set; } = new ObservableCollection<SeguimientoGridItem>();
+
         public Seguimiento()
         {
             InitializeComponent();
-            CargarDatos();
+            _ = CargarSeguimientosAsync();
         }
+
+        public class SeguimientoGridItem
+        {
+            public int IdSeguimiento { get; set; }
+            public string NombrePaciente { get; set; }
+            public string FechaSeguimiento { get; set; }
+            public string EstadoAnimo { get; set; }
+            public string AdherenciaTratamiento { get; set; }
+            public string Observaciones { get; set; }
+            public string ProximaEvaluacion { get; set; }
+        }
+
+        private async Task CargarSeguimientosAsync()
+        {
+            var lista = await _seguimientoService.GetAllSeguimientosAsync();
+            Seguimientos.Clear();
+            if (lista != null)
+            {
+                foreach (var s in lista)
+                {
+                    string nombrePaciente = "";
+                    var paciente = await _pacienteService.GetPacienteByIdAsync(s.id_paciente);
+                    if (paciente != null)
+                        nombrePaciente = paciente.NombreCompleto;
+                    Seguimientos.Add(new SeguimientoGridItem
+                    {
+                        IdSeguimiento = s.id_seguimiento,
+                        NombrePaciente = nombrePaciente,
+                        FechaSeguimiento = s.fecha_seguimiento,
+                        EstadoAnimo = s.estado_animo,
+                        AdherenciaTratamiento = s.adherencia_tratamiento,
+                        Observaciones = s.observaciones,
+                        ProximaEvaluacion = s.proxima_evaluacion,
+                    });
+                }
+            }
+            GridDatos.ItemsSource = Seguimientos;
+        }
+
+        // Nuevo método para consultar y mostrar seguimiento
+        public async Task MostrarSeguimiento(int idSeguimiento)
+        {
+            var seguimiento = await _seguimientoService.GetSeguimientoByIdAsync(idSeguimiento);
+            if (seguimiento == null)
+            {
+                MessageBox.Show("No se encontró seguimiento.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            var paciente = await _pacienteService.GetPacienteByIdAsync(seguimiento.id_paciente);
+            string nombrePaciente = paciente?.NombreCompleto ?? "";
+            tbPaciente.Text = nombrePaciente;
+            tbFechaSeguimiento.Text = seguimiento.fecha_seguimiento;
+            tbEstadoAnimo.Text = seguimiento.estado_animo;
+            tbAdherencia.Text = seguimiento.adherencia_tratamiento;
+            tbObservaciones.Text = seguimiento.observaciones;
+            tbProximaEvaluacion.Text = seguimiento.proxima_evaluacion;
+        }
+
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["conexionDB2"].ConnectionString);
 
         void CargarDatos()
@@ -54,7 +119,7 @@ namespace WPF_LoginForm.Views
         private void Agregar(object sender, RoutedEventArgs e)
         {
             CrearCita ventana = new CrearCita();
-            FrameControlSolicitudes.Content = ventana;
+            // FrameControlSolicitudes.Content = ventana;
             //ventana.BtnCrear.Visibility = Visibility.Visible;
         }
 
@@ -87,10 +152,10 @@ namespace WPF_LoginForm.Views
         private void Confirmar(object sender, RoutedEventArgs e)
         {
             int id = (int)((Button)sender).CommandParameter;
-            FormularioS ventana = new FormularioS();
+            FormularioS ventana = new FormularioS(null, null);
             //ventana.id_solicitud = id;
             //ventana.Consultar();
-            FrameControlSolicitudes.Content = ventana;
+            //FrameControlSolicitudes.Content = ventana;
             //ventana.Titulo.Text = "Actualizar Servicio";
             //ventana.tbCliente.IsEnabled = false;
             //ventana.tbDescripcion.IsEnabled = false;
@@ -105,6 +170,40 @@ namespace WPF_LoginForm.Views
             //    cmd.ExecuteNonQuery();
             //}
             //con.Close();
+        }
+
+        private async void BtnConsultarSeguimiento_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(Buscar.Text, out int idSeguimiento))
+            {
+                await MostrarSeguimiento(idSeguimiento);
+            }
+            else
+            {
+                MessageBox.Show("Ingrese un ID de seguimiento válido.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private async void ConsultarSeguimientoGrid_Click(object sender, RoutedEventArgs e)
+        {
+            if (((Button)sender).CommandParameter is int idSeguimiento)
+            {
+                var seguimiento = await _seguimientoService.GetSeguimientoByIdAsync(idSeguimiento);
+                if (seguimiento == null)
+                {
+                    MessageBox.Show("No se encontró seguimiento.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                var paciente = await _pacienteService.GetPacienteByIdAsync(seguimiento.id_paciente);
+                var formularioS = new WPF_LoginForm.Views.FormularioS(null, paciente);
+                formularioS.tbNombre.Text = paciente?.NombreCompleto ?? "";
+                formularioS.tbFecha.Text = seguimiento.fecha_seguimiento;
+                formularioS.tbFecha_Copiar1.Text = seguimiento.estado_animo;
+                formularioS.tbFecha_Copiar.Text = seguimiento.adherencia_tratamiento;
+                formularioS.tbFecha_Copiar4.Text = seguimiento.observaciones;
+                formularioS.tbFecha_Copiar5.Text = seguimiento.proxima_evaluacion;
+                FrameFormularioS.Navigate(formularioS);
+            }
         }
 
     }

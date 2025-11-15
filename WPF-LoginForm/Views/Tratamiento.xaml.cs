@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WPF_LoginForm.Services;
+using WPF_LoginForm.Models;
 
 namespace WPF_LoginForm.Views
 {
@@ -38,6 +39,14 @@ namespace WPF_LoginForm.Views
             tbIdEmpleado.Text = tratamiento.IdEmpleado.ToString();
             tbIdCita.Text = tratamiento.IdCita.ToString();
             tbFechaRegistro.Text = tratamiento.FechaRegistro;
+
+            // Obtener nombre del paciente usando el id_paciente
+            var pacienteService = new PacienteApiService();
+            var paciente = await pacienteService.GetPacienteByIdAsync(tratamiento.IdPaciente);
+            if (paciente != null)
+                tbNombre.Text = paciente.NombreCompleto;
+            else
+                tbNombre.Text = "";
         }
 
         private void Crear(object sender, RoutedEventArgs e)

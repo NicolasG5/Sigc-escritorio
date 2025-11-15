@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPF_LoginForm.Views"
+             xmlns:converters="clr-namespace:WPF_LoginForm.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <!-- Converters para seguimiento y medicación -->
+        <converters:FirstSeguimientoObservacionesConverter x:Key="FirstSeguimientoObservacionesConverter"/>
+        <converters:FirstMedicacionNombreConverter x:Key="FirstMedicacionNombreConverter"/>
         <!--Region Buscador-->
         <SolidColorBrush x:Key="TextBox.Static.Border" Color="{StaticResource MediumGray}"/>
         <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{StaticResource SecondaryColor}"/>
@@ -306,29 +310,20 @@
                   HorizontalGridLinesBrush="{StaticResource MediumGrayBrush}" Style="{DynamicResource DataGridStyle}">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Opciones de administrador" 
-                                        Width="245">
+                                        Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <DockPanel>
                                     <!--creacion de botones para crud-->
-                                    <Button Content="Confirmar"
-                                        x:Name="BtnConfirmar"
+                                    <Button Content="Reporte"
+                                        x:Name="BtnReporte"
                                         Background="{StaticResource SuccessBrush}"
-                                        Width="80"
+                                        Width="100"
                                         BorderBrush="Transparent"
                                         Foreground="White"
                                         Style="{DynamicResource btnBuscarStyle}" 
-                                        Click="Confirmar"
+                                        Click="Reporte"
                                         CommandParameter="{Binding Id}"/>
-                                    <Button Content="Denegar"
-                                        x:Name="BtnDenegar"
-                                        Background="{StaticResource ErrorBrush}"
-                                        Width="80"
-                                        BorderBrush="Transparent"
-                                        Foreground="White"
-                                        Style="{DynamicResource btnBuscarStyle}"
-                                        CommandParameter="{Binding Id}" 
-                                        Click="Denegar"/>
 
                                     <!--ENDREGION-->
                                 </DockPanel>
@@ -338,26 +333,20 @@
                     <DataGridTextColumn Header="ID"
                                     Width="40"
                                     Binding="{Binding Id}"/>
-                    <!--<DataGridTextColumn Header="FechaSolicitud"
-                                    Width="110"
-                                    Binding="{Binding FechaSolicitud}"/>-->
-                    <!--<DataGridTextColumn Header="Nombre"
-                                    Width="100"
-                                    Binding="{Binding Nombre}"/>-->
                     <DataGridTextColumn Header="Nombre Paciente"
                                     Width="130"
-                                    Binding="{Binding Cliente}"/>
+                                    Binding="{Binding Paciente.NombreCompleto}"/>
                     
-                    <DataGridTextColumn Header="Seguimientos"
+                    <DataGridTextColumn Header="Seguimiento"
                                     Width="*"
-                                    Binding="{Binding Descripcion}"/>
+                                    Binding="{Binding Seguimientos, Converter={StaticResource FirstSeguimientoObservacionesConverter}}"/>
                     <DataGridTextColumn Header="Medicacion"
                                     Width="*"
-                                    Binding="{Binding TipoServicio}"/>
+                                    Binding="{Binding Medicaciones[0].NombreMedicamento}"/>
 
                     <DataGridTextColumn Header="Tratamiento"
                                     Width="*"
-                                    Binding="{Binding Estado}"/>
+                                    Binding="{Binding Tratamiento.TipoTratamiento}"/>
                     
 
 
@@ -366,10 +355,11 @@
             <!--EndRegion-->
             <!--Region FrameCliente-->
             <Frame x:Name="FrameReportesG"
-               Grid.Column="0"
-               Grid.Row="0"
-               Grid.RowSpan="8"
-               Grid.ColumnSpan="6" />
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   Grid.RowSpan="8"
+                   Grid.ColumnSpan="6"
+                   NavigationUIVisibility="Hidden" />
             <!--Endregion-->
 
         </Grid>

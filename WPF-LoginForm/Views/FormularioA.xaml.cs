@@ -47,7 +47,10 @@ namespace WPF_LoginForm.Views
                     System.Diagnostics.Debug.WriteLine($"Fecha Cita: {_cita.FechaCita:dd/MM/yyyy}");
                     System.Diagnostics.Debug.WriteLine($"Hora: {_cita.HoraCita}");
                     System.Diagnostics.Debug.WriteLine($"Motivo: {_cita.MotivoCita}");
-                    
+
+                    // Mostrar nombre del paciente en el formulario
+                    tbNombre.Text = _cita.NombrePaciente;
+
                     // Establecer fechas por defecto
                     dpFechaInicio.SelectedDate = DateTime.Now;
                     dpFechaFinEstimada.SelectedDate = DateTime.Now.AddMonths(3); // 3 meses desde hoy

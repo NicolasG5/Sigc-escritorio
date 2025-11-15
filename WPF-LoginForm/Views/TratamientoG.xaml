@@ -238,7 +238,7 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0"
                    Grid.ColumnSpan="6"
-                   Text="Control De Tratamiento"
+                   Text="Gestion De Tratamiento"
                    Foreground="{StaticResource titleColor1}"
                    FontSize="30"
                    HorizontalAlignment="Center"
@@ -310,14 +310,29 @@
                             <DataTemplate>
                                 <DockPanel>
                                     <!-- Botón Consultar -->
-                                    <Button Content="Consultar"
+                                    <Button Content="✓ Consultar"
                                             x:Name="BtnConsultar"
                                             Background="{StaticResource SuccessBrush}"
+                                            Width="85"
+                                            Height="28"
+                                            Margin="2"
+                                            BorderBrush="Transparent"
+                                            Foreground="White"
+                                            FontWeight="SemiBold"
+                                            Style="{DynamicResource btnBuscarStyle}"
+                                            Click="VerDetalle"
+                                            CommandParameter="{Binding IdTratamiento}"
+                                            ToolTip="Consultar tratamiento"/>
+                                    <!-- Botón Atender -->
+                                    <Button Content="Atender"
+                                            x:Name="BtnAtender"
+                                            Background="{StaticResource AccentBrush}"
                                             Width="80"
+                                            Margin="10,0,0,0"
                                             BorderBrush="Transparent"
                                             Foreground="White"
                                             Style="{DynamicResource btnBuscarStyle}"
-                                            Click="VerDetalle"
+                                            Click="Atender"
                                             CommandParameter="{Binding IdTratamiento}"/>
                                 </DockPanel>
                             </DataTemplate>

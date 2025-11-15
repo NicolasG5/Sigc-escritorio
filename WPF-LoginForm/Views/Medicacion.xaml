@@ -3,337 +3,129 @@
      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-     xmlns:local="clr-namespace:WPF_LoginForm.Views" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Medicacion"
-      Background="Transparent">
-
+     xmlns:local="clr-namespace:WPF_LoginForm.Views"
+     mc:Ignorable="d" 
+     d:DesignHeight="600" d:DesignWidth="950"
+     Title="Medicacion">
     <Page.Resources>
-
-        <!--REGION FocusVisual-->
-        <Style x:Key="FocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--endregion-->
-        <!--REGION BtnStyle-->
-        <SolidColorBrush x:Key="Button.Static.Background" Color="{StaticResource PrimaryColor}"/>
-        <SolidColorBrush x:Key="Button.Static.Border" Color="{StaticResource MediumGray}"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource SecondaryColor}"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="{StaticResource SecondaryColor}"/>
-        <SolidColorBrush x:Key="Button.Pressed.Background" Color="{StaticResource AccentColor}"/>
-        <SolidColorBrush x:Key="Button.Pressed.Border" Color="{StaticResource AccentColor}"/>
-        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFE0E0E0"/>
-        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-        <Style x:Key="BtnStyle" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+        <!-- Modern styles from FormularioA -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border CornerRadius="10" x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--ENDREGION-->
-        <!--REGION TEXTBOX-->
-
-        <SolidColorBrush x:Key="TextBox.Static.Border" Color="{StaticResource AccentColor}"/>
-        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{StaticResource SecondaryColor}"/>
-        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="{StaticResource AccentColor}"/>
-        <Style x:Key="TextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
-            <Setter Property="Foreground" Value="{StaticResource DarkBrush}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="AllowDrop" Value="true"/>
-            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
-            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBox}">
-                        <Border CornerRadius="10" x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
-                        <Condition Property="IsSelectionActive" Value="false"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                </MultiTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource SecondaryBrush}"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
-        <!--ENDREGION-->
-        <!--REGION COMBOBOX-->
-        <LinearGradientBrush x:Key="ComboBox.Static.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="{StaticResource SecondaryColor}" Offset="0.0"/>
-            <GradientStop Color="{StaticResource SecondaryColor}" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.Static.Border" Color="{StaticResource AccentColor}"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="{StaticResource AccentColor}"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background" Color="Transparent"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Border" Color="Transparent"/>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="{StaticResource DarkColor}"/>
-        <LinearGradientBrush x:Key="ComboBox.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="{StaticResource SecondaryColor}" Offset="0.0"/>
-            <GradientStop Color="{StaticResource SecondaryColor}" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="{StaticResource SecondaryColor}"/>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="{StaticResource AccentColor}"/>
-        <LinearGradientBrush x:Key="ComboBox.MouseOver.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="{StaticResource SecondaryColor}" Offset="0.0"/>
-            <GradientStop Color="{StaticResource SecondaryColor}" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border" Color="{StaticResource AccentColor}"/>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="{StaticResource DarkColor}"/>
-        <LinearGradientBrush x:Key="ComboBox.Pressed.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="{StaticResource PrimaryColor}" Offset="0.0"/>
-            <GradientStop Color="{StaticResource PrimaryColor}" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="{StaticResource PrimaryColor}"/>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Border" Color="{StaticResource PrimaryColor}"/>
-        <LinearGradientBrush x:Key="ComboBox.Pressed.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="{StaticResource PrimaryColor}" Offset="0.0"/>
-            <GradientStop Color="{StaticResource PrimaryColor}" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border" Color="{StaticResource PrimaryColor}"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="{StaticResource MediumGray}"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="#FFF0F0F0"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="#FFD9D9D9"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background" Color="#FFEFEFEF"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFD9D9D9"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border" Color="Transparent"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="{StaticResource DarkColor}"/>
-        <!-- Keep existing ComboBox templates/styles -->
-
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource MediumGrayBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Padding="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource titleColor3}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource titleColor1}"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,15,0,10"/>
+        </Style>
     </Page.Resources>
-    <Border CornerRadius="10"
- BorderThickness="1"
- Background="{StaticResource panelColor}">
-        <Border.BorderBrush>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="{StaticResource winBorderColor4}" Offset="0"/>
-                <GradientStop Color="{StaticResource winBorderColor5}" Offset="0.5"/>
-                <GradientStop Color="{StaticResource winBorderColor4}" Offset="1"/>
-            </LinearGradientBrush>
-        </Border.BorderBrush>
-        <Grid Margin="0,0,-1,0">
-            <!--REGION COLS & ROWS-->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="80*"/>
-                <ColumnDefinition Width="119*"/>
-                <ColumnDefinition Width="101.004"/>
-                <ColumnDefinition Width="99"/>
-                <ColumnDefinition Width="80*"/>
-                <ColumnDefinition Width="20"/>
-            </Grid.ColumnDefinitions>
+    <Border Background="{StaticResource panelColor}" CornerRadius="10">
+        <Grid Margin="30">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="10*"/>
-                <RowDefinition Height="23"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="7.629"/>
-                <RowDefinition Height="32*"/>
-                <RowDefinition Height="4.789"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <!--ENDREGION-->
-            <!--REGION TITULO-->
-            <TextBlock x:Name="Titulo"
-           Text="Medicacion"
-           Grid.Column="2"
-           Grid.Row="1"
-           FontSize="30"
-           VerticalAlignment="Top"
-           HorizontalAlignment="Center" 
-           Foreground="{StaticResource titleColor1}" Height="40" Width="185"/>
-            <!--ENDREGION-->
-            <!--REGION BOTONES-->
-            <!--REGION REGRESAR-->
-            <Button x:Name="BtnRegresar"
-        Content="Regresar"
-        Grid.Column="1"
-        Grid.Row="1"
-        Cursor="Hand"
-        Background="{StaticResource SecondaryBrush}"
-        Style="{DynamicResource BtnStyle}"
-        Click="Regresar" Margin="10,5,50,15"/>
-            <!--ENDREGION-->
-            <!--REGION CREAR-->
-            <Button x:Name="BtnCrear"
-        Content="Crear"
-        Grid.Row="19"
-        Grid.Column="5"
-        Cursor="Hand"
-        Background="{StaticResource PrimaryBrush}"
-        Style="{DynamicResource BtnStyle}"
-        Visibility="Hidden"
-        Click="Crear" Margin="30,8,30,0" Grid.RowSpan="2"/>
-            <!--ENDREGION-->
-            <!--REGION ELIMINAR-->
-            <Button x:Name="BtnEliminar"
-        Content="Eliminar"
-        Grid.Row="19"
-        Grid.Column="5"
-        Cursor="Hand"
-        Background="{StaticResource ErrorBrush}"
-        Style="{DynamicResource BtnStyle}"
-        Visibility="Hidden"
-        Click="Eliminar" Margin="30,8,30,0" Grid.RowSpan="2"/>
-            <!--ENDREGION-->
-            <!--REGION MODIFICAR-->
-            <Button x:Name="BtnActualizar"
-        Content="Actualizar"
-        Grid.Row="19"
-        Grid.Column="5"
-        Cursor="Hand"
-        Background="{StaticResource PrimaryBrush}"
-        Style="{DynamicResource BtnStyle}"
-        Visibility="Hidden"
-        Click="Actualizar" Margin="30,8,30,0" Grid.RowSpan="2"/>
-            <!--ENDREGION-->
-            <!--ENDREGION-->
-            <!--REGION CONTENIDO-->
-            <TextBlock Grid.Row="2"
-           Grid.Column="1"
-           Text="Nombre Paciente:"
-           HorizontalAlignment="Left"
-           VerticalAlignment="Top"
-           Foreground="{StaticResource titleColor1}" Margin="0,4,0,0" Height="16" Width="102"/>
-            <TextBox Grid.Row="1"
-         Grid.Column="1"
-         x:Name="tbNombre" Style="{DynamicResource TextBox}"
-         HorizontalContentAlignment="Center" Margin="149,42,28,1" Grid.ColumnSpan="3" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="3">
-                <TextBox.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="-0.133"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </TextBox.RenderTransform>
-            </TextBox>
-
-            <TextBox Grid.Row="4"
-         Grid.Column="1"
-         x:Name="tbFecha"
-         Style="{DynamicResource TextBox}"
-         HorizontalContentAlignment="Center" Margin="152,10,28,25" Grid.RowSpan="5" Grid.ColumnSpan="3"/>
-            <TextBlock Grid.Row="10"
-    Text="Descripcion Medicamento:"
-    HorizontalAlignment="Left"
-    VerticalAlignment="Top"
-    Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Height="16" Width="152" Margin="0,2,0,0" Grid.Column="1"/>
-            <TextBox Grid.Row="8"
-    Grid.Column="1"
-    x:Name="tbFecha_Copiar1"
-    Style="{DynamicResource TextBox}"
-    HorizontalContentAlignment="Center" Margin="152,15,0,0" Grid.RowSpan="8" HorizontalAlignment="Left" Width="320" Grid.ColumnSpan="3" Height="144" VerticalAlignment="Top"/>
-            <TextBox Grid.Row="18"
-    Grid.Column="1"
-    x:Name="tbFecha_Copiar4"
-    Style="{DynamicResource TextBox}"
-    HorizontalContentAlignment="Center" Margin="152,2,28,16" Grid.RowSpan="5" Grid.ColumnSpan="3"/>
-            <TextBlock Grid.Row="18"
-    Text="Conclusion:"
-    HorizontalAlignment="Left"
-    VerticalAlignment="Top"
-    Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Margin="0,10,0,0" Grid.Column="1" Height="16" Width="60"/>
-            <TextBlock Grid.Row="4"
-        Text="Medicacion:"
-        HorizontalAlignment="Left"
-        VerticalAlignment="Top"
-        Foreground="{StaticResource titleColor1}" RenderTransformOrigin="0.59,3.962" Height="16" Width="137" Margin="18,10,0,0" Grid.ColumnSpan="2"/>
-            <!--ENDREGION-->
-            <!--REGION ENVIAR-->
-            <Button x:Name="btnEnviar"
-Content="Guardar"
-Grid.Row="20"
-Grid.Column="5"
-Width="100"
-Cursor="Hand"
-Background="{StaticResource PrimaryBrush}"
-Style="{DynamicResource BtnStyle}"
-Click="Guardar" Margin="30,19,30,9" Grid.RowSpan="3"/>
-            <!--ENDREGION-->
-
-
-
+            <!-- HEADER -->
+            <Grid Grid.Row="0">
+                <TextBlock Text="💊 Formulario de Medicación" FontSize="28" FontWeight="Bold" Foreground="{StaticResource titleColor1}" HorizontalAlignment="Center"/>
+                <Button Content="← Regresar" HorizontalAlignment="Left" Background="{StaticResource color2}" Style="{StaticResource ModernButton}" Click="Regresar" Width="120"/>
+            </Grid>
+            <Separator Grid.Row="1" Margin="0,15" Background="{StaticResource MediumGrayBrush}"/>
+            <!-- CONTENT -->
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="👤 Información del Paciente" Style="{StaticResource SectionHeader}"/>
+                    <Border Background="{StaticResource color8}" CornerRadius="8" Padding="20" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="Paciente:" Style="{StaticResource LabelText}"/>
+                            <ComboBox x:Name="cbPaciente" SelectionChanged="cbPaciente_SelectionChanged" Height="35" FontSize="14"/>
+                            <TextBlock Text="Tratamiento asociado:" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="tbTratamiento" Style="{StaticResource ModernTextBox}" IsReadOnly="True"/>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="💊 Detalles de Medicación" Style="{StaticResource SectionHeader}"/>
+                    <Border Background="{StaticResource color8}" CornerRadius="8" Padding="20" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="Nombre Medicamento:" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="tbNombreMedicamento" Style="{StaticResource ModernTextBox}"/>
+                            <TextBlock Text="Dosis:" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="tbDosis" Style="{StaticResource ModernTextBox}"/>
+                            <TextBlock Text="Frecuencia:" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="tbFrecuencia" Style="{StaticResource ModernTextBox}"/>
+                            <TextBlock Text="Vía de administración:" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="tbViaAdministracion" Style="{StaticResource ModernTextBox}"/>
+                            <TextBlock Text="Fecha de inicio:" Style="{StaticResource LabelText}"/>
+                            <DatePicker x:Name="dpFechaInicio" Height="35" FontSize="14"/>
+                            <TextBlock Text="Fecha de fin:" Style="{StaticResource LabelText}"/>
+                            <DatePicker x:Name="dpFechaFin" Height="35" FontSize="14"/>
+                            <TextBlock Text="Prescrito por:" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="tbPrescritoPor" Style="{StaticResource ModernTextBox}"/>
+                            <TextBlock Text="Observaciones:" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="tbObservaciones" Style="{StaticResource ModernTextBox}" Height="60" TextWrapping="Wrap"/>
+                            <TextBlock Text="Estado:" Style="{StaticResource LabelText}"/>
+                            <ComboBox x:Name="cbEstado" Height="35" FontSize="14" SelectedIndex="0">
+                                <ComboBoxItem Content="Activo" Tag="activo"/>
+                                <ComboBoxItem Content="Suspendido" Tag="suspendido"/>
+                                <ComboBoxItem Content="Finalizado" Tag="finalizado"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+            <!-- FOOTER CON BOTONES -->
+            <Border Grid.Row="3" Background="{StaticResource color8}" CornerRadius="8" Padding="20" Margin="0,20,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="BtnEliminar" Content="Eliminar" Background="{StaticResource ErrorBrush}" Style="{StaticResource ModernButton}" Click="Eliminar" Width="130" Margin="0,0,10,0" Visibility="Hidden"/>
+                    <Button x:Name="BtnActualizar" Content="Actualizar" Background="{StaticResource PrimaryBrush}" Style="{StaticResource ModernButton}" Click="Actualizar" Width="130" Margin="0,0,10,0" Visibility="Hidden"/>
+                    <Button x:Name="BtnCrear" Content="Crear" Background="{StaticResource PrimaryBrush}" Style="{StaticResource ModernButton}" Width="130" Margin="0,0,10,0" Visibility="Hidden"/>
+                    <Button x:Name="btnEnviar" Content="Guardar Medicación" Background="{StaticResource SuccessBrush}" Style="{StaticResource ModernButton}" Click="Guardar" Width="180"/>
+                </StackPanel>
+            </Border>
         </Grid>
-
     </Border>
 </Page>
