@@ -153,6 +153,12 @@ namespace WPF_LoginForm.ViewModels
             LoadCurrentUserData();
         }
 
+        public async void RefreshCurrentUserDisplayName()
+        {
+            await System.Threading.Tasks.Task.Delay(100); // Espera breve para asegurar que el login y el token estén listos
+            LoadCurrentUserData();
+        }
+
         private void ExecuteShowReportesCommand(object obj)
         {
             CurrentChildView = new ReportesG();
@@ -304,9 +310,7 @@ namespace WPF_LoginForm.ViewModels
             try
             {
                 var username = Thread.CurrentPrincipal?.Identity?.Name;
-                
                 System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] Username from Principal: '{username}'");
-                
                 if (string.IsNullOrEmpty(username))
                 {
                     CurrentUserAccount.DisplayName = "Usuario no identificado";
@@ -315,17 +319,14 @@ namespace WPF_LoginForm.ViewModels
                     OnPropertyChanged(nameof(CurrentUserAccount));
                     return;
                 }
-
                 System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] Calling GetByUsernameAsync for: {username}");
                 var user = await userRepository.GetByUsernameAsync(username);
-                
                 if (user != null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] User found: {user.Name} {user.LastName}");
+                    System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] User found: {user.DisplayName}");
                     CurrentUserAccount.Username = user.Username;
-                    CurrentUserAccount.DisplayName = $"{user.Name} {user.LastName}";
+                    CurrentUserAccount.DisplayName = user.DisplayName;
                     CurrentUserAccount.ProfilePicture = null;
-                    
                     System.Diagnostics.Debug.WriteLine($"[LoadCurrentUserData] DisplayName set to: {CurrentUserAccount.DisplayName}");
                 }
                 else
@@ -334,8 +335,6 @@ namespace WPF_LoginForm.ViewModels
                     CurrentUserAccount.DisplayName = "Usuario no encontrado";
                     CurrentUserAccount.Username = username;
                 }
-                
-                // Forzar actualización de la UI
                 OnPropertyChanged(nameof(CurrentUserAccount));
             }
             catch (Exception ex)

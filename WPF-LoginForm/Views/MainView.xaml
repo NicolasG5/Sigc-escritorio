@@ -409,11 +409,7 @@
                                               Height="12" Width="12"
                                               Style="{StaticResource iconButtonIcon}"/>
                             </Button>
-                            <TextBlock Text="{Binding CurrentUserAccount.DisplayName}"
-                                       Foreground="{StaticResource titleColor3}"
-                                       FontFamily="Montserrat"
-                                       FontSize="12"
-                                       VerticalAlignment="Center"/>
+                            <!-- Imagen de usuario -->
                             <Ellipse Height="35" Width="35"
                                      Stroke="{StaticResource color2}"
                                      StrokeThickness="2"
@@ -422,6 +418,13 @@
                                     <ImageBrush ImageSource="/Images/Perfil.png"/>
                                 </Ellipse.Fill>
                             </Ellipse>
+                            <!-- Nombre del usuario a la izquierda de la imagen -->
+                            <TextBlock Text="{Binding CurrentUserAccount.DisplayName}"
+                                       Foreground="{StaticResource titleColor3}"
+                                       FontFamily="Montserrat"
+                                       FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
                             <Button Style="{StaticResource iconButton}"
                                     Tag="{StaticResource color3}">
                                 <fa:IconImage Icon="Clock" Style="{StaticResource iconButtonIcon}"/>

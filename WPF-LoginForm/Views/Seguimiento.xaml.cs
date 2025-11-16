@@ -138,7 +138,7 @@ namespace WPF_LoginForm.Views
             //ventana.tbFechaSolicitud.IsEnabled = false;
             //ventana.tbFechaInicio.IsEnabled = false;
             //ventana.tbEstado.IsEnabled = false;
-            ventana.BtnDenegar.Visibility = Visibility.Visible;
+            // ventana.BtnDenegar.Visibility = Visibility.Visible;
             con.Open();
             using (SqlCommand cmd = new SqlCommand("UPDATE SolicitudServicio SET Estado = 'Denegado' WHERE Id = @id", con))
             {

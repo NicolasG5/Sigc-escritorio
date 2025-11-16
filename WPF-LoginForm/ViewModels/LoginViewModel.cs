@@ -103,6 +103,10 @@ namespace WPF_LoginForm.ViewModels
                     foreach (var usuario in usuarios)
                         Usuarios.Add(usuario);
 
+                    // Refrescar el nombre del usuario en la barra superior
+                    var mainVM = System.Windows.Application.Current.MainWindow?.DataContext as MainViewModel;
+                    mainVM?.RefreshCurrentUserDisplayName();
+
                     System.Diagnostics.Debug.WriteLine($"[ExecuteLoginCommand] Setting IsViewVisible to false");
                     IsViewVisible = false;
                     return;

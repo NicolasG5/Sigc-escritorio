@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,23 +15,41 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using WPF_LoginForm.Models;
+using WPF_LoginForm.Services;
+using Newtonsoft.Json;
 
 namespace WPF_LoginForm.Views
 {
    
     public partial class CrudSolicitudServicio : Page
     {
+        private readonly CitaApiService _citaService = new CitaApiService();
+        private readonly ServicioApiService _servicioService = new ServicioApiService();
+        private readonly PsicologoApiService _psicologoService = new PsicologoApiService();
+        private readonly HttpClient _httpClient = new HttpClient { BaseAddress = new Uri("http://147.182.240.177:8000/") };
+
         public CrudSolicitudServicio()
         {
             InitializeComponent();
-            CargarCBTipoServicio();
-            CargarCBEquipo();
-            AutocompletarFecha();
+            _ = CargarServiciosYEmpleadosAsync();
+            cbEmpleado.SelectionChanged += cbEmpleado_SelectionChanged;
+            dpFechaCita.SelectedDateChanged += dpFechaCita_SelectedDateChanged;
+            cbHoraInicio.SelectionChanged += cbHoraInicio_SelectionChanged;
         }
 
         private void Regresar(object sender, RoutedEventArgs e)
         {
-            Content = new Customer();
+            // Navega a la vista principal de clientes/solicitudes
+            if (this.Parent is Frame frame)
+            {
+                frame.Content = new Customer();
+            }
+            else
+            {
+                // Fallback: reemplaza el contenido de la página
+                this.Content = new Customer();
+            }
         }
 
         readonly SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["conexionDB2"].ConnectionString);
@@ -64,63 +83,167 @@ namespace WPF_LoginForm.Views
             con.Close();
         }
 
+        private async Task CargarServiciosYEmpleadosAsync()
+        {
+            // Servicios activos
+            var servicios = await _servicioService.GetServiciosActivosAsync();
+            cbServicio.ItemsSource = servicios.ToList();
+            cbServicio.DisplayMemberPath = "DisplayName";
+            cbServicio.SelectedValuePath = "IdServicio";
+
+            // Empleados disponibles
+            var token = Repositories.ApiTokenStore.Instance.Token;
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/empleados/disponibles");
+            request.Headers.Add("accept", "application/json");
+            request.Headers.Add("Authorization", $"Bearer {token}");
+            var response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var empleados = JsonConvert.DeserializeObject<List<PsicologoModel>>(json);
+                cbEmpleado.ItemsSource = empleados;
+                cbEmpleado.DisplayMemberPath = "DisplayName";
+                cbEmpleado.SelectedValuePath = "IdEmpleado";
+            }
+        }
+
+        private async void cbEmpleado_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await ActualizarHorasDisponiblesAsync();
+        }
+
+        private async void dpFechaCita_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await ActualizarHorasDisponiblesAsync();
+        }
+
+        private async Task ActualizarHorasDisponiblesAsync()
+        {
+            cbHoraInicio.ItemsSource = null;
+            tbHoraFin.Text = "";
+            if (cbEmpleado.SelectedItem is PsicologoModel empleado && dpFechaCita.SelectedDate.HasValue)
+            {
+                var token = Repositories.ApiTokenStore.Instance.Token;
+                var fecha = dpFechaCita.SelectedDate.Value.ToString("yyyy-MM-dd"); // Formato correcto
+                var url = $"/api/v1/empleados/disponibilidad?psicologo_id={empleado.IdEmpleado}&fecha={fecha}";
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("accept", "application/json");
+                request.Headers.Add("Authorization", $"Bearer {token}");
+                var response = await _httpClient.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var horas = JsonConvert.DeserializeObject<List<HoraDisponibilidadModel>>(json);
+                    var horasDisponibles = horas.Where(h => h.disponible && !h.ocupado && !h.pasado).Select(h => h.hora).ToList();
+                    cbHoraInicio.ItemsSource = horasDisponibles;
+                }
+            }
+        }
+
+        private void cbHoraInicio_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            tbHoraFin.Text = "";
+            if (cbHoraInicio.SelectedItem is string horaInicio && cbServicio.SelectedItem is ServicioModel servicio)
+            {
+                TimeSpan inicio;
+                // Intentar parsear HH:mm:ss, luego HH:mm
+                if (TimeSpan.TryParseExact(horaInicio, "hh\\:mm\\:ss", null, out inicio) ||
+                    TimeSpan.TryParseExact(horaInicio, "hh\\:mm", null, out inicio))
+                {
+                    var fin = inicio.Add(TimeSpan.FromMinutes(servicio.DuracionMinutos));
+                    tbHoraFin.Text = fin.ToString("hh\\:mm");
+                }
+                else
+                {
+                    tbHoraFin.Text = "Formato de hora inválido";
+                }
+            }
+        }
+
+        public class HoraDisponibilidadModel
+        {
+            public string hora { get; set; }
+            public bool disponible { get; set; }
+            public bool ocupado { get; set; }
+            public bool pasado { get; set; }
+        }
+
         #region CRUD (create, read, update, delete)
         public int id_solicitud;
 
         #region Crear
-        private void Crear(object sender, RoutedEventArgs e)
+        private async void CrearCita_Click(object sender, RoutedEventArgs e)
         {
-            //if (tbCliente.Text == "" || tbDescripcion.Text == "" || tbFechaInicio.Text == "" || tbHoraInicio.Text == "" || cbTipoServicio.SelectedItem == null || cbEquipo.SelectedItem == null)
-            //{
-            //    MessageBox.Show("Los campos no pueden quedar vacíos");
-            //}
-            //else
-            //{
-            //    con.Open();
+            if (cbServicio.SelectedItem == null || cbEmpleado.SelectedItem == null || dpFechaCita.SelectedDate == null || cbHoraInicio.SelectedItem == null || string.IsNullOrWhiteSpace(tbHoraFin.Text))
+    {
+        MessageBox.Show("Completa todos los campos obligatorios.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+        return;
+    }
 
-            //    using (SqlCommand cmd = new SqlCommand("INSERT INTO SolicitudServicio (Cliente, Descripcion, FechaInicio, HoraInicio, TipoServicio, EquipoId) VALUES (@Cliente, @Descripcion, @FechaInicio, @HoraInicio, @TipoServicio, @EquipoId)", con))
-            //    {
-            //        cmd.Parameters.AddWithValue("@Cliente", tbCliente.Text);
-            //        cmd.Parameters.AddWithValue("@Descripcion", tbDescripcion.Text);
+    // Convertir fecha de nacimiento a yyyy-MM-dd
+    string fechaNacimientoFormateada = null;
+    if (!string.IsNullOrWhiteSpace(tbFechaNacimiento.Text))
+    {
+        DateTime fechaNacimiento;
+        if (DateTime.TryParse(tbFechaNacimiento.Text.Trim(), out fechaNacimiento))
+        {
+            fechaNacimientoFormateada = fechaNacimiento.ToString("yyyy-MM-dd");
+        }
+        else
+        {
+            MessageBox.Show("La fecha de nacimiento debe tener formato válido (dd/MM/yyyy o yyyy-MM-dd)", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+    }
 
-            //        DateTime fechaInicio;
-            //        if (DateTime.TryParse(tbFechaInicio.Text, out fechaInicio))
-            //        {
-            //            cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio);
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show("La fecha de inicio no es válida");
-            //            return;
-            //        }
+    // Usar solo los campos del formulario
+    var nuevoPaciente = new PacienteFormularioModel
+    {
+        Rut = tbRut.Text?.Trim(),
+        Nombres = tbNombres.Text?.Trim(),
+        ApellidoPaterno = tbApellidoPaterno.Text?.Trim(),
+        ApellidoMaterno = tbApellidoMaterno.Text?.Trim(),
+        FechaNacimiento = fechaNacimientoFormateada,
+        Telefono = tbTelefono.Text?.Trim(),
+        Email = tbEmail.Text?.Trim(),
+        Estado = "activo"
+    };
 
-            //        TimeSpan horaInicio;
-            //        if (TimeSpan.TryParse(tbHoraInicio.Text, out horaInicio))
-            //        {
-            //            cmd.Parameters.AddWithValue("@HoraInicio", horaInicio.ToString(@"hh\:mm\:ss"));
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show("La hora de inicio no es válida");
-            //            return;
-            //        }
+    var pacienteService = new PacienteApiService();
+    var pacienteCreado = await pacienteService.CreatePacienteDesdeFormularioAsync(nuevoPaciente);
+    if (pacienteCreado == null || pacienteCreado.IdPaciente <= 0)
+    {
+        MessageBox.Show("No se pudo crear el paciente. Verifica los datos ingresados.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        return;
+    }
 
-            //        cmd.Parameters.AddWithValue("@TipoServicio", ((KeyValuePair<int, string>)cbTipoServicio.SelectedItem).Key);
-            //        cmd.Parameters.AddWithValue("@EquipoId", ((KeyValuePair<int, string>)cbEquipo.SelectedItem).Key);
+    var solicitud = new SolicitudCreateModel
+    {
+        Rut = pacienteCreado.Rut,
+        Nombres = pacienteCreado.Nombres,
+        ApellidoPaterno = pacienteCreado.ApellidoPaterno,
+        ApellidoMaterno = pacienteCreado.ApellidoMaterno,
+        Telefono = pacienteCreado.Telefono,
+        Email = pacienteCreado.Email,
+        FechaNacimiento = pacienteCreado.FechaNacimiento,
+        IdServicio = (int)cbServicio.SelectedValue,
+        IdEmpleado = (int)cbEmpleado.SelectedValue, // Cambiado de IdPsicologo a IdEmpleado
+        FechaCita = dpFechaCita.SelectedDate.Value.ToString("yyyy-MM-dd"),
+        HoraInicio = cbHoraInicio.SelectedItem as string,
+        HoraFin = tbHoraFin.Text,
+        MotivoConsulta = tbMotivoConsulta.Text
+    };
 
-            //        cmd.ExecuteNonQuery();
-            //    }
-
-            //    con.Close();
-
-            //    var equipoSeleccionado = (KeyValuePair<int, string>)cbEquipo.SelectedItem;
-            //    equipoSeleccionado = new KeyValuePair<int, string>(equipoSeleccionado.Key, equipoSeleccionado.Value + " (No disponible)");
-            //    cbEquipo.Items[cbEquipo.SelectedIndex] = equipoSeleccionado;
-
-            //    cbEquipo.SelectedItem = null;
-
-            //    Content = new Customer();
-            //}
+    var result = await _citaService.CreateSolicitudAsync(solicitud);
+    if (result != null)
+    {
+        MessageBox.Show("Cita creada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+        Content = new Customer();
+    }
+    else
+    {
+        MessageBox.Show("Error al crear la cita. Verifica los datos ingresados.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
         }
         #endregion
 

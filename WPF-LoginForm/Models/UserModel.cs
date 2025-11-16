@@ -34,5 +34,7 @@ namespace WPF_LoginForm.Models
         }
         // Propiedad calculada para saber si está activo
         public bool IsActive => Estado == "activo";
+        // DisplayName calculado
+        public string DisplayName => !string.IsNullOrWhiteSpace(Name) || !string.IsNullOrWhiteSpace(LastName) ? $"{Name} {LastName}" : Username;
     }
 }

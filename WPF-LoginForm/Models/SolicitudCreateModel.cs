@@ -32,8 +32,8 @@ namespace WPF_LoginForm.Models
         [JsonProperty("id_servicio")]
         public int IdServicio { get; set; }
 
-        [JsonProperty("id_psicologo")]
-        public int IdPsicologo { get; set; }
+        [JsonProperty("id_empleado")]
+        public int IdEmpleado { get; set; } // Cambiado de id_psicologo a id_empleado
 
         [JsonProperty("fecha_cita")]
         public string FechaCita { get; set; }

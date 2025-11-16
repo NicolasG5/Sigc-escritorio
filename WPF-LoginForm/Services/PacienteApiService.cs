@@ -38,7 +38,7 @@ namespace WPF_LoginForm.Services
                     System.Diagnostics.Debug.WriteLine($"Respuesta JSON: {json.Substring(0, Math.Min(200, json.Length))}...");
 
                     var pacientesResponse = JsonConvert.DeserializeObject<PacientesResponse>(json);
-                    
+
                     if (pacientesResponse?.Data != null)
                     {
                         System.Diagnostics.Debug.WriteLine($"? Pacientes obtenidos: {pacientesResponse.Count}");
@@ -89,7 +89,7 @@ namespace WPF_LoginForm.Services
                     try
                     {
                         var paciente = JsonConvert.DeserializeObject<PacienteModel>(json);
-                        
+
                         if (paciente != null && paciente.IdPaciente > 0)
                         {
                             System.Diagnostics.Debug.WriteLine($"? Paciente obtenido: {paciente.NombreCompleto} (ID: {paciente.IdPaciente})");
@@ -99,12 +99,12 @@ namespace WPF_LoginForm.Services
                     catch (Exception exDirecto)
                     {
                         System.Diagnostics.Debug.WriteLine($"?? No se pudo deserializar como PacienteModel directo: {exDirecto.Message}");
-                        
+
                         // Plan B: Intentar como PacientesResponse (formato con data/count)
                         try
                         {
                             var pacientesResponse = JsonConvert.DeserializeObject<PacientesResponse>(json);
-                            
+
                             if (pacientesResponse?.Data != null && pacientesResponse.Data.Length > 0)
                             {
                                 System.Diagnostics.Debug.WriteLine($"? Paciente obtenido (formato array): {pacientesResponse.Data[0].NombreCompleto}");
@@ -116,7 +116,7 @@ namespace WPF_LoginForm.Services
                             System.Diagnostics.Debug.WriteLine($"?? Tampoco se pudo deserializar como array: {exArray.Message}");
                         }
                     }
-                    
+
                     // Si llegamos aquí, no se pudo deserializar de ninguna forma
                     throw new Exception($"No se pudo deserializar la respuesta del paciente. JSON: {json.Substring(0, Math.Min(200, json.Length))}");
                 }
@@ -181,6 +181,43 @@ namespace WPF_LoginForm.Services
                     }
 
                     throw new Exception("Respuesta inesperada del servidor");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine($"? Error: {error}");
+                    throw new Exception($"Error al crear paciente: {response.StatusCode}\n{error}");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"? Excepción: {ex.Message}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// POST /api/v1/pacientes/ (solo campos de formulario)
+        /// Crea un nuevo paciente usando solo los campos del formulario
+        /// </summary>
+        public async Task<PacienteModel> CreatePacienteDesdeFormularioAsync(PacienteFormularioModel paciente)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"=== POST {BASE_ENDPOINT}/ (solo campos de formulario) ===");
+                var json = JsonConvert.SerializeObject(paciente, Formatting.Indented);
+                System.Diagnostics.Debug.WriteLine($"Datos a enviar:\n{json}");
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(BASE_ENDPOINT + "/", content);
+                System.Diagnostics.Debug.WriteLine($"Status: {response.StatusCode}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseJson = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine($"Respuesta: {responseJson}");
+                    // La API responde con el paciente directamente
+                    var pacienteCreado = JsonConvert.DeserializeObject<PacienteModel>(responseJson);
+                    System.Diagnostics.Debug.WriteLine($"? Paciente creado: ID {pacienteCreado.IdPaciente}");
+                    return pacienteCreado;
                 }
                 else
                 {
@@ -287,5 +324,25 @@ namespace WPF_LoginForm.Services
                 throw;
             }
         }
+    }
+
+    public class PacienteFormularioModel
+    {
+        [JsonProperty("rut")]
+        public string Rut { get; set; }
+        [JsonProperty("nombres")]
+        public string Nombres { get; set; }
+        [JsonProperty("apellido_paterno")]
+        public string ApellidoPaterno { get; set; }
+        [JsonProperty("apellido_materno")]
+        public string ApellidoMaterno { get; set; }
+        [JsonProperty("fecha_nacimiento")]
+        public string FechaNacimiento { get; set; }
+        [JsonProperty("telefono")]
+        public string Telefono { get; set; }
+        [JsonProperty("email")]
+        public string Email { get; set; }
+        [JsonProperty("estado")]
+        public string Estado { get; set; } = "activo";
     }
 }

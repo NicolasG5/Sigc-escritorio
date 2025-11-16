@@ -170,24 +170,37 @@ namespace WPF_LoginForm.Services
         /// </summary>
         public async Task<CitaModel> CreateSolicitudAsync(SolicitudCreateModel solicitud)
         {
-            var token = ApiTokenStore.Instance.Token;
-            if (string.IsNullOrEmpty(token))
-                return null;
-
-            var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/citas/");
-            request.Headers.Add("accept", "application/json");
-            request.Headers.Add("Authorization", $"Bearer {token}");
-
-            var jsonContent = JsonConvert.SerializeObject(solicitud);
-            request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var json = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<CitaModel>(json);
+                var json = JsonConvert.SerializeObject(solicitud, Formatting.Indented);
+                System.Diagnostics.Debug.WriteLine("=== POST /api/v1/citas/ ===");
+                System.Diagnostics.Debug.WriteLine($"Datos a enviar:\n{json}");
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var token = Repositories.ApiTokenStore.Instance.Token;
+                var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/citas/");
+                request.Headers.Add("accept", "application/json");
+                request.Headers.Add("Authorization", $"Bearer {token}");
+                request.Content = content;
+                var response = await _httpClient.SendAsync(request);
+                System.Diagnostics.Debug.WriteLine($"Status: {response.StatusCode}");
+                var responseJson = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"Respuesta: {responseJson}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var citaCreada = JsonConvert.DeserializeObject<CitaModel>(responseJson);
+                    System.Diagnostics.Debug.WriteLine($"? Cita creada: ID {citaCreada.IdCita}");
+                    return citaCreada;
+                }
+                else
+                {
+                    throw new Exception($"Error al crear cita: {response.StatusCode}\n{responseJson}");
+                }
             }
-            return null;
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"? Excepción en CreateSolicitudAsync: {ex.Message}");
+                throw;
+            }
         }
 
         /// <summary>

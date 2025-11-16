@@ -11,7 +11,7 @@ namespace WPF_LoginForm.Models
         // Datos de la cita
         public int IdCita { get; set; }
         public int IdPaciente { get; set; }
-        public int IdPsicologo { get; set; }
+        public int IdEmpleado { get; set; } // Renombrado para compatibilidad
         public DateTime? FechaCita { get; set; }
         public string HoraCita { get; set; } // Formato: "09:00 - 10:00"
         public string EstadoCita { get; set; }
@@ -26,5 +26,12 @@ namespace WPF_LoginForm.Models
 
         // Propiedad calculada para mostrar fecha formateada
         public string FechaCitaFormateada => FechaCita?.ToString("dd/MM/yyyy") ?? "";
+
+        // Alias para compatibilidad
+        public int IdPsicologo
+        {
+            get { return IdEmpleado; }
+            set { IdEmpleado = value; }
+        }
     }
 }

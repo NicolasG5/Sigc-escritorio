@@ -57,7 +57,7 @@ namespace WPF_LoginForm.Views
         {
             CrudSolicitudServicio ventana = new CrudSolicitudServicio();
             FrameCustomerView2.Content = ventana;
-            ventana.BtnCrear.Visibility = Visibility.Visible;
+            
         }
 
         private void Consultar(object sender, RoutedEventArgs e)

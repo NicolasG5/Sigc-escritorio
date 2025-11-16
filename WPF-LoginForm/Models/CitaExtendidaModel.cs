@@ -11,7 +11,7 @@ namespace WPF_LoginForm.Models
         // Datos básicos de la cita
         public int IdCita { get; set; }
         public int IdPaciente { get; set; }
-        public int IdPsicologo { get; set; }
+        public int IdEmpleado { get; set; } // Renombrado para compatibilidad
         public int IdServicio { get; set; }
         
         // Información de fecha y hora
@@ -95,6 +95,13 @@ namespace WPF_LoginForm.Models
             {
                 return FechaCreacion.ToString("dd/MM/yyyy HH:mm");
             }
+        }
+        
+        // Alias para compatibilidad
+        public int IdPsicologo
+        {
+            get { return IdEmpleado; }
+            set { IdEmpleado = value; }
         }
     }
 }

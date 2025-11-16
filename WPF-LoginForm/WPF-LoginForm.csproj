@@ -132,8 +132,10 @@
     <Compile Include="CustomControls\BindablePasswordBox.xaml.cs">
       <DependentUpon>BindablePasswordBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\CitaApiModel.cs" />
     <Compile Include="Models\CitaConfirmadaModel.cs" />
     <Compile Include="Models\CitaExtendidaModel.cs" />
+    <Compile Include="Models\CitaGridModel.cs" />
     <Compile Include="Models\CitaModel.cs" />
     <Compile Include="Models\CitaPacientePresenteModel.cs" />
     <Compile Include="Models\CiudadModel.cs" />
