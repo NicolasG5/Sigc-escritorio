@@ -34,12 +34,7 @@ namespace WPF_LoginForm.Views
             tbFechaFinEstimada.Text = tratamiento.FechaFinEstimada;
             tbFechaFinReal.Text = tratamiento.FechaFinReal;
             tbEstado.Text = tratamiento.Estado;
-            tbIdTratamiento.Text = tratamiento.IdTratamiento.ToString();
-            tbIdPaciente.Text = tratamiento.IdPaciente.ToString();
-            tbIdEmpleado.Text = tratamiento.IdEmpleado.ToString();
-            tbIdCita.Text = tratamiento.IdCita.ToString();
-            tbFechaRegistro.Text = tratamiento.FechaRegistro;
-
+            // Eliminadas referencias a los controles de ID y FechaRegistro
             // Obtener nombre del paciente usando el id_paciente
             var pacienteService = new PacienteApiService();
             var paciente = await pacienteService.GetPacienteByIdAsync(tratamiento.IdPaciente);

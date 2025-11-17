@@ -195,7 +195,14 @@ namespace WPF_LoginForm.Views
                     return;
                 }
                 var paciente = await _pacienteService.GetPacienteByIdAsync(seguimiento.id_paciente);
-                var formularioS = new WPF_LoginForm.Views.FormularioS(null, paciente);
+                // Obtener el tratamiento del paciente
+                TratamientoResponse tratamiento = null;
+                if (seguimiento.id_tratamiento != 0)
+                {
+                    var tratamientoService = new TratamientoApiService();
+                    tratamiento = await tratamientoService.GetTratamientoByIdAsync(seguimiento.id_tratamiento);
+                }
+                var formularioS = new WPF_LoginForm.Views.FormularioS(tratamiento, paciente);
                 formularioS.tbNombre.Text = paciente?.NombreCompleto ?? "";
                 formularioS.tbFecha.Text = seguimiento.fecha_seguimiento;
                 formularioS.tbFecha_Copiar1.Text = seguimiento.estado_animo;

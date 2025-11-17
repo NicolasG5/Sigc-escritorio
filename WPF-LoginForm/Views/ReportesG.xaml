@@ -336,20 +336,12 @@
                     <DataGridTextColumn Header="Nombre Paciente"
                                     Width="130"
                                     Binding="{Binding Paciente.NombreCompleto}"/>
-                    
-                    <DataGridTextColumn Header="Seguimiento"
-                                    Width="*"
-                                    Binding="{Binding Seguimientos, Converter={StaticResource FirstSeguimientoObservacionesConverter}}"/>
                     <DataGridTextColumn Header="Medicacion"
                                     Width="*"
                                     Binding="{Binding Medicaciones[0].NombreMedicamento}"/>
-
                     <DataGridTextColumn Header="Tratamiento"
                                     Width="*"
                                     Binding="{Binding Tratamiento.TipoTratamiento}"/>
-                    
-
-
                 </DataGrid.Columns>
             </DataGrid>
             <!--EndRegion-->

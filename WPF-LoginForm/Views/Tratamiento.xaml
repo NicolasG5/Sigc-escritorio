@@ -105,21 +105,6 @@
                             <TextBox x:Name="tbEstado" Style="{StaticResource ModernTextBox}"/>
                         </StackPanel>
                     </Border>
-                    <TextBlock Text="🔎 Identificadores y Registro" Style="{StaticResource SectionHeader}"/>
-                    <Border Background="{StaticResource color8}" CornerRadius="8" Padding="20" Margin="0,0,0,15">
-                        <StackPanel>
-                            <TextBlock Text="ID Tratamiento:" Style="{StaticResource LabelText}"/>
-                            <TextBox x:Name="tbIdTratamiento" Style="{StaticResource ModernTextBox}"/>
-                            <TextBlock Text="ID Paciente:" Style="{StaticResource LabelText}"/>
-                            <TextBox x:Name="tbIdPaciente" Style="{StaticResource ModernTextBox}"/>
-                            <TextBlock Text="ID Empleado:" Style="{StaticResource LabelText}"/>
-                            <TextBox x:Name="tbIdEmpleado" Style="{StaticResource ModernTextBox}"/>
-                            <TextBlock Text="ID Cita:" Style="{StaticResource LabelText}"/>
-                            <TextBox x:Name="tbIdCita" Style="{StaticResource ModernTextBox}"/>
-                            <TextBlock Text="Fecha Registro:" Style="{StaticResource LabelText}"/>
-                            <TextBox x:Name="tbFechaRegistro" Style="{StaticResource ModernTextBox}"/>
-                        </StackPanel>
-                    </Border>
                 </StackPanel>
             </ScrollViewer>
             <!-- FOOTER CON BOTONES -->

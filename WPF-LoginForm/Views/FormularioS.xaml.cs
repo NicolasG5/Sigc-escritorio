@@ -23,6 +23,44 @@ namespace WPF_LoginForm.Views
             _paciente = paciente;
             _idPsicologo = idPsicologo;
             tbNombre.Text = paciente.NombreCompleto;
+            // Mostrar tipo de tratamiento en el campo correcto
+            if (tratamiento != null)
+                tbFecha_Copiar4.Text = tratamiento.TipoTratamiento;
+            // Cargar medicación del paciente solo si tratamiento no es null
+            if (tratamiento != null)
+                CargarMedicacionAsync();
+            else
+                tbMedicacion.Text = "Sin medicación";
+        }
+
+        private async void CargarMedicacionAsync()
+        {
+            if (_tratamiento == null || _paciente == null)
+            {
+                tbMedicacion.Text = "Sin medicación";
+                return;
+            }
+            var medicacionService = new MedicacionApiService();
+            var medicaciones = await medicacionService.GetAllMedicacionesAsync();
+            if (medicaciones != null && medicaciones.Count > 0)
+            {
+                // Filtrar por paciente y tratamiento
+                var medicacionesPaciente = medicaciones.FindAll(m => m.IdPaciente == _paciente.IdPaciente && m.IdTratamiento == _tratamiento.IdTratamiento);
+                if (medicacionesPaciente.Count > 0)
+                {
+                    // Puedes mostrar solo el primero o concatenar todos
+                    var info = string.Join("; ", medicacionesPaciente.ConvertAll(m => $"{m.NombreMedicamento} ({m.Dosis}, {m.Frecuencia})"));
+                    tbMedicacion.Text = info;
+                }
+                else
+                {
+                    tbMedicacion.Text = "Sin medicación";
+                }
+            }
+            else
+            {
+                tbMedicacion.Text = "Sin medicación";
+            }
         }
 
         private async void Guardar(object sender, RoutedEventArgs e)
@@ -38,11 +76,9 @@ namespace WPF_LoginForm.Views
                     adherencia_tratamiento = tbFecha_Copiar.Text,
                     observaciones = tbFecha_Copiar4.Text,
                     proxima_evaluacion = DateTime.TryParse(tbFecha.Text, out var fechaEval) ? fechaEval.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"),
-                    id_seguimiento = 0,
                     id_paciente = _paciente.IdPaciente,
                     id_empleado = _tratamiento.IdEmpleado,
                     id_tratamiento = _tratamiento.IdTratamiento,
-                    fecha_registro = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")
                 };
                 var result = await _seguimientoService.CrearSeguimientoAsync(seguimiento);
                 if (result)
@@ -103,10 +139,8 @@ namespace WPF_LoginForm.Views
         public string adherencia_tratamiento { get; set; }
         public string observaciones { get; set; }
         public string proxima_evaluacion { get; set; }
-        public int id_seguimiento { get; set; } = 0;
         public int id_paciente { get; set; }
         public int id_empleado { get; set; }
         public int id_tratamiento { get; set; }
-        public string fecha_registro { get; set; }
     }
 }

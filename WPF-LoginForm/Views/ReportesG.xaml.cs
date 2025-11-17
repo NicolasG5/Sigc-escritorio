@@ -51,7 +51,12 @@ namespace WPF_LoginForm.Views
             foreach (var paciente in pacientes)
             {
                 var tratamiento = tratamientos?.FirstOrDefault(t => t.IdPaciente == paciente.IdPaciente);
-                var segs = seguimientos?.Where(s => s.id_paciente == paciente.IdPaciente).ToList();
+                // Filtrar seguimientos por paciente y tratamiento
+                List<SeguimientoResponse> segs = null;
+                if (tratamiento != null)
+                    segs = seguimientos?.Where(s => s.id_paciente == paciente.IdPaciente && s.id_tratamiento == tratamiento.IdTratamiento).ToList();
+                else
+                    segs = seguimientos?.Where(s => s.id_paciente == paciente.IdPaciente).ToList();
                 var meds = medicaciones?.Where(m => m.IdPaciente == paciente.IdPaciente).ToList();
                 PsicologoModel psicologo = null;
                 if (tratamiento != null)
