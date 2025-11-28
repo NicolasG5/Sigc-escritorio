@@ -305,7 +305,7 @@
                 <DataGrid.Columns>
                     <!-- Columna de Acciones -->
                     <DataGridTemplateColumn Header="Acciones" 
-                                            Width="200">
+                                            Width="250">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -335,6 +335,19 @@
                                             CommandParameter="{Binding IdCita}" 
                                             Click="Denegar"
                                             ToolTip="Rechazar esta solicitud"/>
+                                    <Button Content="⟳ Reagendar"
+                                            x:Name="BtnReagendar"
+                                            Background="{StaticResource PrimaryBrush}"
+                                            Width="90"
+                                            Height="28"
+                                            Margin="2"
+                                            BorderBrush="Transparent"
+                                            Foreground="White"
+                                            FontWeight="SemiBold"
+                                            Style="{DynamicResource btnBuscarStyle}"
+                                            CommandParameter="{Binding IdCita}"
+                                            Click="Reagendar"
+                                            ToolTip="Editar y reagendar cita"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

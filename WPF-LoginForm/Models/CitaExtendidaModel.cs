@@ -13,6 +13,8 @@ namespace WPF_LoginForm.Models
         public int IdPaciente { get; set; }
         public int IdEmpleado { get; set; } // Renombrado para compatibilidad
         public int IdServicio { get; set; }
+        public int IdEstadoCita { get; set; } // Nueva propiedad
+        public int IdSala { get; set; } // Nueva propiedad
         
         // Información de fecha y hora
         public string FechaCita { get; set; }

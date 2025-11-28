@@ -160,7 +160,7 @@
                     </RadioButton>-->
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color3}"
+                                 Tag="{StaticResource color4}"
                                  Command="{Binding ShowCustomerCommand}">
 
                         <StackPanel Orientation="Horizontal">
@@ -193,7 +193,7 @@
                                  Command="{Binding ShowCustomerView4Command}">
 
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="UserGroup" Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="Briefcase" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Mantenedor de Empleados" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
@@ -224,7 +224,7 @@
                                  Command="{Binding ShowControlSolicitudesCommand}">
 
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="FlorinSign" Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="EnvelopeOpen" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Gestion de Solicitudes" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
@@ -234,7 +234,7 @@
                                  Command="{Binding ShowCitaCommand}">
 
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="FlorinSign" Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="CalendarCheck" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Gestion de Citas" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
@@ -244,7 +244,7 @@
                                  Command="{Binding ShowAtencionCommand}">
 
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="FlorinSign" Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="ClipboardUser" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Gestion de Atencion" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
@@ -254,7 +254,7 @@
                                  Command="{Binding ShowSeguimientoCommand}">
 
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="FlorinSign" Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="FileCirclePlus" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Gestion de Seguimiento" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
@@ -264,7 +264,7 @@
              Command="{Binding ShowTratamientoCommand}">
 
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="FlorinSign" Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="FileZipper" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Gestion de Tratamiento" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
@@ -274,7 +274,7 @@
              Command="{Binding ShowMedicacionCommand}">
 
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="FlorinSign" Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="MattressPillow" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Gestion de Medicacion" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
@@ -285,14 +285,14 @@
              Command="{Binding ShowReportesCommand}">
 
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="FlorinSign" Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="FolderOpen" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Gestion de Reportes" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 
                     <!-- NUEVO: Boton para Gestion de Usuarios -->
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color3}"
+                                 Tag="{StaticResource color9}"
                                  Command="{Binding ShowGestionUsuariosCommand}">
 
                         <StackPanel Orientation="Horizontal">

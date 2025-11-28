@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Collections.ObjectModel;
 using WPF_LoginForm.Models;
 using WPF_LoginForm.Services;
 
@@ -31,27 +33,31 @@ namespace WPF_LoginForm.Views
         private readonly MedicacionApiService _medicacionService = new MedicacionApiService();
         private readonly PsicologoApiService _psicologoService = new PsicologoApiService();
 
-        public List<ReporteModel> Reportes { get; set; } = new List<ReporteModel>();
+        public ObservableCollection<ReporteModel> Reportes { get; set; } = new ObservableCollection<ReporteModel>();
+        private DispatcherTimer _autoRefreshTimer;
 
         public ReportesG()
         {
             InitializeComponent();
+            GridDatos.ItemsSource = Reportes;
             _ = CargarDatosAsync();
+            // Configurar timer para refresco automático cada 10 segundos
+            _autoRefreshTimer = new DispatcherTimer();
+            _autoRefreshTimer.Interval = TimeSpan.FromSeconds(10);
+            _autoRefreshTimer.Tick += async (s, e) => await CargarDatosAsync();
+            _autoRefreshTimer.Start();
         }
 
         private async Task CargarDatosAsync()
         {
-            // Ejemplo: cargar todos los pacientes y sus datos relacionados
             var pacientes = await _pacienteService.GetAllPacientesAsync();
             var tratamientos = await _tratamientoService.GetAllTratamientosAsync();
             var seguimientos = await _seguimientoService.GetAllSeguimientosAsync();
             var medicaciones = await _medicacionService.GetAllMedicacionesAsync();
-
             Reportes.Clear();
             foreach (var paciente in pacientes)
             {
                 var tratamiento = tratamientos?.FirstOrDefault(t => t.IdPaciente == paciente.IdPaciente);
-                // Filtrar seguimientos por paciente y tratamiento
                 List<SeguimientoResponse> segs = null;
                 if (tratamiento != null)
                     segs = seguimientos?.Where(s => s.id_paciente == paciente.IdPaciente && s.id_tratamiento == tratamiento.IdTratamiento).ToList();
@@ -75,7 +81,6 @@ namespace WPF_LoginForm.Views
                     Estado = tratamiento?.Estado
                 });
             }
-            GridDatos.ItemsSource = Reportes;
         }
 
         // Evento para búsqueda en el TextBox

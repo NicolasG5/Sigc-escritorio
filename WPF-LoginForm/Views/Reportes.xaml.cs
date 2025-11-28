@@ -51,7 +51,7 @@ namespace WPF_LoginForm.Views
 
         private void Regresar(object sender, RoutedEventArgs e)
         {
-            Content = new Atencion();
+            Content = new ReportesG ();
         }
         
         #region buscar

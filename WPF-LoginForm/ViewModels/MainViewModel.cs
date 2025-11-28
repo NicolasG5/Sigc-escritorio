@@ -162,8 +162,8 @@ namespace WPF_LoginForm.ViewModels
         private void ExecuteShowReportesCommand(object obj)
         {
             CurrentChildView = new ReportesG();
-            Caption = "Seguimiento";
-            Icon = IconChar.Hammer;
+            Caption = "Reportes";
+            Icon = IconChar.Folder;
         }
 
         // NUEVO: Metodo para mostrar Gestion de Usuarios
@@ -177,29 +177,29 @@ namespace WPF_LoginForm.ViewModels
         private void ExecuteShowMedicacionCommand(object obj)
         {
             CurrentChildView = new MedicacioG();
-            Caption = "Seguimiento";
-            Icon = IconChar.Hammer;
+            Caption = "Medicacion";
+            Icon = IconChar.Pills;
         }
 
         private void ExecuteShowTratamientoCommand(object obj)
         {
             CurrentChildView = new TratamientoG();
-            Caption = "Seguimiento";
-            Icon = IconChar.Hammer;
+            Caption = "Tratamineto";
+            Icon = IconChar.BookAtlas;
         }
 
         private void ExecuteShowSeguimientoCommand(object obj)
         {
             CurrentChildView = new Seguimiento();
             Caption = "Seguimiento";
-            Icon = IconChar.Hammer;
+            Icon = IconChar.Book;
         }
 
         private void ExecuteShowCitaCommand(object obj)
         {
             CurrentChildView = new Cita();
             Caption = "Cita";
-            Icon = IconChar.Hammer;
+            Icon = IconChar.Calendar;
         }
 
         private void ExecuteShowAtencionCommand(object obj)
@@ -207,7 +207,7 @@ namespace WPF_LoginForm.ViewModels
             
             CurrentChildView = new Atencion();
             Caption = "Atencion";
-            Icon = IconChar.Hammer;
+            Icon = IconChar.AddressBook;
         }
 
         private void ExecuteShowShowAgregarViewCommandCommand(object obj)
@@ -229,21 +229,21 @@ namespace WPF_LoginForm.ViewModels
         {
             CurrentChildView = new Customer();
             Caption = "Solicitud";
-            Icon = IconChar.Hammer;
+            Icon = IconChar.BusinessTime;
         }
 
         private void ExecuteShowCustomerView5Command(object obj)
         {
             CurrentChildView = new CustomerView5();
-            Caption = "Customers5";
-            Icon = IconChar.Hammer;
+            Caption = "Pacientes";
+            Icon = IconChar.User;
         }
 
 
         private void ExecuteShowCustomerView4Command(object obj)
         {
             CurrentChildView = new CustomerView4();
-            Caption = "Customers4";
+            Caption = "Empleados";
             Icon = IconChar.Hammer;
         }
 

@@ -508,5 +508,47 @@ namespace WPF_LoginForm.Services
             var response = await _httpClient.SendAsync(request);
             return response.IsSuccessStatusCode;
         }
+
+        /// <summary>
+        /// Reagenda una cita existente
+        /// PUT /api/v1/citas/{codigo_confirmacion}/reagendar
+        /// </summary>
+        public async Task<bool> ReagendarCitaAsync(string codigoConfirmacion, string nuevaFecha, string nuevaHoraInicio, string nuevaHoraFin)
+        {
+            var token = ApiTokenStore.Instance.Token;
+            if (string.IsNullOrEmpty(token))
+                return false;
+            var request = new HttpRequestMessage(HttpMethod.Put, $"/api/v1/citas/{codigoConfirmacion}/reagendar");
+            request.Headers.Add("accept", "application/json");
+            request.Headers.Add("Authorization", $"Bearer {token}");
+            var body = new {
+                nueva_fecha = nuevaFecha,
+                nueva_hora_inicio = nuevaHoraInicio,
+                nueva_hora_fin = nuevaHoraFin,
+                id_estado_cita = 8 // Estado 'Reprogramada'
+            };
+            var jsonContent = JsonConvert.SerializeObject(body);
+            request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var response = await _httpClient.SendAsync(request);
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Actualiza una cita existente por su ID
+        /// PUT /api/v1/citas/{id}
+        /// </summary>
+        public async Task<bool> UpdateCitaAsync(int idCita, CitaModel cita)
+        {
+            var token = ApiTokenStore.Instance.Token;
+            if (string.IsNullOrEmpty(token))
+                return false;
+            var request = new HttpRequestMessage(HttpMethod.Put, $"/api/v1/citas/{idCita}");
+            request.Headers.Add("accept", "application/json");
+            request.Headers.Add("Authorization", $"Bearer {token}");
+            var jsonContent = JsonConvert.SerializeObject(cita);
+            request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var response = await _httpClient.SendAsync(request);
+            return response.IsSuccessStatusCode;
+        }
     }
 }

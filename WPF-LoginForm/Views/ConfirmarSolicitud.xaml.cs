@@ -17,6 +17,7 @@ namespace WPF_LoginForm.Views
         private readonly ServicioApiService _servicioService;
         private int _idCita;
         private CitaModel _citaActual;
+        private bool _modoReagendar = false;
 
         /// <summary>
         /// Constructor sin parámetros (modo creación)
@@ -33,10 +34,11 @@ namespace WPF_LoginForm.Views
         /// <summary>
         /// Constructor con ID de cita (modo confirmación)
         /// </summary>
-        public ConfirmarSolicitud(int idCita, CitaModel cita) : this()
+        public ConfirmarSolicitud(int idCita, CitaModel cita, bool modoReagendar = false) : this()
         {
             _idCita = idCita;
             _citaActual = cita;
+            _modoReagendar = modoReagendar;
             
             CargarDatosSolicitud();
         }
@@ -146,6 +148,25 @@ namespace WPF_LoginForm.Views
                 tbFechaSolicitud.Text = _citaActual.FechaCreacion.ToString("dd/MM/yyyy HH:mm");
                 tbSala.Text = $"Sala #{_citaActual.IdSala}";
 
+                // Habilitar edición de campos si es modo reagendar
+                if (_modoReagendar)
+                {
+                    dpFecha.IsEnabled = true;
+                    tbHoraInicio.IsReadOnly = false;
+                    tbHoraFin.IsReadOnly = false;
+                    tbMotivoConsulta.IsReadOnly = false;
+                    tbObservaciones.IsReadOnly = false;
+                    tbNombrePsicologo.IsReadOnly = false;
+                    tbTituloPsicologo.IsReadOnly = false;
+                    tbEmailPsicologo.IsReadOnly = false;
+                    tbTelefonoPsicologo.IsReadOnly = false;
+                    tbNombreServicio.IsReadOnly = false;
+                    tbDuracionServicio.IsReadOnly = false;
+                    tbPrecioServicio.IsReadOnly = false;
+                    tbSala.IsReadOnly = false;
+                    BtnEnviar.Content = "⟳ Reagendar Cita";
+                }
+
                 System.Diagnostics.Debug.WriteLine($"✅ Datos cargados correctamente para cita ID: {_idCita}");
             }
             catch (Exception ex)
@@ -184,8 +205,28 @@ namespace WPF_LoginForm.Views
             {
                 if (_citaActual == null)
                 {
-                    MessageBox.Show("⚠️ No hay solicitud cargada", 
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("⚠️ No hay solicitud cargada", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                if (_modoReagendar)
+                {
+                    var nuevaFecha = dpFecha.SelectedDate?.ToString("yyyy-MM-dd");
+                    var nuevaHoraInicio = tbHoraInicio.Text;
+                    var nuevaHoraFin = tbHoraFin.Text;
+                    // Usar el método correcto para reagendar
+                    var citaService = new CitaApiService();
+                    bool resultadoReagendar = await citaService.ReagendarCitaAsync(_citaActual.CodigoConfirmacion, nuevaFecha, nuevaHoraInicio, nuevaHoraFin);
+                    if (resultadoReagendar)
+                    {
+                        MessageBox.Show("✅ Cita reagendada correctamente.", "Reagendar", MessageBoxButton.OK, MessageBoxImage.Information);
+                        var controlSolicitudes = new ControlSolicitudes();
+                        controlSolicitudes.CargarDatos();
+                        Content = controlSolicitudes;
+                    }
+                    else
+                    {
+                        MessageBox.Show("❌ No se pudo reagendar la cita.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return;
                 }
 

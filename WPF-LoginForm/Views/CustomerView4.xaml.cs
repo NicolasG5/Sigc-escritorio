@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
+using System.Collections.ObjectModel;
 using WPF_LoginForm.Models;
 using WPF_LoginForm.Services;
 
@@ -15,13 +17,21 @@ namespace WPF_LoginForm.Views
     public partial class CustomerView4 : UserControl
     {
         private readonly PsicologoApiService _empleadoService;
-        private List<PsicologoModel> _todosEmpleados;
+        private ObservableCollection<PsicologoModel> _todosEmpleados = new ObservableCollection<PsicologoModel>();
+        private DispatcherTimer _autoRefreshTimer;
 
         public CustomerView4()
         {
             InitializeComponent();
             _empleadoService = new PsicologoApiService();
+            GridDatos.ItemsSource = _todosEmpleados;
             CargarDatos();
+
+            // Configurar timer para refresco automático cada 10 segundos
+            _autoRefreshTimer = new DispatcherTimer();
+            _autoRefreshTimer.Interval = TimeSpan.FromSeconds(10);
+            _autoRefreshTimer.Tick += (s, e) => CargarDatos();
+            _autoRefreshTimer.Start();
         }
 
         private async void CargarDatos()
@@ -31,7 +41,9 @@ namespace WPF_LoginForm.Views
                 System.Diagnostics.Debug.WriteLine("=== CARGANDO EMPLEADOS ===");
                 
                 var empleados = await _empleadoService.GetAllPsicologosAsync();
-                _todosEmpleados = empleados?.ToList() ?? new List<PsicologoModel>();
+                _todosEmpleados.Clear();
+                foreach (var emp in empleados ?? new List<PsicologoModel>())
+                    _todosEmpleados.Add(emp);
                 
                 System.Diagnostics.Debug.WriteLine($"Empleados cargados: {_todosEmpleados.Count}");
                 

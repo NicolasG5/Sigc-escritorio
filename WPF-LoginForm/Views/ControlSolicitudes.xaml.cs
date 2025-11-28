@@ -29,20 +29,22 @@ namespace WPF_LoginForm.Views
             CargarDatos();
         }
 
-        private async void CargarDatos()
+        public async void CargarDatos()
         {
             try
             {
-                // Mostrar indicador de carga
+                // Limpia el ItemsSource antes de recargar
                 GridDatos.ItemsSource = null;
-                
-                // Obtener solicitudes pendientes desde la API
+                GridDatos.Items.Refresh();
+                // Obtener solicitudes pendientes
                 var solicitudesPendientes = await _citaService.GetCitasPendientesAsync();
-                
-                // Cargar datos completos para cada cita
+                // Obtener citas reagendadas (IdEstadoCita == 8)
+                var todasCitas = await _citaService.GetAllCitasAsync();
+                var citasReagendadas = todasCitas.Where(c => c.IdEstadoCita == 8).ToList(); // 8 = Reagendada
+                // Unir ambas listas
+                var todasSolicitudes = solicitudesPendientes.Concat(citasReagendadas).ToList();
                 _citasCompletas = new List<CitaExtendidaModel>();
-                
-                foreach (var cita in solicitudesPendientes)
+                foreach (var cita in todasSolicitudes)
                 {
                     var citaExtendida = await CargarDatosCompletosCita(cita);
                     if (citaExtendida != null)
@@ -50,21 +52,16 @@ namespace WPF_LoginForm.Views
                         _citasCompletas.Add(citaExtendida);
                     }
                 }
-
-                // Asignar al DataGrid
                 GridDatos.ItemsSource = _citasCompletas;
-                
-                // Mostrar mensaje si no hay solicitudes
+                GridDatos.Items.Refresh();
                 if (_citasCompletas.Count == 0)
                 {
-                    MessageBox.Show("No hay solicitudes pendientes en este momento.", 
-                        "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("No hay solicitudes pendientes o reagendadas en este momento.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar solicitudes:\n\n{ex.Message}\n\nDetalles: {ex.InnerException?.Message}", 
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error al cargar solicitudes:\n\n{ex.Message}\n\nDetalles: {ex.InnerException?.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -217,6 +214,7 @@ namespace WPF_LoginForm.Views
                 case 4: return "Completada";
                 case 5: return "Cancelada";
                 case 6: return "No Asistió";
+                case 8: return "Reagendada";
                 default: return $"Estado {idEstadoCita}";
             }
         }
@@ -409,6 +407,57 @@ namespace WPF_LoginForm.Views
             {
                 MessageBox.Show($"❌ Error al denegar solicitud:\n\n{ex.Message}", 
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Evento para botón Reagendar (Editar cita)
+        private async void Reagendar(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (((Button)sender).CommandParameter == null)
+                {
+                    MessageBox.Show("No se pudo obtener el ID de la cita.", "Error de Datos", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                int idCita = (int)((Button)sender).CommandParameter;
+                var citaExtendidaLocal = _citasCompletas?.FirstOrDefault(c => c.IdCita == idCita);
+                if (citaExtendidaLocal != null)
+                {
+                    var citaModel = new CitaModel
+                    {
+                        IdCita = citaExtendidaLocal.IdCita,
+                        FechaCita = citaExtendidaLocal.FechaCita,
+                        HoraInicio = citaExtendidaLocal.HoraInicio,
+                        HoraFin = citaExtendidaLocal.HoraFin,
+                        MotivoConsulta = citaExtendidaLocal.MotivoConsulta,
+                        Observaciones = "",
+                        CodigoConfirmacion = citaExtendidaLocal.CodigoConfirmacion,
+                        FechaCreacion = citaExtendidaLocal.FechaCreacion,
+                        IdPaciente = citaExtendidaLocal.IdPaciente,
+                        IdPsicologo = citaExtendidaLocal.IdPsicologo,
+                        IdServicio = citaExtendidaLocal.IdServicio,
+                        IdEstadoCita = citaExtendidaLocal.IdEstadoCita,
+                        IdSala = citaExtendidaLocal.IdSala,
+                        RecordatorioEnviado = false
+                    };
+                    ConfirmarSolicitud ventana = new ConfirmarSolicitud(idCita, citaModel, true); // true = modo reagendar
+                    FrameControlSolicitudes.Content = ventana;
+                    return;
+                }
+                var cita = await _citaService.GetCitaByIdAsync(idCita);
+                if (cita == null)
+                {
+                    MessageBox.Show($"No se pudo cargar la información de la cita\nID: {idCita}", "Error al Cargar Datos", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CargarDatos();
+                    return;
+                }
+                ConfirmarSolicitud ventana2 = new ConfirmarSolicitud(idCita, cita, true); // true = modo reagendar
+                FrameControlSolicitudes.Content = ventana2;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al abrir reagendar:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using WPF_LoginForm.Models;
 using WPF_LoginForm.Services;
 
@@ -11,13 +13,21 @@ namespace WPF_LoginForm.Views
     public partial class CustomerView5 : UserControl
     {
         private readonly PacienteApiService _pacienteService;
-        private List<PacienteModel> _todosPacientes;
+        private ObservableCollection<PacienteModel> _todosPacientes = new ObservableCollection<PacienteModel>();
+        private DispatcherTimer _autoRefreshTimer;
 
         public CustomerView5()
         {
             InitializeComponent();
             _pacienteService = new PacienteApiService();
+            GridDatos.ItemsSource = _todosPacientes;
             CargarDatos();
+
+            // Configurar timer para refresco automático cada 10 segundos
+            _autoRefreshTimer = new DispatcherTimer();
+            _autoRefreshTimer.Interval = TimeSpan.FromSeconds(10);
+            _autoRefreshTimer.Tick += (s, e) => CargarDatos();
+            _autoRefreshTimer.Start();
         }
 
         private async void CargarDatos()
@@ -27,7 +37,9 @@ namespace WPF_LoginForm.Views
                 System.Diagnostics.Debug.WriteLine("=== CARGANDO PACIENTES ===");
                 
                 var pacientes = await _pacienteService.GetAllPacientesAsync();
-                _todosPacientes = pacientes?.ToList() ?? new List<PacienteModel>();
+                _todosPacientes.Clear();
+                foreach (var p in pacientes ?? new List<PacienteModel>())
+                    _todosPacientes.Add(p);
                 
                 System.Diagnostics.Debug.WriteLine($"Pacientes cargados: {_todosPacientes.Count}");
                 

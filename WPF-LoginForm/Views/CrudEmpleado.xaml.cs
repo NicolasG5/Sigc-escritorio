@@ -79,14 +79,17 @@ namespace WPF_LoginForm.Views
                 
                 System.Diagnostics.Debug.WriteLine($"Usuarios ya asignados: {string.Join(", ", usuariosAsignados)}");
                 
-                // Filtrar solo usuarios NO asignados
+                // Filtrar solo usuarios NO asignados o el usuario actual del empleado
+                var usuarioActualId = _empleado != null ? _empleado.IdUsuario.ToString() : null;
                 _usuariosDisponibles = todosUsuarios
                     .Where(u => {
                         int userId;
                         if (int.TryParse(u.Id, out userId))
                         {
                             bool estaAsignado = usuariosAsignados.Contains(userId);
-                            System.Diagnostics.Debug.WriteLine($"Usuario {u.Username} (ID: {userId}) - Asignado: {estaAsignado}");
+                            // Permitir el usuario actual del empleado aunque esté asignado
+                            if (usuarioActualId != null && u.Id == usuarioActualId)
+                                return true;
                             return !estaAsignado;
                         }
                         return false;
@@ -105,68 +108,54 @@ namespace WPF_LoginForm.Views
                     NombreCompleto = $"{u.Name} {u.LastName}"
                 }).ToList();
                 
-                cbUsuario.ItemsSource = usuariosParaComboBox;
-                cbUsuario.DisplayMemberPath = "DisplayUsuario";
-                cbUsuario.SelectedValuePath = "Id";
+                // --- AJUSTE PARA CONSULTA ---
+                if (_soloConsulta && _empleado != null && _empleado.IdUsuario > 0)
+                {
+                    var usuarioEmpleado = todosUsuarios.FirstOrDefault(u => u.Id == _empleado.IdUsuario.ToString());
+                    if (usuarioEmpleado != null)
+                    {
+                        var usuarioActual = new
+                        {
+                            Id = usuarioEmpleado.Id,
+                            DisplayUsuario = $"{usuarioEmpleado.Username} ({usuarioEmpleado.Email}) - ASIGNADO",
+                            Username = usuarioEmpleado.Username,
+                            Email = usuarioEmpleado.Email,
+                            NombreCompleto = $"{usuarioEmpleado.Name} {usuarioEmpleado.LastName}"
+                        };
+                        var listaConActual = usuariosParaComboBox.ToList();
+                        listaConActual.Insert(0, usuarioActual);
+                        cbUsuario.ItemsSource = listaConActual;
+                        cbUsuario.SelectedValue = _empleado.IdUsuario.ToString();
+                        txtInfoUsuario.Text = $"✓ Usuario asignado: {usuarioEmpleado.Username}";
+                        cbUsuario.IsEnabled = false;
+                    }
+                }
+                else if (_modoEdicion && _empleado != null && _empleado.IdUsuario > 0)
+                {
+                    cbUsuario.ItemsSource = usuariosParaComboBox;
+                    cbUsuario.DisplayMemberPath = "DisplayUsuario";
+                    cbUsuario.SelectedValuePath = "Id";
+                    cbUsuario.SelectedValue = _empleado.IdUsuario.ToString();
+                    cbUsuario.IsEnabled = true;
+                }
+                else
+                {
+                    cbUsuario.ItemsSource = usuariosParaComboBox;
+                    cbUsuario.DisplayMemberPath = "DisplayUsuario";
+                    cbUsuario.SelectedValuePath = "Id";
+                    cbUsuario.IsEnabled = !_modoEdicion;
+                }
                 
-                if (_usuariosDisponibles.Count == 0)
+                if (_usuariosDisponibles.Count == 0 && !_soloConsulta)
                 {
                     txtInfoUsuario.Text = "⚠️ No hay usuarios disponibles. Debe crear usuarios en 'Gestión de Usuarios' primero.";
                     txtInfoUsuario.Foreground = new SolidColorBrush(Colors.OrangeRed);
                     cbUsuario.IsEnabled = false;
-                    
-                    System.Diagnostics.Debug.WriteLine("⚠️ No hay usuarios disponibles para asignar");
-                }
-                else
-                {
-                    txtInfoUsuario.Text = $"✓ {_usuariosDisponibles.Count} usuario(s) disponible(s) para asignar";
-                    txtInfoUsuario.Foreground = new SolidColorBrush(Colors.Green);
-                    cbUsuario.IsEnabled = true;
-                    
-                    // Si estamos en modo edición y el empleado tiene un usuario asignado
-                    if (_modoEdicion && _empleado != null && _empleado.IdUsuario > 0)
-                    {
-                        // Buscar el usuario en la lista (puede no estar disponible porque ya está asignado)
-                        var usuarioEmpleado = todosUsuarios.FirstOrDefault(u => u.Id == _empleado.IdUsuario.ToString());
-                        
-                        if (usuarioEmpleado != null)
-                        {
-                            // Agregar el usuario actual a la lista aunque esté asignado (para mostrarlo)
-                            var usuarioActual = new
-                            {
-                                Id = usuarioEmpleado.Id,
-                                DisplayUsuario = $"{usuarioEmpleado.Username} ({usuarioEmpleado.Email}) - ACTUAL",
-                                Username = usuarioEmpleado.Username,
-                                Email = usuarioEmpleado.Email,
-                                NombreCompleto = $"{usuarioEmpleado.Name} {usuarioEmpleado.LastName}"
-                            };
-                            
-                            // Agregar a la lista del ComboBox
-                            var listaConActual = usuariosParaComboBox.ToList();
-                            listaConActual.Insert(0, usuarioActual);
-                            cbUsuario.ItemsSource = listaConActual;
-                            
-                            // Seleccionar el usuario actual
-                            cbUsuario.SelectedValue = _empleado.IdUsuario.ToString();
-                            txtInfoUsuario.Text = $"✓ Usuario asignado actualmente: {usuarioEmpleado.Username}";
-                            
-
-                            System.Diagnostics.Debug.WriteLine($"Usuario del empleado cargado: {usuarioEmpleado.Username} (ID: {_empleado.IdUsuario})");
-                        }
-                        
-                        // En modo edición, no permitir cambiar el usuario
-                        cbUsuario.IsEnabled = false;
-                        txtInfoUsuario.Text += " (No modificable en edición)";
-                    }
-                    
-                    System.Diagnostics.Debug.WriteLine($"✓ Usuarios cargados en ComboBox: {cbUsuario.Items.Count}");
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"❌ Error al cargar usuarios: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
-                
                 txtInfoUsuario.Text = "❌ Error al cargar usuarios. Verifique su conexión.";
                 txtInfoUsuario.Foreground = new SolidColorBrush(Colors.Red);
                 cbUsuario.IsEnabled = false;
@@ -253,7 +242,7 @@ namespace WPF_LoginForm.Views
             tbAniosExperiencia.IsEnabled = true;
             cbRol.IsEnabled = true;
             cbEstado.IsEnabled = true;
-            cbUsuario.IsEnabled = false; // No permitir cambiar usuario en edición
+            cbUsuario.IsEnabled = true; // Permitir cambiar usuario en edición
             
             BtnCrear.Visibility = Visibility.Collapsed;
             BtnActualizar.Visibility = Visibility.Visible;
@@ -427,7 +416,9 @@ namespace WPF_LoginForm.Views
                 string estado = ((ComboBoxItem)cbEstado.SelectedItem)?.Tag?.ToString() ?? "activo";
                 string fechaNacimiento = dpFechaNacimiento.SelectedDate?.ToString("yyyy-MM-dd") ?? "";
 
-                // Crear modelo de actualización
+                // Tomar el usuario seleccionado en el ComboBox
+                int idUsuario = int.Parse(cbUsuario.SelectedValue?.ToString() ?? _empleado.IdUsuario.ToString());
+
                 var empleadoActualizado = new PsicologoApiService.CreateEmpleadoModel
                 {
                     Rut = tbRun.Text.Trim(),
@@ -445,7 +436,7 @@ namespace WPF_LoginForm.Views
                     FotoPerfil = _empleado.FotoPerfil ?? "",
                     IdRol = idRol,
                     Estado = estado,
-                    IdUsuario = _empleado.IdUsuario // Mantener el usuario actual (no se puede cambiar)
+                    IdUsuario = idUsuario // Permitir cambiar usuario
                 };
 
                 System.Diagnostics.Debug.WriteLine($"Actualizando empleado ID: {_empleado.IdEmpleado}");
