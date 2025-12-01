@@ -110,9 +110,23 @@ namespace WPF_LoginForm.Views
         // Evento para búsqueda en el TextBox
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //string texto = Buscar.Text;
-            //DataTable dt = ((DataView)GridDatos.ItemsSource).Table;
-            //dt.DefaultView.RowFilter = $"Cliente LIKE '%{texto}%' OR Descripcion LIKE '%{texto}%' OR Estado LIKE '%{texto}%' OR TipoServicio LIKE '%{texto}%'";
+            string texto = Buscar.Text?.ToLower() ?? "";
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                GridDatos.ItemsSource = Seguimientos;
+            }
+            else
+            {
+                var filtrados = Seguimientos.Where(s =>
+                    (s.NombrePaciente?.ToLower().Contains(texto) ?? false) ||
+                    (s.FechaSeguimiento?.ToLower().Contains(texto) ?? false) ||
+                    (s.EstadoAnimo?.ToLower().Contains(texto) ?? false) ||
+                    (s.AdherenciaTratamiento?.ToLower().Contains(texto) ?? false) ||
+                    (s.Observaciones?.ToLower().Contains(texto) ?? false) ||
+                    (s.ProximaEvaluacion?.ToLower().Contains(texto) ?? false)
+                ).ToList();
+                GridDatos.ItemsSource = filtrados;
+            }
         }
 
         // Evento para botón Agregar

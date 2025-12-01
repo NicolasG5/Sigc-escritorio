@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using WPF_LoginForm.Services;
 using WPF_LoginForm.Models;
+using WPF_LoginForm.Services;
 
 namespace WPF_LoginForm.Views
 {
@@ -30,6 +31,8 @@ namespace WPF_LoginForm.Views
             public string Descripcion { get; set; }
             // Puedes agregar más campos si lo necesitas
         }
+
+        private List<TratamientoGridItem> _tratamientosOriginales = new List<TratamientoGridItem>();
 
         private async Task CargarTratamientosAsync()
         {
@@ -60,13 +63,27 @@ namespace WPF_LoginForm.Views
                     Descripcion = t.Descripcion
                 });
             }
+            _tratamientosOriginales = items;
             GridDatos.ItemsSource = items;
         }
 
         // Evento para búsqueda en el TextBox
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // TODO: Implementar búsqueda con API
+            string texto = Buscar.Text?.ToLower() ?? "";
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                GridDatos.ItemsSource = _tratamientosOriginales;
+            }
+            else
+            {
+                var filtrados = _tratamientosOriginales.Where(t =>
+                    (t.NombrePaciente?.ToLower().Contains(texto) ?? false) ||
+                    (t.FechaInicio?.ToLower().Contains(texto) ?? false) ||
+                    (t.Descripcion?.ToLower().Contains(texto) ?? false)
+                ).ToList();
+                GridDatos.ItemsSource = filtrados;
+            }
         }
 
         // Evento para botón Agregar
